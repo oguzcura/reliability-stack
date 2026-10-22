@@ -1,0 +1,123 @@
+% Section 2: definitions (P4)
+Throughout this paper we use the dimensional vocabulary below, and each dimension is chosen to
+vary independently: matching on one dimension tells you nothing about the others, and improving
+one does not require changing the rest.
+
+\subsection{What reliability is}
+Operationally, a configuration is reliable only relative to three named terms: an envelope of failure kinds it must not produce, a budget it must hold, and an assurance path that intervenes as it drifts. ``Reliable'' carries those relative terms; the selection procedure of \cref{sec:selection} is how they are chosen. Reliability is not benchmark accuracy or fluency \cite{measwhatmatters2025,quantconstruct2026}. A system can raise benchmark scores while
+becoming less deployable, more confidently wrong, less able to refuse, more
+expensive to operate within a budget \cite{leaderillusion2025}. Reliability is a property of the
+\emph{system configuration} as well: the contract, thresholds, monitors and escalation paths
+below belong to that configuration, not to a single weight checkpoint. That is why our
+unit of analysis per \cref{sec:stack} is the assembled stack instance.
+
+Classical reliability engineering supplies the vocabulary this section borrows, and three
+distinctions do most of the work. Reliability is the continuity of correct service and
+availability is readiness for correct service \cite{avizienis2004}; safety is freedom from
+losses to people and environment, a property of the controlled system \cite{leveson2011}. In
+deployment terms we read availability as uptime, which can be high while outputs are wrong; that
+gap is why we keep the two apart \evjudge{}. Second, reliability is
+compositional: a chain of redundant components is only as independent as its failure causes
+allow, and common-cause failures defeat redundancy that looks adequate on paper, which is why a
+stack that adds a monitor and a verifier has added no independence unless the model, the monitor,
+and the verifier fail for different reasons \cite{leveson2011,leveson2018stpa}. Third, accident analysis separates latent
+conditions, present in design and organization long before an event, from active failures at the
+point of operation \cite{leveson2011}. Our inherited failure envelope is the stack's
+latent-condition accounting: the failure a layer defers is a latent condition for the layer
+below. Conventional analysis grades each failure mode by severity, occurrence and detectability
+(FMECA, IEC~60812 \cite{iec60812}); we use it to rank layers by what they leave unrecoverable;
+hazard frequency is a different axis.
+Of these terms, only \emph{reliability debt} is a coinage;
+the envelope is our adaptation of latent-condition accounting.
+
+Every claim in this paper carries one of six evidence classes: [T] theory under stated assumptions,
+[E] independent empirical, [A] author-reported, [V] vendor-reported, [S] verified synthesis,
+[W] watch/pending. Four annotations record what a claim is reacting to, while the class carries
+the strength of the evidence: [C] contradiction, [N]
+named gap, [GAP] unmeasured link, [J] our analytic judgement.
+\cref{tab:evidence-classes} is the single alphabet every other surface cites, and
+\cref{sec:protocol} gives the full protocol.
+
+\subsection{The dimensions}
+\begin{description}[leftmargin=1.5em, itemsep=1pt]
+\item[Inherited failure envelope.] The set of failure modes a layer's choice makes unrecoverable
+downstream: the choice cannot remove them, it can only relocate them. When a fix moves a failure
+to another layer rather than removing it, we call that \emph{reliability debt}.
+\item[Well-posedness under distribution shift.] A task is well-posed when its answer space and
+input distribution can both be stated; a model is reliable only relative to that pair.
+Deployment drifts the second term, which is why shift is a first-class modifier in
+\cref{sec:selection}, and why the classifier-baseline literature, with
+the longest experience of this instability, anchors the dimension
+\cite{id231108298,id250315850}.
+\item[Calibration and selective prediction.] Calibration is measured confidence--accuracy
+agreement. Selective prediction turns that agreement into a decision by fixing a cutoff with a
+stated error rate \cite{id240718418,id260704430}. The formulation is older than the LLM
+literature: fix a cut on a confidence score, accept the region it selects, and report the error on
+the accepted set \cite{geifman2017selective,geifman2019selectivenet}. What changes in the LLM
+setting is the calibration error of the score, confidence that need not be monotone across an
+option set, and a rejected sample that has already cost a generation. The direction of
+miscalibration (over- vs.\ under-confidence) changes which way a confidence-gated cascade fails
+\cite{id260933843}; we therefore track direction as well as magnitude.
+\item[Validity versus truth.] Syntactic/schema correctness of an output is separable from
+semantic correctness of its content \cite{jsonschemabench2025,xgrammar2024}. Conflating
+these is the source of most spurious ``guaranteed'' deployment claims, and the asymmetry
+shapes Layer 4 (\cref{sec:contracts}).
+\item[Grounding.] For generative output, whether a claim is supported by available evidence.
+The trustworthy-RAG literature treats grounding as a collection of techniques organized by
+dimension, each opening new failure paths of its own (stale sources, retrieval misses, unfaithful
+use) \cite{id250206872,id240910102}.
+\item[Error cost and reversibility.] Errors differ by consequence severity and by whether
+they can be undone. This becomes the L0 risk budget: the escalation band of \cref{fig:map} is
+derived from it, and the band's width is our answer to how much error a task can absorb.
+\item[Prediction unit and generation schedule.] What a system predicts --- a token, a continuous
+latent, or a discrete code spanning several tokens --- and the order in which predictions
+condition on each other are separable from both the training signal and the architecture: the
+same objective admits a left-to-right chain, an iterative denoising sweep, or a coarse-to-fine
+level order (\cref{fig:schedule-atlas}). The schedule fixes where commitment points fall, and
+with them whether early commitments remain revisable.
+\item[Latency, cost and budget.] Deployment reliability is bounded by operational budget;
+a configuration that is reliable at unit cost can be unreliable at required throughput. We
+treat budget as a selection constraint; maximizing it is a different objective.
+\item[Execution configuration.] The inference engine, the numeric precision, the cache settings
+and the co-resident traffic a model is served under: properties of the deployment; the weights
+alone do not carry them. They enter the computed function, so an error rate belongs to the
+configuration it was measured on (\cref{sec:l5-bridge}).
+\item[Monitoring and drift response.] This dimension is the assurance layer's own reliability:
+monitors can be evaded under ordinary task pressure~\cite{id260930217}, and OOD detection alone
+does not close the failure envelope \cite{id221116158}.
+\end{description}
+
+\subsection{Three determinism terms: task, model, serving path}
+\label{sec:determinism}
+\cref{sec:selection} routes tasks on two axes: how open the answer space is, and what an error
+costs. That routing requires one distinction we fix here. A \emph{task} has a well-defined or an
+open-ended answer space; a \emph{model} either samples stochastically or is effectively
+deterministic at inference; and a \emph{serving path} either reproduces the same arithmetic for
+the same request or does not, because the inference engine, the numeric precision and the
+co-resident traffic on the device all enter the computed function.
+The first two are frequently conflated in vendor material (``deterministic mode'' versus
+``deterministic task''), and we keep them strictly separated. The third is the one a deployment
+team discovers by accident: no checkpoint records it, so a threshold fitted on one serving path
+does not carry to another (\cref{sec:l5-bridge}). The planner on a well-posed route
+query and the generative assistant on an ambiguous brief face different reliability demands
+even under identical decoding parameters.
+
+\subsection{Vocabulary used in this paper}
+\begin{description}[leftmargin=1.5em, itemsep=1pt]
+\item[Layer.] One of the reliability-bearing decision problems the stack arranges, from task and
+risk specification to assurance and control; a decision problem, not a model class.
+\item[Stack instance.] A particular filling of the layers by one assembled system; the unit is
+not a model considered on its own.
+\item[Inherited failure envelope.] The failure modes a layer's choice makes unrecoverable
+downstream: the choice cannot remove them, only relocate them.
+\item[Reliability debt.] What a fix incurs when it moves a failure to another layer rather than
+removing it; see also \emph{inherited failure envelope}.
+\item[Well-posedness.] A task is well-posed when its answer space and input distribution can both
+be stated; reliability is claimed only relative to that pair.
+\item[Selective prediction.] Turning measured confidence into a decision by fixing a cutoff with a
+stated error rate.
+\item[Validity versus truth.] Schema or syntactic correctness of an output, which a contract layer
+can enforce, versus semantic correctness of its content, which no contract can.
+\item[Residual.] The error left after the safeguards act, which the operator chooses to own and
+re-evaluate rather than assume absent.
+\end{description}

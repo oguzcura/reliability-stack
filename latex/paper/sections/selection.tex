@@ -1,0 +1,206 @@
+% Section 10: selection framework (P4)
+The stack of \cref{sec:stack} tells you \emph{what a system is}, and this section tells a
+practitioner \emph{what to build}. The selection framework routes by task; model preference is not
+an axis. It is written as a
+procedure because the assembly is the product. Each of the six steps hands the next a term it
+cannot invent for itself, and the last one ends at a configuration whose residual risk is named
+and owed.
+
+\subsection{The two axes}
+\label{sec:sel-axes}
+The horizontal axis is \textbf{answer-space openness}: how far the correct answer set is from
+enumerable at design time. Well-defined answer spaces support closed contracts (typed
+decisions, validation); open-ended ones cannot be closed by any contract layer and must rely
+on grounding and review (\cref{sec:case-rag}). We use \emph{openness of the
+answer space}. Stochastic inference is a deployment knob; an axis built on it would re-ask the
+determinism question and leave every reliability limit unaddressed.
+
+The vertical axis is \textbf{cost of error}: the severity of a wrong output. Reversible low-stakes
+outputs allow sampling or iteration strategies; irreversible high-stakes ones push the operating
+point toward validated acceptance and human escalation, whichever objective family serves the
+task. \cref{fig:map} draws the resulting quadrants and the escalation band.
+
+\subsection{The procedure}
+\label{sec:sel-procedure}
+The procedure starts from the paper's one falsifiable cross-layer regularity: failures originate
+where they are least catchable and are usually caught in the later columns of
+\cref{fig:failmatrix}. Where the checks sit is therefore a decision the procedure makes. It
+consumes the ledger.
+
+\begin{enumerate}[leftmargin=1.6em, itemsep=2pt]
+\item \textbf{Risk specification.} Fix the three terms that make ``reliable'' a claim in this
+  paper: the envelope of failure kinds the system must not produce, the budget it must hold, and
+  the assurance path that intervenes as it drifts (\cref{sec:reliability}). Mapped onto the
+  framework, those terms are two axes---answer-space openness and error severity---plus two
+  constraints, reversibility and operational budget: three claims, which the framework reads as
+  four terms every later step reads.
+
+\item \textbf{Placement.} Locate the task on \cref{fig:map}: how open the answer set is at design
+  time, and what a wrong output costs. The coordinate is an analytic cut [J], the status the map
+  gives its quadrant lists. Record the reason the placement holds rather than treating the
+  quadrant as measured, and keep task openness separate from decoding stochasticity, which is a
+  deployment knob (\cref{sec:reliability}).
+
+\item \textbf{Modifier routes.} Walk the four placement modifiers --- distribution shift,
+  reversibility, observability, operational budget --- plus the schedule route, which asks the
+  question the axes never raise: \emph{which factorization does this contract have to inspect?}
+  The schedule is not inherited from the objective; \cref{fig:schedule-atlas} draws the three
+  factorizations as lanes, and \cref{sec:sel-modifiers}(v) states the route. Each route is stated
+  with its evidence there; any of them can move the operating point without
+  moving the axes, so the placement from Step~2 is provisional until they have been walked.
+
+\item \textbf{Probe against the failure matrix.} For each failure kind in the envelope, find the
+  row where it originates in \cref{fig:failmatrix} and ask which later column would catch it;
+  where no column does, the candidate needs another layer or a narrower claim, and the residue is
+  bracketed as the residual of \cref{fig:layer5-assur}. A candidate that verifies only at the
+  layer where it operates is checking the wrong place by default: origins cluster at L2 while
+  filled cells cluster in the last three columns. The two probes already on
+  \cref{fig:map} are our own cases, and they are illustrative: they show what a filled placement
+  looks like before any threshold exists.
+
+\item \textbf{Archetype routes.} Read the quadrant's candidate modes and select one to carry:
+  (low cost, well-defined) rules, classifiers and decision models benchmarked against baselines;
+  (high cost, well-defined) specialist plus validators, calibrated acceptance and escalation;
+  (high cost, open-ended) grounded generative assistance with retrieval, verification and human
+  review; (low cost, open-ended) general-purpose generation with sampling and iteration. Two gated
+  variants enter only where their precondition holds: latent-prediction planning under
+  identifiability conditions (\cref{sec:case-jepa}), and rules or formal verification where an
+  executable validator exists (\cref{sec:case-forms}). Then read the card of
+  \cref{sec:familycards} --- what the objective optimizes, which task types it suits, which
+  failure modes remain, which complementary layers cover the residual --- and the mechanism
+  sketch for where the design's benefit comes from. The route fixes the objective family and the
+  contract tier; it does not fix the schedule of Step~3.
+
+\item \textbf{Budget covenant.} Convert the L0 budget into thresholds and escalation conditions
+  with the existing [T]-class machinery --- conformal abstention \cite{id240501563},
+  risk-controlled selective answering \cite{id260704430}, and risk-budgeted serving
+  \cite{id260933887} --- then fit them on the operator's calibration set, reference configuration
+  and correctness measure. The cutoff is the cost-based reject option, chosen to hold the error
+  budget on the calibration distribution \cite{geifman2017selective}; never install it as a fixed
+  universal constant (see also the contested-direction caveat \cite{id260933843}); the output is an
+  \emph{operator}, not a ``safe zone''. Instrument it: monitors, abstention and escalation ladder,
+  plus a scheduled evaluation plan that tracks shift and takeover attempts, the contested claims of
+  \cref{tab:crosscase} included.
+\end{enumerate}
+What the six steps produce is a candidate operating mode with a checked residual-risk story.
+The framework draws two lines: it treats ranking model classes against each other as a
+category error (\cref{sec:stack}), and it holds escalation to the residual the evidence supports.
+
+\subsection{Modifier routes}
+\label{sec:sel-modifiers}
+Four modifiers move the placement and leave the axes fixed. A fifth route, the schedule, does a
+different job: it selects which factorization the contract inspects. All five are claims we have
+to defend, and each answers a question the placement alone cannot settle.
+
+\begin{description}[leftmargin=1.5em, itemsep=1pt]
+\item[(i) Distribution shift.] Widens margins on the reliability side: a well-instrumented
+  classifier degrades unpredictably under shift, making calibrated abstention the floor rather
+  than a bonus \cite{id250315850,id221116158}. Shift is also the matrix's one ambiguous origin row,
+  filed at L0 and stated as such (\cref{fig:failmatrix}).
+\item[(ii) Reversibility.] Converts some high-error-cost placements back into the iterative
+  regime, because repairable damage can wait for repair. The
+  dashed elbow of \cref{fig:map} is this move drawn.
+\item[(iii) Observability.] Determines whether the assurance layer gets signal at all; monitoring
+  under low observability is one of the honest failed rows of \cref{sec:case-classifier}, where
+  the monitor is evaded under ordinary task pressure \cite{id260930217}.
+\item[(iv) Operational budget.] Constrains the acceptable cost of the safeguard chain itself; it
+  constrains which configuration is even selectable, not how reliable it should be. A
+  configuration that reaches target quality faster converts its margin into reliability budget
+  (more candidates, more checks) rather than raw throughput; the schedule classes of
+  \cref{fig:schedule-atlas} make that exchange rate visible, and on XSum the NCM authors spend
+  saved sampling time on minimum-Bayes-risk selection for \evaurep{about 7\% higher ROUGE-L within
+  the same sampling budget} (\cref{sec:l5-selfcheck}).
+\item[(v) Schedule.] The route that puts the schedule axis into the procedure: it fixes which
+  factorization the contract must inspect, and so where the acceptance surface sits. A schedule is
+  a factorization choice, not an architecture: the same objective admits a left-to-right chain, an
+  iterative denoising sweep, or a coarse-to-fine level order, and what differs across the three is
+  how many sequential decisions a contract must accept and whether any of them can be taken back
+  (\cref{fig:schedule-atlas}, \cref{sec:contracts}). The archetype of Step~5 therefore
+  fixes the objective family; the schedule is a separate commitment, and it is
+  the one that decides whether the budget conversion of (iv) buys more passes or more checks. Where
+  a shorter path holds quality, the saved passes are spendable on verification: the hierarchical
+  family reports 21$\times$ faster decoding on LM1B at matched parameter scale and 31$\times$ on
+  XSum at matched ROUGE-L, at $K \ll L$ [A] \cite{kumbong2026ncm}, and its tokenizer-stage
+  substitutions are what the contract's exactness boundary then has to catch.
+\end{description}
+
+\subsection{A worked instance: typed decision serving}
+\label{sec:sel-instance}
+The six steps are easier to check when one task is carried through them. This instance carries
+Case~2 (\cref{sec:case-decision}), a non-generative decision model returning
+\texttt{choice}/\texttt{score}/\texttt{noul} from one forward pass. It adds no measurement of its
+own; the single cell the paper cannot supply is marked operator-supplied.
+
+\begin{description}[leftmargin=1.5em, itemsep=2pt]
+\item[\textbf{1. Risk specification.}] A closed decision over an option set of 50 similar
+  candidates, the size at which the inherited evaluation reports its accuracy drop; a 10\%
+  accepted-error budget; no human reader in the loop, because the decision acts. Two failure kinds
+  fill the envelope: interface instability under option order and option-set size, and acceptance
+  miscalibrated against the budget.
+\item[\textbf{2. Placement.}] High cost of error against a well-defined answer space: the quadrant
+  routing to a specialist with validators, calibrated acceptance and escalation (\cref{fig:map}).
+  The placement is an analytic cut \textsf{[J]}: it records that a wrong decision acts and that
+  the option set is enumerable at design time.
+\item[\textbf{3. Modifier routes.}] Shift is presentational here: a paired evaluation holds the
+  inputs fixed, reverses option order, and 30\% of answers flip, with accuracy dropping at 50
+  similar candidates \evindep{\cite{id261002267}}. Reversibility is none once the decision acts, so
+  the gate sits before commitment. Observability is the serving harness's request and decision
+  logs. Budget is one forward pass, leaving no sampling passes to convert into checks. The schedule
+  route does not arise: a single-pass decision has one commitment point.
+\item[\textbf{4. Probe against the failure matrix.}] Interface instability is the decision-model
+  framing row: it originates at L4 and is caught in the contracts column, where shuffling against
+  order and a shortlist against set size both sit. The row's monitoring-and-escalation cell is an
+  empty gap in our evidence, so the gate this instance adds is a design move; no catch is
+  documented. Acceptance
+  miscalibration originates at L1, and its acceptance cell is filled only with a
+  contested direction. The joint effect of the three is unmeasured, and no anchor evaluates
+  harness, gate and escalation together (\cref{sec:case-decision}): the procedure brackets that
+  gap, it does not close it.
+\item[\textbf{5. Archetype route.}] Within that route the family is the decision-oriented one, at
+  the typed-decision contract tier, with the card of \cref{sec:familycards} supplying the failure
+  modes it leaves and the complements that cover them. The validators cover form. The
+  contract settles that the answer is a well-formed choice over the offered set and relocates
+  whether the choice is correct.
+\item[\textbf{6. Budget covenant.}] The published gate freezes its thresholds before evaluation and
+  still misses its 10\% accepted-error target on both reported tracks, though it beats random
+  escalation \evindep{\cite{id260933843}}. The shipped checkpoint is independently measured
+  under-confident, mean confidence 0.553 against accuracy 0.767, signed gap $-0.214$
+  \evindep{\cite{id260933843}}. That sign contradicts the card's over-confidence framing and decides
+  which way a confidence-gated cascade fails, so the operator refits the cut on its own calibration
+  split \evvendor{a threshold is a policy chosen from measured accuracy on the operator's own data,
+  not a property of the model}. Coverage at the 10\% budget is not reported in this paper; that cell
+  is operator-supplied. Escalation: any accepted set that misses the budget routes to human review,
+  with a measured catch rate.
+  Owner: the operator. Re-evaluation trigger: any checkpoint change or execution-configuration
+  change, or any option set above 50.
+\end{description}
+Shuffling, a shortlist and a recalibrated gate have not been composed end to end. That residue is
+why the instance stops short of a guarantee and hands back a configuration with a named gap and an
+owner for it.
+
+\subsection{Why this is useful beyond standard practice}
+Existing deployed reliability practice solves \emph{per-dimension} problems
+\cite{id250206872,id240910102,id230901219}: a definition each for calibration, RAG honesty, or content
+quality; each works, is checkable, has failure modes; assembling them for a concrete task is
+what breaks. Our framing explicitly conditions on L0 and treats the assembly as the product:
+each safeguard layer declares what it covers, what its unverified residues are
+(\cref{fig:failmatrix}), and which verified substitutes exist if a residue is deal-breaking.
+The matrix narrows the candidates to the verification-anchored set it enumerates, each with its
+ledger record, and the evidence map (\cref{fig:evidence}) tells the reader which of these claims
+are contested.
+
+The regularity can be tested outside our own matrix. We coded four incidents chosen for their
+public record rather than their fit---Amazon's recruiting tool (2018), the Dutch childcare-benefits
+risk model (2013--2021), Zillow Offers (2021), and the Air Canada chatbot (2024)---with the coding
+rule fixed before the cases were assigned: origin is the earliest layer whose documented design
+choice made the harm likely, and a catch is a safeguard inside the deployed system that fired
+before harm~\cite{reuters2018amazon,amnesty2021xenophobic,zillow2021winddown,aircanada2024bccrt}.
+In all four the earliest documented origin is L1 or L2, and none was caught at or before that
+layer: three had no internal catch at all, and the fourth was stopped only by project cancellation
+at L5. Read at the strength the sample supports, origins cluster early; the sample is too small to
+locate the mode within L1--L2. The later columns describe safeguards that exist rather than
+safeguards that fire. Zillow's documented L4 co-origin
+is the boundary case, and counting nominal review steps as catches would inflate the catch
+side.\footnote{One coder, coding rule fixed before assignment, not blinded to the matrix; a
+retrospective coding, not a benchmark.} The coding manual and every assignment are
+\cref{app:codebook} (\cref{tab:codebook}).

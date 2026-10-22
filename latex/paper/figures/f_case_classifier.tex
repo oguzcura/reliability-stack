@@ -1,0 +1,63 @@
+% figures/f_case_classifier.tex — Case-study sketch (pack 5): discriminative classifier baseline.
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar).
+% Roles: input / class probabilities / label / abstain = rs/gData; encoder + mapping head =
+%   rs/gModel; selective gate = rs/gAccent (the ONE ledger-defended item, [T]); OOD + runtime
+%   monitor = rs/gInfra (monitors are a distinct component, not a model).
+% Chain: input x -> masked-pretrain encoder -> P(y | x) mapping head -> class probabilities ->
+%   selective gate (risk-budget threshold) -> label / abstain; the monitor feeds the gate, and an
+%   evasion lane (task pressure -> monitor, solid attack arrow) makes the monitor an untrusted
+%   input to the gate. No second colour: the pressure block is a text label, not a role tile.
+% Accent: the ONE yellow = threshold-from-risk-budget selective prediction [T] — assumption-bound.
+% label: fig:case-classifier   (figure env + \label live in main.tex; case-studies slot, owner wires)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. [S] calibration / UQ / abstention inventories are LLM-centric (2503.15850 + 2311.08298,
+%      abstention taxonomy 2407.18418); no anchor runs a plain classifier vs LLM/decision stacks
+%      on a shared task [GAP] — comparability limit, not a performance claim;
+%   2. [T] risk-budget threshold (2607.04430): provable alignment under assumptions only; bridges
+%      to the conformal line (2405.01563) and the forms case;
+%   3. [E] OOD detection alone insufficient — runtime monitors are a distinct component (2211.16158);
+%      monitors themselves evadable under ordinary task pressure (2609.30217): the assurance layer
+%      is part of the attack surface;
+%   4. L4 contract = class probabilities, calibrated or not — same single-pass primitive as the
+%      decision-model case (2610.02267's interface).
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\providecommand{\figplus}{{\fontsize{8.2}{10}\selectfont $+$}}
+\begin{tikzpicture}
+% uniform row height (the 3-line gate set the band; all six boxes match it)
+\node[rs/gData, minimum height=32pt] (in1) {input x};
+\node[rs/gModel, right=10mm of in1, minimum height=32pt] (enc) {encoder\\(masked pretrain)};
+\node[rs/gModel, right=10mm of enc, minimum height=32pt] (map) {P(y \figsep\ x)\\mapping};
+\node[rs/gData, right=10mm of map, minimum height=32pt] (prb) {class probabilities\\calibrated or not};
+\node[rs/gAccent, right=10mm of prb, minimum height=32pt] (gate) {selective gate\\risk-budget\\threshold [T]};
+\node[rs/gData, right=10mm of gate, minimum height=32pt] (lab) {label};
+\node[rs/gData, below=7mm of gate] (abs) {abstain};
+% ===== OOD + runtime monitor (feeds the gate) =====
+\node[rs/gInfra, above=10mm of gate] (mon) {OOD \figplus\ runtime monitor};
+% ===== evasion lane (E1): the monitor is an INPUT to the gate, so the gate inherits its
+% evasion rate. Plain solid attack arrow into mon.west (no second colour: the role tokens keep
+% their meaning; the pressure block is text, not a new tile). Numbers stay in the L5 prose/caption.
+\node[anchor=east, align=center, font=\fontsize{7.5}{9.0}\selectfont, text=black!85]
+  (tp) at ([xshift=-6mm]mon.west) {task pressure\\evadable \textbf{[E]}};
+\draw[-{Stealth[length=1.7mm]}, line width=1.0pt, draw=black] (tp.east) -- (mon.west);
+% ===== edges =====
+\draw[rs/gFlow] (in1.east) -- (enc.west);
+\draw[rs/gFlow] (enc.east) -- (map.west);
+\draw[rs/gFlow] (map.east) -- (prb.west);
+\draw[rs/gFlow] (prb.east) -- (gate.west);
+\draw[rs/gFlow] (gate.east) -- (lab.west);
+\draw[rs/gFlow] (gate.south) -- (abs.north);
+\draw[rs/gFlow] (mon.south) -- (gate.north);
+% L4 nuance now lives inside the prb node text ("calibrated or not") — no orphan edge label
+% (foot removed: both lines restated ribbon chips already on the card; the evasion lane carries it)
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsNoClaim}{\textbf{[S]} calibration inventories LLM-centric}
+\rsRibSeg{rsNoClaim}{\textbf{[T]} risk-budget threshold}
+\rsRibSeg{rsVerified}{\textbf{[E]} OOD alone insufficient}
+\rsRibbonRow{-5.8mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} monitors evadable}
+\rsRibSeg{rsNoClaim}{\textbf{[N]} no shared-task comparison}
+\end{tikzpicture}

@@ -1,0 +1,80 @@
+% (v3 design notes retired 2026-10-19 — see the v4 header below.)
+% figures/f_layer5_assur.tex — L5 mechanism sketch: the chosen budget line against the measured
+% residual staircase (v4 2026-10-19).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: rung nodes = rs/gModel (the
+%   ladder's components); the budget = a plain thin line (a policy artifact, not a component);
+%   each rung's leak is set under its step (the layer's own envelope); no accent (the ledger-
+%   defended item for L5 is the threshold-as-policy claim, which is the LINE, not a node: an
+%   accent box on any rung would say "this rung is the evidence", which is false).
+% Change from v3: the vertical menu + 56x80mm monitoring rail panel are replaced by the staircase
+%   the doc specifies — five rungs at ordinal x on a descending stepped residual, a chosen budget
+%   line crossing them, a bracketed residual at the last step, and a named leak under every step.
+%   The rungs are drawn top-down left-to-right in the same order as the old ladder, so the reading
+%   order does not change. Vertical pitch is deliberately uneven (12/13/13/13 mm) and there are no
+%   ticks, gridlines, or scales: the figure is ordinal and must not be read as rates. One axis-mapping
+%   aid only (x: rung order / y: residual, schematic), added after A3 flagged that nothing said
+%   which quantity was vertical; the y label must NOT say "measured" (A2).
+% label: fig:layer5-assur   (figure env + \label to be wired in main.tex, sec:assurance)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. ladder order is by cost, OUR ordering [S]; rungs are cumulative in practice; every rung is
+%      itself a component with its own failure envelope — the named leaks under the steps are the
+%      envelope from sec:l5-envelope (verifier relocation 2606.01066 [E]; correction racing [S];
+%      escalation capacity [S]; thresholds are policies, not constants [T]);
+%   2. the budget line: thresholds are policies derived from a risk budget, never universal
+%      constants — conformal abstention 2405.01563 [T], risk-controlled selective answering
+%      2607.04430 [T]; guarantees are conditional (exchangeability on calibration data; only as
+%      good as the chosen error criterion);
+%   3. WHAT THE FIGURE DOES NOT ENCODE: no rates, no measured residual, and no claim about which
+%      rung a real stack must reach to clear its budget. The staircase's y is ordinal ("further
+%      down"), the crossing point is schematic, and the step heights are deliberately uneven.
+%   4. the residual is bracketed at the last step, not tabulated: the layer's promise is a
+%      measured residual under a chosen budget, not a number in a figure;
+%   5. CUT FROM v3, now caption-only: the monitoring rail (monitored quantity chosen and validated
+%      against the quantity cared about, not an OOD proxy 2211.16158 [E]; monitors as oversight
+%      duties incl. fairness 2609.26123 [E]; auditing only as sound as the audited quantity [S];
+%      monitor evasion under ordinary task pressure 2609.30217 [E]). The rail cost 56x80mm and
+%      duplicated Fig 14's own content; sec:l5-monitoring prose carries it. If the caption must
+%      keep it, one sentence: "monitoring applies at every rung and is itself evadable [E]."
+% Fonts >= 7.5pt; no math glyphs.
+\begin{tikzpicture}[x=1mm,y=1mm]
+\tikzset{
+  rs/l5node/.style={rs/gModel, minimum width=26mm},
+  rs/l5leak/.style={rs/gEdgeLbl, align=center, anchor=south, text=black!70},
+  rs/l5lbl/.style={rs/gLegend, anchor=center, align=center},
+}
+% ===== five rungs on a descending stepped residual =====
+\node[rs/l5node] (r1) at (14,14)  {1 grounding:\\evidence attached};
+\node[rs/l5node] (r2) at (45,2)   {2 rule checks:\\quotes, units};
+\node[rs/l5node] (r3) at (76,-11) {3 model-based\\checks: evadable [E]};
+\node[rs/l5node] (r4) at (107,-24){4 calibrated\\abstention [T]};
+\node[rs/l5node] (r5) at (138,-37){5 escalation:\\human review};
+% ===== the steps: tread at each rung, riser into the next rung's west edge =====
+\draw[rs/gFlow] (r1.east) -- (32,14) -- (32,2);
+\draw[rs/gFlow] (r2.east) -- (63,2)  -- (63,-11);
+\draw[rs/gFlow] (r3.east) -- (94,-11) -- (94,-24);
+\draw[rs/gFlow] (r4.east) -- (125,-24) -- (125,-37);
+\draw[rs/gFlow] (r5.east) -- (156,-37);
+% ===== the chosen budget line =====
+% The label is IN-LINE at the line's right end: the rule BREAKS at the label and resumes after it, so
+% the text rides the budget level instead of floating above it (a floating label let the line read as
+% an accidental rule through the riser). The rule still reaches x=160 so the residual bracket at
+% x=156 hangs off the budget level, and the label stops at 154.2 to leave that bracket its own ink.
+% Wording is a policy statement, not a measurement: the crossing point is where the operator chooses,
+% not where this stack measured anything.
+\node[rs/l5lbl, anchor=east] (budgetlbl) at (154.2,-4.5)
+  {budget (chosen) \textemdash{} drawn where you choose};
+\draw[black!70, line width=0.9pt] (0,-4.5) -- ([xshift=-1pt]budgetlbl.west);
+\draw[black!70, line width=0.9pt] ([xshift=1pt]budgetlbl.east) -- (160,-4.5);
+% ===== residual bracket at the last step =====
+\draw[<->, >=Stealth, line width=0.5pt, draw=black!60] (156,-5.2) -- (156,-37);
+\node[rs/l5lbl, anchor=east] at (154,-21) {y: residual\\(schematic)};
+% ===== axis-mapping aid (both axes ordinal; see caption) =====
+\node[rs/l5lbl, anchor=west] at (0,-44) {x: rung order};
+% ===== named leaks, one per step =====
+\node[rs/l5leak] at (16.5,20)  {attribution is\\not truth};
+\node[rs/l5leak] at (47.5,8)   {correction racing:\\checks race commit};
+\node[rs/l5leak] at (78.5,-5)  {verifier relocation:\\the checker errs too [E]};
+\node[rs/l5leak] at (109.5,-18){thresholds are\\policies, not facts [T]};
+\node[rs/l5leak] at (140.5,-31){escalation has capacity limits\\and its own miss rate [S]};
+\end{tikzpicture}

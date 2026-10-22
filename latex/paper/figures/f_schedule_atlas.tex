@@ -1,0 +1,124 @@
+% figures/f_schedule_atlas.tex — G1: generation-schedule atlas (three factorizations, one picture).
+% TAKEAWAY: the three families differ mainly in HOW MANY sequential decisions they make and
+% whether a decision can be revised — AR commits per token, masked diffusion refines all
+% positions every pass, NCM-class commits K coarse-to-fine levels (K << L).
+% Grammar: style_v2_tokens.tex roles only (rs/gData payload green, rs/gModel mechanism).
+%   No accent colour (this figure defends no single ledger item). Dashed survives ONLY as the
+%   diagnostic preview port (off the generation path, labelled); no contested [C] wiring is drawn.
+% Labels >= 7.5pt; math rides 8.2pt (CMSY measures ~0.92x); NO math sub/superscripts — level
+%   indices and z-tap indices ride as TEXT digits, or they would publish below the 7pt floor.
+% The only quantitative claim is K << L; step counts are symbolic (Lx1, TxL, Kxl_k), no clock.
+\providecommand{\atlasll}{{\fontsize{8.2}{10}\selectfont $K \ll L$}}
+\providecommand{\atlasdots}{{\fontsize{8.2}{10}\selectfont $\cdots$}}
+\providecommand{\atlasT}{{\fontsize{8.2}{10}\selectfont $T$}}
+% level labels ride 8.2pt math and a TEXT digit: a math subscript would publish at 5.6pt
+\providecommand{\atlasell}[1]{{\fontsize{8.2}{10}\selectfont $\ell$}#1}
+% z tap labels: 8.2pt glyph + TEXT index, same sub-floor reason
+\providecommand{\atlasz}{{\fontsize{8.2}{10}\selectfont $z$}}
+\providecommand{\atlaszof}[1]{{\fontsize{8.2}{10}\selectfont $z$}(#1)}
+\begin{tikzpicture}[x=1mm, y=1mm]
+\tikzset{
+  rsa/lane/.style={anchor=west, font=\fontsize{8.2}{9.8}\selectfont\bfseries, text=black},
+  rsa/cell/.style={draw=black!70, line width=0.6pt, fill=rsGreenPale, align=center,
+                   font=\fontsize{7.5}{9.0}\selectfont, inner sep=0.6pt, minimum height=5mm},
+  rsa/note/.style={anchor=west, font=\fontsize{7.5}{9.0}\selectfont, text=black!85},
+  rsa/cost/.style={anchor=west, font=\fontsize{7.5}{9.0}\selectfont, text=black!70},
+}
+% ============ lane 1: autoregressive — L sequential, non-revisable commitments ============
+\node[rsa/lane] at (0,0) {AR};
+\node[rsa/note] at (0,-4.4) {next-token chain};
+\node[rsa/cost] at (0,-8.3) {{\fontsize{8.2}{10}\selectfont $L\times1$} --- revision: none};
+\foreach \i/\lab in {0/the, 1/f, 2/ul, 3/l} {
+  \node[rsa/cell, minimum width=7mm] at (44+\i*9,0) {\lab};
+}
+\foreach \i in {4,...,8} {
+  \node[rsa/cell, minimum width=7mm, fill=white] at (44+\i*9,0) {};
+}
+\node[rsa/note] at (121.5,-1.6) {\atlasdots};
+% per-token commitment arrows: each token is committed when emitted, with no revision path back
+\foreach \i in {0,...,8} {
+  \draw[-{Stealth[length=1.4mm]}, line width=0.6pt, draw=black!75]
+    (44+\i*9,-2.7) -- (44+\i*9,-7.3);
+}
+\draw[line width=0.6pt, draw=black!45] (40.5,-7.6) -- (119.5,-7.6);
+\node[rsa/note] at (44,-11.4) {L sequential steps; each token commits (non-revisable)};
+
+% ============ lane 2: masked diffusion — T passes over ALL L positions ============
+\node[rsa/lane] at (0,-22) {masked diffusion};
+\node[rsa/note, text width=31mm] at (0,-26.4) {iterative denoising, all positions revisited};
+\node[rsa/cost] at (0,-33.4) {{\fontsize{8.2}{10}\selectfont $T\times L$} --- revision: all};
+% three snapshots (t=T / one intermediate / t=0). The intermediate reveal is SCATTERED, not a
+% prefix: a prefix is the AR picture this lane must not borrow. Settled cells are darker.
+\foreach \c in {0,...,8} {
+  \node[rsa/cell, minimum width=7mm, fill opacity=0.12, text=black!80]
+    at (44+\c*8.4,-22) {?};
+}
+\foreach \c/\t in {0/the, 4/re, 7/le} {
+  \node[rsa/cell, minimum width=7mm, fill opacity=0.85, text=black!85]
+    at (44+\c*8.4,-30) {\t};
+}
+\foreach \c in {1,2,3,5,6,8} {
+  \node[rsa/cell, minimum width=7mm, fill opacity=0.30, text=black!80]
+    at (44+\c*8.4,-30) {?};
+}
+\foreach \c/\t in {0/the, 1/f, 2/ul, 3/l, 4/re, 5/li, 6/ab, 7/le, 8/.} {
+  \node[rsa/cell, minimum width=7mm, fill opacity=0.95, text=black!85]
+    at (44+\c*8.4,-38) {\t};
+}
+% re-mask: a settled cell can return to `?` between passes — self-loop above cell 4, labelled.
+\draw[-{Stealth[length=1.1mm]}, line width=0.75pt, draw=black!65]
+  (76.3,-27.7) .. controls (75.4,-25.3) and (79.8,-25.3) .. (78.9,-27.7);
+\node[rsa/note] at (80.2,-26.0) {re-mask};
+% the pass axis: one arrow for T, not per-cell arrows
+\draw[-{Stealth[length=1.6mm]}, line width=0.7pt, draw=black!65] (118,-19.5) -- (118,-40.5);
+\node[rsa/note] at (120,-30) {\atlasT{} passes};
+\node[rsa/note] at (44,-44.8) {T denoise passes over ALL L positions; any position re-masked};
+
+% ============ lane 3: NCM-class — K sequential levels, parallel within a level ============
+\node[rsa/lane] at (0,-55) {NCM-class};
+\node[rsa/note, align=left] at (0,-59.4)
+  {corpus / tokenizer:\\K code levels};
+\node[rsa/cost, align=left] at (0,-65.6)
+  {{\fontsize{8.2}{10}\selectfont $K\times$}\atlasell{k}\\{}revision: residual};
+% same-span level rows: every level spans x=44..108 while cells shrink as l_k grows and fill
+% darkens with detail — the SAME sequence at rising resolution, not a row that appends rightward.
+\foreach \r/\n/\idx/\op in {0/2/1/0.30, 1/4/2/0.50, 2/7/3/0.72, 3/10/4/0.95} {
+  \pgfmathsetmacro{\cw}{(64-(\n-1)*0.7)/\n}
+  \pgfmathsetmacro{\nm}{\n-1}
+  \node[rsa/note, anchor=east] at (38,-55-\r*6) {\atlasell{\idx}};
+  \foreach \c in {0,...,\nm} {
+    \pgfmathsetmacro{\cx}{44+\c*(\cw+0.7)+\cw/2}
+    \node[rsa/cell, minimum width=\cw mm, fill opacity=\op, text=black!80]
+      at (\cx,-55-\r*6) {};
+  }
+  % one hand-off per level (parallel within the level): its codes join the cumulative z(k)
+  \draw[-{Stealth[length=1.4mm]}, line width=0.7pt, draw=black!70]
+    (108,-55-\r*6) -- (117.6,-55-\r*6);
+  \fill[black!70] (118,-55-\r*6) circle (0.55);
+  \pgfmathtruncatemacro{\kp}{\r+1}
+  \node[rsa/note, anchor=south east] at (117.4,-54.1-\r*6) {\atlaszof{\kp}};
+  % diagnostic preview port (dashed, off the cost path, above the tap so it never grazes the
+  % decode box); omitted at level K, whose decode is real
+  \ifnum\r<3
+    \draw[line width=0.6pt, draw=black!55, dashed] (118,-55-\r*6) -- (119.7,-53.9-\r*6);
+    \draw[line width=0.55pt, draw=black!55, fill=white] (119.9,-53.7-\r*6) circle (0.42);
+  \fi
+}
+% conditioning spine: thin left rail from the corpus/tokenizer past every level, one tick per level
+\draw[line width=0.6pt, draw=black!60] (41.5,-51.4) -- (41.5,-73);
+\fill[black!60] (41.5,-51.4) circle (0.45);
+\foreach \r in {0,...,3} {
+  \draw[-{Stealth[length=1.1mm]}, line width=0.6pt, draw=black!60]
+    (41.5,-55-\r*6) -- (43.7,-55-\r*6);
+}
+\node[rsa/note] at (0,-51.2) {conditioned on \atlasz(k-1)};
+% one decode, after the last level: the acceptance surface, not a per-level step
+\draw[line width=0.6pt, draw=black!60] (118,-55) -- (118,-73);
+\node[rs/gModel, anchor=west, minimum width=22mm, minimum height=11mm, text width=19mm,
+      inner xsep=2pt, inner ysep=2pt, font=\fontsize{7.5}{9.0}\selectfont] (dec)
+  at (120,-73) {decode once\\acceptance\\surface};
+\draw[-{Stealth[length=1.4mm]}, line width=0.7pt, draw=black!70] (118,-73) -- (dec.west);
+\node[rsa/note] at (121.2,-53.8) {previews};
+\node[rsa/note] at (44,-81.4) {K steps of sequential levels, parallel within level; \atlasll};
+% preview ports are diagnostic; the sole generation-path decode is the box above
+\end{tikzpicture}

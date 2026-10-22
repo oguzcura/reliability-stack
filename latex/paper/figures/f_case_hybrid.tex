@@ -1,0 +1,52 @@
+% figures/f_case_hybrid.tex — case-study v7 (RELATIVE chain, nested containers)
+% Containers chained on drawing edges: no manual mm guesses, no overlaps by construction.
+% Vendor edge semantics: solid = documented edge; dashed = optional / undocumented wiring.
+\begin{tikzpicture}
+  % ===== perception tiles (2x2) =====
+  \node[rs/tile] (p1) {OCR};
+  \node[rs/tile, right=3mm of p1] (p2) {detection};
+  \node[rs/tile, below=1.2mm of p1] (p3) {scrape};
+  \node[rs/tile, right=3mm of p3] (p4) {translate};
+  \node[rs/container, fit=(p1)(p2)(p3)(p4), inner sep=10pt, fill=none] (fperc) {};
+  
+\node[rs/contitle, anchor=west] at ([xshift=3pt, yshift=-5.5pt]fperc.north west) {perception};
+  % ===== reasoning container (chained off frea's east edge) =====
+  \node[rs/comp, right=12mm of fperc.east, yshift=4mm] (rc1) {LLM reasoning core};
+  \node[rs/tile, below=1.2mm of rc1.south west, xshift=0pt, anchor=north west, yshift=-1mm]  (rc2) {adapters};
+  \node[rs/tile, right=3mm of rc2] (rc3) {tools};
+  \node[rs/container, fit=(rc1)(rc2)(rc3), inner sep=10pt, inner xsep=12.5pt, fill=none] (frea) {};
+  
+\node[rs/contitle, anchor=west] at ([xshift=3pt, yshift=-5.5pt]frea.north west) {reasoning + orchestration};
+  % ===== input + context (LEFT of fperc, below the in-plane) =====
+  \node[rs/input, left=14mm of fperc.west, yshift=0mm] (in1) {inputs};
+  \node[rs/comp, below=5mm of in1] (ctx) {context builder};
+  % ===== infra container (BELOW fperc) =====
+  \node[rs/tile, below=11mm of p3] (i1) {retrieval};
+  \node[rs/tile, right=3mm of i1] (i2) {sandbox};
+  \node[rs/tile, right=3mm of i2] (i3) {vector DB};
+  \node[rs/tile, right=3mm of i3] (i4) {GPU scale};
+  \node[rs/container, fit=(i1)(i2)(i3)(i4), inner sep=10pt, fill=none] (finf) {};
+  
+\node[rs/contitle, anchor=west] at ([xshift=3pt, yshift=-5.5pt]finf.north west) {infra foundation};
+  % ===== decoders container (chained off frea east) =====
+  \node[rs/comp, right=12mm of frea.east, yshift=2mm] (de1) {decoder 1};
+  \node[rs/comp, below=1.2mm of de1] (de2) {decoder 2};
+  \node[rs/comp, below=1.2mm of de2] (de3) {decoder 3};
+  \node[rs/container, fit=(de1)(de2)(de3), inner sep=10pt, inner xsep=11pt, fill=none] (fdec) {};
+  
+\node[rs/contitle, anchor=west] at ([xshift=3pt, yshift=-5.5pt]fdec.north west) {typed decoders};
+  % ===== outputs =====
+  \node[rs/out, right=10mm of fdec.east] (obj) {structured output};
+  \node[rs/claim, above=4mm of obj] (val) {validation layer};
+  % ===== edges =====
+  \draw[rs/flow]  (in1.east) -- (fperc.west);
+  \draw[rs/flow]  (in1.south) -- (ctx.north);
+  \draw[rs/flow]  (fperc.east) -- (frea.west);
+  \draw[rs/flow]  (ctx.east) -- ([yshift=-2mm]fperc.south east) -- ([xshift=-2mm, yshift=-2mm]frea.south west) -- ([xshift=-2mm]frea.south);
+  \draw[rs/flow]  (frea.east) -- (fdec.west);
+  \draw[rs/flow]  (fdec.east) -- (obj.west);
+  \draw[rs/flow2] (obj.north) -- (val.south);
+  \draw[rs/flow2] (finf.east) -- (rc3.east);
+  \node[rs/foot] at ([yshift=-8mm]finf.south) {edge set vendor-reported [V]; dashed wiring undocumented by vendor};
+  \node[rs/foot] at ([yshift=5mm]frea.north east) {miss: upstream errors accepted downstream};
+\end{tikzpicture}

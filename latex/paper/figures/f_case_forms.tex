@@ -1,0 +1,77 @@
+% figures/f_case_forms.tex — Case-study sketch (pack 6): rules / constrained-decision pipeline.
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar).
+% Roles: task / verdict+certificate = rs/gData; generative proposal = rs/gModel; formal validator =
+%   rs/gAccent (the ONE ledger-defended item, [E]); statistical wrapper = neutral claim box
+%   (rs/caseNote: gray dashed = claim-to-defend, mirrors f_fam_energy's [GAP] box; not a role);
+%   fuzzer-found verifier gaps = the paired-verdict trace above the validator (ink only: filled
+%   square = ACCEPT under the wider encoding, open square = REJECT under the narrower one; no
+%   second colour, no rates).
+% Chain: task under explicit spec -> generative proposal (grammar-constrained decoding) -> formal
+%   validator (checks encoded constraints) -> verdict + certificate.
+% Accent: yellow = deterministic validity enforcement [E] (schema-level / grammar-constrained).
+% Dashed wires = claims-to-defend: statistical wrapper [T] qualifies learned components; the
+%   fuzzer-found verifier-gap note [E] (validity != truth).
+% label: fig:case-forms   (figure env + \label live in main.tex; case-studies slot, owner wires)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. HONEST NULL: no production rules-only / formally-verified pipeline anchor exists in our
+%      build — this figure is our template instance, not a vendor reconstruction [GAP];
+%   2. [E] syntax-level enforcement 2305.13971 / 2501.10868 / 2411.15100: validity guarantees are
+%      relative to the encoded constraints, and enforced rules can be formally sound but factually
+%      wrong;
+%   3. [E] verifiers themselves fail (2606.01066): fuzzing finds verifier gaps — the validation
+%      layer relocates rather than removes error;
+%   4. [T] statistical wrappers (2609.33887 reference-relative risk; 2405.01563 conformal) are
+%      assumption-bound and reference-relative — the reference itself may be wrong;
+%   5. no anchor evaluates a formal verifier wrapping a learned model in a closed loop [GAP].
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figplus}{{\fontsize{8.2}{10}\selectfont $+$}}
+\providecommand{\figneq}{{\fontsize{8.2}{10}\selectfont $\ne$}}
+\begin{tikzpicture}
+% claim-to-defend box (neutral, mirrors f_fam_energy's [GAP] pattern): not a role token, not the accent
+\tikzset{rs/caseNote/.style={rounded corners=2.5pt, draw=black!40, line width=0.9pt, dashed,
+  fill=white, align=center, inner sep=3pt, font=\fontsize{7.5}{9.0}\selectfont, text=black!55}}
+% ===== chain =====
+\node[rs/gData] (in1) {task under\\explicit spec};
+\node[rs/gModel, right=17mm of in1] (gen) {generative proposal\\constrained decoding};
+\node[rs/gAccent, right=17mm of gen] (val) {formal validator [E]\\checks constraints};
+\node[rs/gData, right=17mm of val] (ver) {verdict \figplus\ certificate};
+% ===== statistical wrapper (above proposal, dashed claim) =====
+\node[rs/caseNote, above=10mm of gen] (wrap) {statistical wrapper [T]\\conformal / learn-then-test};
+% ===== paired-verdict trace (F1): the same completion, two encodings of the constraint =====
+% The divergence IS the claim: a wider encoded language ACCEPTs what a narrower one REJECTs, so
+% "valid" is relative to the encoded constraints and the guard relocates error rather than
+% removing it. Verdict markers are filled (accepted) vs open (rejected) -- presence/absence, no
+% second colour. The instance label is the anchor's own example; no counts, no rates.
+\coordinate (trc) at ($(val.north)+(-22mm,4mm)$);
+\begin{scope}[shift={(trc)}, x=1mm, y=1mm]
+\node[anchor=base, font=\fontsize{7.5}{9.0}\selectfont, text=black!85] at (22,12.4)
+  {fuzzer-found gap \textbf{[E]}};
+\node[anchor=west, font=\fontsize{7.5}{9.0}\selectfont, text=black!85] at (0,8.4) {buggy verifier};
+\draw[-{Stealth[length=1.1mm]}, line width=0.6pt, draw=black!70] (27.2,8.9) -- (30.6,8.9);
+\fill[black!75] (31.5,8.25) rectangle ++(1.5,1.5);
+\node[anchor=west, font=\fontsize{7.5}{9.0}\selectfont, text=black!85] at (33.6,8.4) {ACCEPT};
+\node[anchor=west, font=\fontsize{7.5}{9.0}\selectfont, text=black!85] at (0,4.4) {narrower verifier};
+\draw[-{Stealth[length=1.1mm]}, line width=0.6pt, draw=black!70] (27.2,4.9) -- (30.6,4.9);
+\draw[black!75, line width=0.7pt, fill=white] (31.5,4.25) rectangle ++(1.5,1.5);
+\node[anchor=west, font=\fontsize{7.5}{9.0}\selectfont, text=black!85] at (33.6,4.4) {REJECT};
+\node[anchor=base, font=\fontsize{7.5}{9.0}\selectfont, text=black!70] at (22,0.6)
+  {instance: \texttt{partial\_answer}};
+\end{scope}
+% ===== edges =====
+\draw[rs/gFlow] (in1.east) -- (gen.west);
+\draw[rs/gFlow] (gen.east) -- (val.west);
+\draw[rs/gFlow] (val.east) -- (ver.west);
+\draw[rs/gFlowD] (wrap.south) -- (gen.north);
+% ===== foot (clears the validator); the honest-null line lived in the [N] chip already =====
+\coordinate (mid) at ($(in1.center)!0.5!(ver.center)$);
+\node[rs/gFoot] at ([yshift=-8mm]mid |- val.south) {validity \figneq\ truth --- verifiers fail; guarantees are reference-relative [E]/[T]};
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} formal validator: encoded constraints}
+\rsRibSeg{rsVerified}{\textbf{[E]} verifiers fail (fuzzer gaps)}
+\rsRibbonRow{-5.8mm}
+\rsRibSeg{rsNoClaim}{\textbf{[T]} statistical wrapper assumption-bound}
+\rsRibSeg{rsNoClaim}{\textbf{[N]} honest null: no production anchor}
+\end{tikzpicture}

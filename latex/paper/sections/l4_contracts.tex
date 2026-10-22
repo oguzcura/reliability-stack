@@ -1,0 +1,134 @@
+% l4_contracts.tex --- Layer 4 (Output Contracts), P4 draft, 2026-10-17.
+% Subsections for \section{Layer 4 --- Output Contracts: Validity Is Not Truth}\label{sec:contracts}.
+% Placeholder convention (same as sibling sections): \cite{p2[<arxiv-id>]} for IDs verified in the
+% P2 sweep, wired to named keys at merge. p2 IDs cited here: 2305.13971, 2609.33887, 2609.33843,
+% 2609.34024, 2610.18529, 2610.19811, 2610.02076, 2610.02267. Already wired: jsonschemabench2025,
+% xgrammar2024, rauk2026jevbenchmark. Vendor documentation cited in footnotes per the L5 precedent.
+% NOTE: 2609.33843 carries an author-similarity flag in the Laya audit (item f) --- cite as one
+% reproduction, not consensus; miscalibration direction reported contested per audit item (a).
+
+\subsection{The contract is the interface the software can rely on}
+\label{sec:l4-contract}
+
+Layer~4 asks what a component \emph{returns} to the software around it. We call the declared,
+externally checkable shape of that return an \emph{output contract}, ordered in four contract
+tiers (T1--T4), numbered as in \cref{fig:layer4-contract}.
+\emph{Free-form text} is the weakest: downstream code can act on it only through another parser or
+a model, so the contract is ``whatever the consumer can extract'' (T1). \emph{Schema-constrained output}
+adds a grammar or JSON schema the return must satisfy (T2). \emph{Typed decisions} remove text entirely:
+the component returns a distribution over a fixed set of typed choices (a probability per option
+or per stated claim), so the decision score is what thresholds consume (T3).
+\emph{Structured metadata} --- citations, spans, tool-call records, confidence fields --- layers
+evidence onto any of the above (T4). The tier fixes what later layers can check and select over
+(\cref{sec:selection}): a validator can test a grammar, a threshold can consume a score, and
+neither can test a sentence. That is the handoff promised in \cref{sec:l2-handoff}, where representations
+decide what the system computes over and contracts decide what can be verified about what it
+returns.
+
+\subsection{The validity half: constrained decoding, and what validity measures}
+\label{sec:l4-validity}
+
+Grammar-constrained decoding makes the validity half constructive: at each step it suppresses every
+token that would violate the grammar. \evindep{Constrained decoding was introduced to close a specific gap: language models fail to produce complex structures reliably when not
+finetuned to the required format, and masking invalid continuations restores structural correctness
+without retraining \cite{id230513971}.} Serving engines followed: XGrammar constrains generation
+against grammars and JSON schemas at practical overhead \cite{xgrammar2024}. The guarantee is
+precise and narrow: whatever the engine emits parses under the declared schema. What it is worth
+is measured. \evindep{JSONSchemaBench separates coverage (which schema features an engine
+actually supports), output quality, and generation efficiency, rather than treating ``supports
+JSON'' as one property \cite{jsonschemabench2025}.} The separation matters: a schema an engine
+cannot fully express degrades silently to a weaker contract, and latency can make a valid output
+unusable. Our first load-bearing conclusion, by synthesis rather than citation: \evsynth{schema compliance is table stakes: validity is not correctness. Whether the values filling the schema are true is a distinct property
+that no decoding-time guarantee addresses, because the grammar constrains form and says nothing
+about content.} A perfectly formed JSON object can be confidently wrong in every field.
+
+\subsection{The truth half: typed decisions and calibrated probabilities}
+\label{sec:l4-typeddecisions}
+
+Decision-oriented models occupy the typed-decision tier by construction. \evindep{The
+Single-Shot/System-One family returns no text: given a state and typed questions, the model returns
+a choice from fixed options, a position on a rubric, or the probability that a statement is true,
+and independent benchmarking evaluates these returns on held-out data
+\cite{rauk2026jevbenchmark}.} The vendor architecture documents the interface in its own vocabulary
+--- typed \texttt{choice}, \texttt{score} and \texttt{noul} primitives, \texttt{noul} (the
+vendor's spelling) being a
+$P(\text{true})$ query --- and reports an RLCD recipe built on proper scoring rules (log score,
+spherical score, ranked probability score) whose object is a truthfully reported
+distribution.\footnote{\texttt{github.com/NandhaKishorM/laya}
+documentation, accessed 2026-10-17; evidence class \evvendor{}.} The contract does not remove the
+truth problem; it relocates it, from ``is the text true?'' to ``are the probabilities honest?''
+That second question is measurable. \evindep{Independent evaluations now span decision accuracy and
+calibration in medicine \cite{id260934024,id261018529}, binary decision scores under a risk
+budget \cite{id261019811}, and fine-tuning comparisons \cite{id261002076}.} Vendor
+probability claims enter as hypotheses, not facts; that is the evidence discipline of this survey.
+
+The discipline has already caught a live disagreement. \evvendor{Vendor documentation warns
+that shipped checkpoints are over-confident and need temperature refitting before gating relies on
+them.} \evindep{One reproduction study measures the shipped typed-decisions checkpoint as
+uniformly \emph{under}-confident, signed confidence--accuracy gap $-0.214$, improved by a single
+fitted sharpening temperature \cite{id260933843}.} The direction of miscalibration is therefore
+reported as \emph{contested} (an open ledger entry in \cref{sec:protocol}, cited per checkpoint
+and never as a family-level fact), and the sign decides which way a confidence-gated cascade
+fails: an over-confident model passes wrong answers through the gate; an under-confident one
+abstains on correct ones. A gate designed on the wrong sign misprices both its accepted-error
+budget and its coverage.
+
+\subsection{Thresholds are policy; option sets set the scale}
+\label{sec:l4-thresholds}
+
+Typed probabilities become gating machinery only through a threshold, and the operational
+literature has converged on the stance this paper adopts: ``a threshold is a policy you choose
+from measured accuracy at that coverage on your data, not a property of the model''\footnote{Ibid.,
+``Automated Confidence Gating,'' which in our framework is derived from the risk budget of
+\cref{sec:l5-calibrated}.} Two constraint classes --- option count and option order --- enter the
+ledger as separately sourced rows; no single law covers them. \evvendor{The vendor's decision-model
+card advises keeping \texttt{choice} questions under roughly twenty options within a fixed
+per-label budget, with sharp falloff beyond; the mechanism is budget trimming, so we record
+guidance, not a measured cliff.} \evvendor{On a 77-label intent benchmark the vendor reports 0.425
+against 0.870 intent accuracy for the Jev-class model. The comparison is uncontrolled and cross-source; the
+vendor itself flags it as indicative.} \evindep{Independently, paired evaluation finds
+the same family changes 30\% of its answers under option-order reversal and reaches 31\% accuracy
+at fifty nearest-neighbour tools \cite{id261002267}.} Option count and option order are
+therefore contract-design variables. Any accuracy or threshold claim is only meaningful at the
+option configuration it was measured on.
+
+\subsection{The hub: risk-controlled serving as the L4--L5 bridge}
+\label{sec:l4-hub}
+
+The contract tier creates the preconditions for risk-controlled operation: typed, checkable
+outputs with a declared correctness measure are what calibration needs. The cleanest current
+construction is risk-budgeted configuration selection (Redline). \evtheory{Given a reference
+configuration and a candidate, a finite-sample procedure selects operating points --- acceptance
+thresholds, buffer depth, schedule, checkpoint, precision --- such that the
+\emph{reference-relative joint risk}, the probability over prompts that the reference answers
+correctly while the candidate does not, stays within a user-chosen budget with high probability,
+with no distributional assumptions \cite{id260933887}.} Its scope is as sharp as its strength:
+relative to a reference and a chosen correctness measure, and by construction \emph{not} a
+factual-correctness guarantee; speed is bought at a bounded disagreement rate, not truth. The
+budget is also task-dependent in the authors' measurements (math clears at a tighter budget
+than code), which is why we treat it as an L0 input rather than a constant. Full treatment is
+\cref{sec:l5-bridge}. The contract-side lesson is that a contract fixes what ``accurate'' means
+for the return, which is what lets ``faster but less accurate'' become a number an operator can
+budget.
+
+\subsection{What Layer 4 does not guarantee}
+\label{sec:l4-limits}
+
+Each contract tier constrains \emph{form}, and only form. Free-form text guarantees nothing
+checkable; schema-constrained output guarantees parseability, not that the parse is true; typed
+decision probabilities make confidence auditable, not accurate; structured metadata makes evidence
+\emph{attachable}, not attached or faithful. \evsynth{An NCM-class staged tokenizer (\cite{kumbong2026ncm}) sharpens the same split one stage
+earlier: the token-exactness vs.\
+meaning-equivalence boundary is a contract statement to define explicitly --- reconstruction
+fidelity on the code side is not meaning fidelity on the read
+side.} \evsynth{A schedule change also relocates the error surface: grammar and schema gates
+operate on decoded tokens and never see the latent codes, so a substitution becomes observable
+only after decoding, and the latent channel remains unaudited while acceptance machinery must be
+anchored at the decoded surface.} \evaurep{The authors' conditioning-corruption training --- their
+code-error robustness measure --- is the corresponding hardening move: robustness bought inside
+the representation rather than enforced at the contract.} Semantics enter only through Layer~5's checks ---
+grounding, validators, calibrated selective prediction, escalation to human review (\cref{sec:assurance}) --- which are
+themselves fallible components, as the assurance layer's own failure envelope concedes
+(\cref{sec:l5-envelope}). The asymmetry is structural: form is
+checkable by construction; truth is a separate property. It is also why the selection framework
+(\cref{sec:selection}) treats the contract tier as a design decision, not a formatting preference.

@@ -1,0 +1,52 @@
+% fig:fam-ncm — NCM-class mechanism sketch (figure-design-standard gate-1 spec, v6)
+% TAKEAWAY: staged-tokenizer generation relocates the envelope to the code hierarchy
+% (token-exact NOT meaning-equivalent; codebook-error compounding is contested).
+% Grammar: accent link SOLID (ledger-[E]-anchored); compounding link DASHED (contested,
+% no production guard). Glosses live in ONE full-width note box (no seam, no overhang),
+% anchored by two thin leaders. Heights normalised (10mm band); 8mm chain gaps.
+% CAPTION NOTE: amber = tokenizer-stage semantic risk [E]; dashed = contested compounding;
+% 4.9x-token claim lives in section text.
+% RIBBON (P1 pilot): evidence strip below the card — one segment per claim already carried
+% by this card or its section paragraph; tags use the reserved rs* evidence colours with
+% letter badges; theory/vendor classes are OUTLINE-only (rsTheory/rsVendor) so they never
+% read as the gray null class; dashed border = contested (same grammar as the dashed edge).
+% LOSS TAPE (P3): three rows of parallel terms = the per-level prediction structure; lives
+% in the free band between the chain and the two risk boxes (no edge crosses it).
+\begin{tikzpicture}[x=1mm, y=1mm]
+  \node[rs/gData,  minimum width=17mm, minimum height=10mm] (corpus) at (0,0)   {corpus};
+  % tokenizer label is text-saturated (27pt of ink in a 10mm box, 0.6mm margins): the
+  % record-rules mark cannot clear it, so this box drops the interior mark (style keeps
+  % rules for every store with headroom); role stays legible from the label itself.
+  \node[rs/gStore, path picture=, minimum width=26mm, minimum height=10mm] (tok)    at (34,0)  {frozen multi-scale\\VQ-VAE tokenizer\\(coarse $\to$ fine codes)};
+  \node[rs/gModel, minimum width=30mm, minimum height=12mm, right=8mm of tok] (gen) {transformer\\generator\\(sequential levels,\\parallel within level)};
+  \node[rs/gData,  minimum width=17mm, minimum height=10mm, right=8mm of gen] (out) {decoded\\tokens};
+  \node[rs/gAccent, align=center, minimum width=26mm] (accent)   at (34,-22) {token-exact $\ne$\\meaning-equivalent [E]};
+  \node[rs/gRisk,   align=center, minimum width=26mm] (compound) at (68,-22) {codebook errors\\compound across levels};
+  \draw[rs/gFlow]  (corpus) -- (tok);
+  \draw[rs/gFlow]  (tok) -- (gen);
+  \draw[rs/gFlow]  (gen) -- (out);
+  \draw[rs/gFlow]  (tok.south) -- (accent.north);
+  \draw[rs/gFlowD] (gen.south) -- (compound.north);
+  % --- single full-width note band, leader-anchored to both risk items
+  \node[rs/gFoot, align=center, draw=black!40, fill=black!4, inner sep=2.5pt, text width=66mm]
+    (gloss) at (51,-35) {left: conditioning-corruption training = a code-error robustness curriculum~~~~~
+    right: no production guard anchor for compounding (open in the ledger)};
+  \draw[black!30, line width=0.4pt] (accent.south) -- (gloss.north -| accent.south);
+  \draw[black!30, line width=0.4pt] (compound.south) -- (gloss.north -| compound.south);
+  % --- loss tape (P3): levels are sequential, terms within a level are parallel.
+  % Sits in the free band between the chain and the two risk boxes; the vertical edges at
+  % x=34 (tokenizer) and x=68 (compounding) stay outside the 30mm label.
+  \coordinate (ntape) at (51,-8.5);
+  \rsLossTape{ncm}{ntape}{0mm}{parallel terms per level}
+  % --- evidence ribbon (P1): one segment per claim already in the card / its section text.
+  % Two rows because six full labels in one row exceed the card's natural width and would
+  % down-scale the whole picture (font floor); each row stays inside the card's bbox width.
+  \rsRibbonAt{-8.5}{-47.5}
+  \rsRibSeg{rsAuthorRep}{\textbf{[A]} 21--31$\times$ speedup}
+  \rsRibSeg{rsAuthorRep}{\textbf{[A]} 12 vs 128 Sudoku NFE}
+  \rsRibSeg{rsAuthorRep}{\textbf{[A]} Sudoku beats baselines}
+  \rsRibbonAt{-8.5}{-53.3}
+  \rsRibSeg{rsAuthorRep}{\textbf{[A]} near-exact token recon}
+  \rsRibSeg[dashed]{rsContested}{\textbf{[C]} codebook compounding}
+  \rsRibSeg{rsNoClaim}{\textbf{[N]} no released guard}
+\end{tikzpicture}

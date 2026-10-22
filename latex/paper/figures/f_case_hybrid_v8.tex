@@ -1,0 +1,127 @@
+% figures/f_case_hybrid_v8.tex — case study 3 (Interfaze-class hybrid specialist): FLAGSHIP architecture panel, v8.
+% Style: figures/style_v2_tokens.tex ONLY (semantic role tokens; rs/g* family). Wired into main.tex (case-3 figure env).
+%
+% SPEC (gate 1, takeaway-first):
+%   ONE takeaway: this class of system separates perception, reasoning, generation and infra into
+%   nested containers with distinct roles, and the reliability-critical path runs through the
+%   validation layer. Components (from the verified case-3 instance, interfaze2026):
+%   prompt input -> preprocessor (cache lane) -> core block (DNN/CNN adapters stacked over a
+%   transformer core, fused via the shared embedding space) -> decoder stage (task decoders,
+%   reasoning, fallback) -> validation layer -> outputs (free text + structured output);
+%   infra foundation lane alongside (vector DB, code sandbox, web index, browser engine, GPU scale).
+%   Encoding: shape = role (rounded model / cylinder store / octagon control / sharp infra /
+%   tinted panel); dashed = wiring the vendor description leaves undocumented (validators,
+%   monitors, escalation); long-dash = reliability-critical path; yellow = the ONE item the
+%   evidence ledger defends ([V] architecture claim 2602.04101: the native fusion).
+%   Caption carries: vendor-only evidence class, no independent propagation measurement,
+%   dashes = undocumented wiring. Figure env + \label (fig:case-hybrid-v8) live in main.tex.
+%
+% LAYOUT NOTE: the three top containers are TOP-ALIGNED and the spine arrows sit on one
+% horizontal line (pin.center = adapters.center = decoders.center); yshift values below are
+% render-verified so the tile-row centers coincide (re-verify if tile sizes change).
+% v8fix wave: the infra foundation lane spans the FULL pipeline width (panel edges flush with
+% fpre.west / ostruct.east; 5 tiles at uniform 64pt width + 31.34pt gap), and its two dashed
+% attachments are SHORT VERTICAL stubs dropped at the fcore/fdec centre x (no near-horizontal
+% diagonals). The core->decoder Z-bend enters the decoder stage at the task-decoders TILE
+% boundary (was: container border).
+\begin{tikzpicture}
+  \pgfdeclarelayer{rsbg}\pgfsetlayers{rsbg,main}  % panel tints render UNDER their tiles
+  % ===== preprocessor panel: REAL containment (input + cache lane) =====
+  \node[rs/gData, minimum width=15mm] (pin) {prompt\\input};
+  \node[rs/gStore, below=3mm of pin] (pcache) {cache};
+  \begin{pgfonlayer}{rsbg}
+    \node[rs/gPanelFill, inner xsep=10pt, fit=(pin)(pcache)] {};
+  \end{pgfonlayer}
+  \node[rs/gPanelEdge, inner xsep=10pt, fit=(pin)(pcache),
+        label={[rs/gPanelTitle, xshift=4pt, yshift=-7pt]north west:preprocessor}] (fpre) {};
+  % ===== core block panel: adapters stacked over transformer core, fused via shared embedding =====
+  % yshift: puts adapters.center at pin.center -> top-aligned containers, horizontal spine line
+  \node[rs/gModel, minimum width=26mm, right=12mm of fpre.east, yshift=16.8pt] (adapters) {DNN / CNN adapters};
+  \node[rs/gAccent, minimum width=30mm, below=2.4mm of adapters] (fusion) {shared embedding space\\fusion [V]};
+  \node[rs/gModel, minimum width=26mm, below=2.4mm of fusion] (tcore) {transformer core};
+  \begin{pgfonlayer}{rsbg}
+    \node[rs/gPanelFill, fit=(adapters)(fusion)(tcore)] {};
+  \end{pgfonlayer}
+  \node[rs/gPanelEdge, fit=(adapters)(fusion)(tcore),
+        label={[rs/gPanelTitle, xshift=4pt, yshift=-7pt]north west:core block}] (fcore) {};
+  % ===== decoder stage panel: task decoders + reasoning + fallback (risk role) =====
+  % yshift: puts decoders.center on the same spine line (render-verified)
+  \node[rs/gModel, minimum width=21mm, right=12mm of fcore.east, yshift=28.75pt] (decoders) {task decoders};
+  \node[rs/gModel, minimum width=21mm, below=2.4mm of decoders] (reasoning) {reasoning};
+  \node[rs/gRisk, minimum width=21mm, below=2.4mm of reasoning] (fallback) {fallback};
+  \begin{pgfonlayer}{rsbg}
+    \node[rs/gPanelFill, fit=(decoders)(reasoning)(fallback)] {};
+  \end{pgfonlayer}
+  \node[rs/gPanelEdge, fit=(decoders)(reasoning)(fallback),
+        label={[rs/gPanelTitle, xshift=4pt, yshift=-7pt]north west:decoder stage}] (fdec) {};
+  % ===== validation layer: the ONE control gate (octagon, amber) =====
+  \node[rs/gControl, minimum width=23mm, right=11mm of fdec.east] (val) {validation\\layer};
+  % ===== output pathway: free text + structured output =====
+  \node[rs/gData, minimum width=15mm, right=11mm of val.east, yshift=4mm] (ofree) {free text};
+  \node[rs/gData, minimum width=15mm, below=3mm of ofree] (ostruct) {structured\\output};
+  % ===== infra foundation lane: stores (cylinders) + services (sharp rectangles) =====
+  % full-width foundation: 5 tiles x 64pt + 4 x 31.82pt gaps = 447.28pt span; xshift 6.42pt puts
+  % the panel's west edge flush with fpre.west (inner xsep 6pt + half stroke), east flush with
+  % ostruct.east (render-verified; re-solve the gap if tile widths change)
+  \node[rs/gStore, minimum width=64pt, anchor=north west] (iv) at ([yshift=-9mm, xshift=6.42pt]fcore.south west -| fpre.west) {vector DB};
+  \node[rs/gInfra, minimum width=64pt, right=31.34pt of iv] (is1) {code\\sandbox};
+  \node[rs/gStore, minimum width=64pt, right=31.34pt of is1] (iw) {web index};
+  \node[rs/gInfra, minimum width=64pt, right=31.34pt of iw] (ib) {browser\\engine};
+  \node[rs/gInfra, minimum width=64pt, right=31.34pt of ib] (ig) {GPU scale};
+  \begin{pgfonlayer}{rsbg}
+    \node[rs/gPanelFill, fit=(iv)(is1)(iw)(ib)(ig)] {};
+  \end{pgfonlayer}
+  \node[rs/gPanelEdge, fit=(iv)(is1)(iw)(ib)(ig),
+        label={[rs/gPanelTitle, xshift=4pt, yshift=-7pt]north west:infra foundation}] (finf) {};
+  % ===== edges: solid = documented wiring; dashed = vendor-undocumented; long heavy dash = critical path =====
+  \draw[rs/gFlowDB] (pcache.north) -- (pin.south);                          % cache lane (undocumented, read/write)
+  \draw[rs/gFlow]  (fpre.east |- pin.center) -- (fcore.west |- adapters.center);   % horizontal spine
+  \draw[rs/gFlow]  (adapters.south) -- (fusion.north);                     % encode -> fuse
+  \draw[rs/gFlow]  (fusion.south) -- (tcore.north);                        % fuse -> decode
+  % Z-bend: exits at the transformer-core row (final internal stage), enters ON the top decode tile
+  \draw[rs/gFlow] (tcore.east) -- ([xshift=15pt]fcore.east |- tcore.center)
+                  -- ([xshift=15pt]fcore.east |- decoders.center) -- (decoders.west);
+  \draw[rs/gFlow]  (decoders.south) -- (reasoning.north);
+  \draw[rs/gFlow]  (reasoning.south) -- (fallback.north);
+  % Z-bend: exits at the fallback row (failure path), turns into the validation gate's west side
+  \draw[rs/gFlowCrit] (fallback.east) -- ([xshift=16pt]fdec.east |- fallback.center)
+                  -- ([xshift=16pt]fdec.east |- val.center) -- (val.west);
+  \draw[rs/gFlowCrit] (val.east) -- (ofree.west);
+  \draw[rs/gFlowCrit] (val.east) -- (ostruct.west);
+  % infra attachment stubs (undocumented): dash phase 4.5pt keeps the first dash clear of the
+  % arrowhead, so each 12-15pt stub still reads dashed rather than head-heavy
+  \draw[rs/gFlowD, dash phase=4.5pt] (fcore.south |- finf.north) -- (fcore.south);   % infra attachment (undocumented); vertical stub
+  \draw[rs/gFlowD, dash phase=4.5pt] (fdec.south |- finf.north) -- (fdec.south);     % infra attachment (undocumented); vertical stub
+  \node[rs/gEdgeLbl, below=3.2mm of val] {critical path};
+  % ===== legend: role words per symbol (redundant encoding; readable in grayscale) =====
+  \coordinate (figmid) at ($(fpre.west)!0.5!(ostruct.east)$);
+  \coordinate (legy) at ([yshift=-8mm]figmid |- finf.south);
+  \node[rs/gModel, minimum width=5.5mm, minimum height=3.6mm, inner sep=0.5pt] (lg1) at ([xshift=-78mm]legy) {};
+  \node[rs/gLegend, right=0.8mm of lg1] (lg1t) {model};
+  \node[rs/gStore, minimum width=6mm, minimum height=4.6mm, inner sep=0.5pt, right=3mm of lg1t] (lg2) {};
+  \node[rs/gLegend, right=0.8mm of lg2] (lg2t) {store};
+  \node[rs/gData, minimum width=5.5mm, minimum height=3.6mm, inner sep=0.5pt, right=3mm of lg2t] (lg3) {};
+  \node[rs/gLegend, right=0.8mm of lg3] (lg3t) {payload};
+  \node[rs/gControl, minimum width=6.2mm, inner sep=0.5pt, right=3mm of lg3t] (lg4) {};
+  \node[rs/gLegend, right=0.8mm of lg4] (lg4t) {control};
+  \node[rs/gRisk, minimum width=5.5mm, minimum height=3.6mm, inner sep=0.5pt, right=3mm of lg4t] (lg5) {};
+  \node[rs/gLegend, right=0.8mm of lg5] (lg5t) {risk};
+  \node[rs/gInfra, minimum width=5.5mm, minimum height=3.6mm, inner sep=0.5pt, right=3mm of lg5t] (lg6) {};
+  \node[rs/gLegend, right=0.8mm of lg6] (lg6t) {infra};
+  \node[rs/gPanelEdge, fill=rsPanelTint, minimum width=5.5mm, minimum height=3.6mm, inner xsep=0.5pt, inner ysep=0.5pt, right=3mm of lg6t] (lg7) {};
+  \node[rs/gLegend, right=0.8mm of lg7] (lg7t) {container};
+  \node[rs/gAccent, minimum width=5.5mm, minimum height=3.6mm, inner sep=0.5pt, right=3mm of lg7t] (lg8) {};
+  \node[rs/gLegend, right=0.8mm of lg8] (lg8t) {accent [V]};
+  % ===== footnotes: evidence class + dashed semantics (caveats carried, not dropped) =====
+  \node[rs/gFoot, anchor=north] (f1) at ([yshift=-5.5mm]legy) {[V] vendor-reported architecture (2602.04101); yellow = ledger-defended fusion claim.};
+  \node[rs/gFoot, below=1.6mm of f1] (f2) {Dashed = vendor-undocumented wiring (validators, monitors, escalation); long dash = reliability-critical path.};
+  \node[rs/gFoot, below=1.6mm of f2] (f3) {Per-component validation; error propagation across the fusion is unmeasured in our evidence set.};
+  % --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+  \rsRibbonBase{-3.4mm}
+  \rsRibbonRow{0mm}
+  \rsRibSeg{rsNoClaim}{\textbf{[V]} vendor-reported fusion architecture}
+  \rsRibSeg{rsNoClaim}{\textbf{[V]} per-component validation}
+  \rsRibbonRow{-5.8mm}
+  \rsRibSeg{rsNoClaim}{\textbf{[N]} error propagation unmeasured}
+  \rsRibSeg{rsNoClaim}{\textbf{[N]} validator wiring undocumented}
+\end{tikzpicture}

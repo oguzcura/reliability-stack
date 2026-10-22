@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it using the metadata below."
+type: preprint
+title: "The Reliability Stack: A Cross-Layer Taxonomy for Engineering Reliable AI Systems"
+authors:
+  - family-names: "Cura"
+    given-names: "Oğuz Emre"
+    affiliation: "Independent Researcher"
+    email: "oguzemrecura@gmail.com"
+    website: "https://github.com/oguzcura"
+date-released: "2026-10-22"
+version: "0.1.0"
+license: "CC-BY-4.0"
+repository-code: "https://github.com/oguzcura/reliability-stack"
+url: "https://github.com/oguzcura/reliability-stack"
+abstract: >-
+  A cross-layer taxonomy for engineering reliable AI systems. The paper treats
+  reliability as an inherited property of an assembled stack rather than a score
+  of a single model, organizes the reliability-bearing decisions into six layers,
+  and derives a selection procedure from two axes: answer-space openness and cost
+  of error. It carries an evidence-typed claim ledger and seven case studies.
+keywords:
+  - "AI reliability"
+  - "reliability engineering"
+  - "machine learning systems"
+  - "taxonomy"
+  - "assurance"
+  - "AI evaluation"

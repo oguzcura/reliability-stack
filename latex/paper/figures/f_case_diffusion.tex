@@ -1,0 +1,88 @@
+% figures/f_case_diffusion.tex — Case-study sketch (pack 7): production diffusion-LLM serving.
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar).
+% Roles: prompt / text = rs/gData (payload); the denoising lanes are INK, not a role — a pass is a
+%   schedule, not a component, and no role token should be spent on one; the four
+%   contract cells = rs/gInfra (sharp rectangle = a service surface, not a store, not a model);
+%   edges = rs/gFlow (thin gray arrows); labels = rs/gTiny.
+% Left: L positions refined in parallel over T vendor-set passes — pass 1 mostly unresolved (?),
+%   pass T fully settled; filled cell = a settled position. Step counts are symbolic; no wall-clock
+%   is drawn, and no clock/axis tick appears anywhere in the card.
+% Right: what the hosted text endpoint withholds — temperature floored at 0.5, no seed, no
+%   logprobs, a stream of revisions rather than appended tokens. The dashed vermillion leader
+%   marks the CONTESTED inference [C]: with no token score, the only acceptance surface left is
+%   whole-output agreement over k resamples. The schema silence is [V]; the consequence is ours.
+% label: fig:case-diffusion   (figure env + \label live in cases.tex, Case 7)
+%
+% CAPTION NOTE — items the paper must defend:
+%   1. [V] contract surface (vendor OpenAPI, read 2026-10-20): temperature in [0.5, 1.0] with
+%      out-of-range values reset to the default; no seed / logprobs / top_logprobs / n; no step
+%      count or schedule parameter; the diffusing stream is a view of intermediate refinement,
+%      not appended tokens;
+%   2. [V] throughput declared 1,107 tok/s (Mercury 2.5, 2026-09-08) vs [E] 770 tok/s on a
+%      fixed-workload independent instrument and 141 tok/s at router P50 — do not average them;
+%   3. [C] acceptance-collapse: schema silence about scores is [V], the consequence for the L5
+%      gate is our inference;
+%   4. [N] no independent quality evaluation of the hosted generation exists at cutoff.
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figge}{{\fontsize{8.2}{10}\selectfont $\ge$}}
+\begin{tikzpicture}[x=1mm,y=1mm]
+\pgfdeclarelayer{rsbg}\pgfsetlayers{rsbg,main}  % panel tint renders UNDER its cells
+% ===== left: prompt -> parallel denoising lanes -> text =====
+\node[rs/gData] (in1) {prompt};
+\node[rs/gTiny, anchor=west] at (34,15.2) {T vendor-set passes over L positions};
+\foreach \y/\lab/\settled in {8/1/1, 0/2/4, -8/T/8} {
+  \node[rs/gTiny, anchor=west] at (34.4,{\y+2.9}) {pass \lab};
+  \foreach \i in {0,...,7} {
+    \pgfmathsetmacro{\cx}{35.9+4*\i}
+    \ifnum\i<\settled
+      \draw[draw=black!45, line width=0.4pt, fill=black!16]
+        (\cx,\y) ++(-1.5,-1.5) rectangle ++(3,3);
+    \else
+      \draw[draw=black!45, line width=0.4pt, fill=white]
+        (\cx,\y) ++(-1.5,-1.5) rectangle ++(3,3);
+      \node[inner sep=0pt, font=\fontsize{7.5}{9.0}\selectfont, text=black!55] at (\cx,\y) {?};
+    \fi
+  }
+}
+% edges: one fan out of the prompt into the three lanes, one comb back into the text box
+\draw[black!70, line width=0.7pt] (in1.east) -- (27,0);   % trunk: no arrowhead at a bare fork
+\foreach \y in {8,0,-8} {
+  \draw[rs/gFlow] (27,0) -- (33.8,\y);
+  \draw[rs/gFlow] (65.6,\y) -- (69,\y);
+}
+\draw[black, line width=0.7pt] (69,8) -- (69,-8);
+\draw[rs/gFlow] (69,0) -- (72,0);
+\node[rs/gData, anchor=west] (out) at (72,0) {text};
+% honesty line under the lanes (the caption repeats it; the card must not imply a measured clock)
+\node[anchor=north west, align=left, text=black!70, text width=44mm,
+      font=\fontsize{7.5}{9.0}\selectfont] at (34.4,-11.6)
+  {step counts symbolic; T is vendor-set, not a request parameter \textbf{[V]}};
+% ===== right: the hosted endpoint's contract surface (container of four cells) =====
+\node[rs/gInfra, anchor=west, minimum width=34mm] (c1) at (89.5,11.4) {temp \figge\, 0.5};
+\node[rs/gInfra, anchor=west, minimum width=34mm] (c2) at (89.5,3.8)  {no seed};
+\node[rs/gInfra, anchor=west, minimum width=34mm] (c3) at (89.5,-3.8) {stream $=$ revisions};
+\node[rs/gInfra, anchor=west, minimum width=34mm] (c4) at (89.5,-11.4) {no logprobs};
+\coordinate (padtop) at ([yshift=3.5pt]c1.north);
+\begin{pgfonlayer}{rsbg}
+  \node[rs/gPanelFill, fit=(c1)(c4)(padtop)] {};
+\end{pgfonlayer}
+\node[rs/gPanelEdge, fit=(c1)(c4)(padtop),
+      label={[rs/gPanelTitle, xshift=4pt, yshift=-9pt]north west:hosted text endpoint}] (panel) {};
+\draw[rs/gFlow] (out.east) -- (panel.west);
+% [C]: the score is absent, so the acceptance surface collapses — our inference, not the schema.
+% The leader leaves the bottom cell vertically, clears the panel border once, and lands outside it.
+\draw[rsContested, dashed, line width=0.9pt, -{Stealth[length=1.7mm]}]
+  (c4.south) -- (c4.south |- 0,-22.5);
+\node[rs/gTiny, anchor=north, text=rsContested] at (c4.south |- 0,-22.5) {\textbf{[C]}};
+\node[anchor=north west, align=left, text=rsContested, text width=34mm,
+      font=\fontsize{7.5}{9.0}\selectfont] at (89.6,-26.5)
+  {no token score left: \mbox{acceptance} $=$ agreement over $k$ whole outputs};
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVendor}{\textbf{[V]} 1,107 tok/s declared (M2.5)}
+\rsRibSeg{rsVerified}{\textbf{[E]} 770 vs 141 tok/s, two instruments}
+\rsRibbonRow{-5.8mm}
+\rsRibSeg{rsVendor}{\textbf{[V]} no seed / logprobs / step count}
+\rsRibSeg{rsNoClaim}{\textbf{[N]} no independent quality eval}
+\end{tikzpicture}

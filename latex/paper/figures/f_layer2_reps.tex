@@ -1,0 +1,81 @@
+% figures/f_layer2_reps.tex — L2 mechanism sketch: representation families, forked at the
+% tokenizer, and the checkability each family hands downstream (v4 2026-10-19).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: payload = rs/gData;
+%   encoders / predictors / learned spaces = rs/gModel; the serving tokenizer = rs/gInfra;
+%   yellow accent = the item the evidence ledger defends for L2. Solid = documented mechanism;
+%   dashed = alternative / claim-to-defend (caption must cite).
+% Change from v3: the three right-hand "space" boxes are gone; the right edge is one handoff
+%   rule (x=109) whose entries are the paper's own affordance claims, so the foot's three
+%   clauses now sit on the marks they qualify. The byte lane is a fork off lane (i) at the
+%   input (tokenizer vs no tokenizer), not a third lane. Lane (iii) — the symbolic/structured
+%   state family the section names ("checks possible by construction") — is drawn.
+% label: fig:layer2-reps   (figure env + \label to be wired in main.tex, sec:representations)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. yellow [T]: identifiability trio klindt2026lejepa + identifiability2026 + id260612471
+%      (2605.26379 / 2607.22430 / 2606.12471) — a learned latent corresponds to the generating
+%      structure only under the stated data/training assumptions; assumption-bound, not an [E]
+%      operational guarantee; no anchor bridges identifiability to decision quality [GAP];
+%   2. prediction is not planning: low latent-prediction error coexists with degenerate geometry
+%      (2607.23531 [E], cosine collapse + rank degeneration, five seeds); prediction metrics are
+%      not decision utility [S];
+%   3. tokenization: effects are [S/E] (2402.18376) — biases do not follow from compression
+%      ratio; in API-served models the tokenizer is fixed by the serving stack (inherited);
+%   4. byte fork (dashed) = tokenizer-free alternative, MEGABYTE class 2305.07185: trades
+%      tokenizer failure modes for longer effective sequences; tagged [S] in the figure (design
+%      evidence, author-reported in the source, no independent head-to-head in our set). The
+%      undefined "[F]" that v3 printed here is retired (audit H10, figure side);
+%   5. handoff downward: contracts (L4) can check discrete structure, not truth; embedding
+%      similarity is not probability semantics — a scalar risk estimate needs calibration /
+%      conformal machinery with its own assumptions (2405.01563, 2607.04430).
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\begin{tikzpicture}[x=1mm,y=1mm]
+\tikzset{
+  rs/l2note/.style={rs/gEdgeLbl, anchor=east, align=right},
+  rs/l2entry/.style={rs/gEdgeLbl, anchor=west, align=left, text=black!80},
+  rs/l2head/.style={rs/gLegend, anchor=west, align=left},
+}
+% ===== right-edge handoff rule: what each family makes checkable =====
+\draw[black!45, line width=0.6pt] (109,20) -- (109,-69);
+\foreach \yy in {10,-2,-24,-63} { \draw[black!45, line width=0.6pt] (107.6,\yy) -- (109,\yy); }
+\node[rs/l2head] at (112,19) {what this family\\makes checkable};
+% ===== lane (i): token embeddings, forked at the input =====
+\node[rs/gData] (txt) at (8,4) {text};
+\node[rs/gInfra, minimum width=27mm] (tokm) at (39,10) {subword tokenizer\\+ embedding table\\{\fontsize{7.5}{9}\selectfont fixed by serving stack}};
+\node[rs/gModel, minimum width=26mm] (bytm) at (38,-2) {multiscale byte\\decoder};
+\coordinate (fork) at (21,4);
+% ===== lane (ii): joint-embedding latent prediction (two rows) =====
+\node[rs/gData] (ctx) at (8,-24) {masked view};
+\node[rs/gModel, minimum width=27mm] (cenc) at (38,-24) {context\\encoder};
+\node[rs/gModel, minimum width=23mm] (pred) at (65,-24) {latent\\predictor};
+\node[rs/gModel, minimum width=25mm] (space) at (95,-29) {target latents};
+\node[rs/gData] (tgt) at (8,-35) {unmasked\\signal};
+\node[rs/gModel, minimum width=26mm] (tenc) at (38,-35) {EMA\\target enc.};
+% ===== yellow claim (ledger-defended item): identifiability =====
+\node[rs/gAccent, minimum width=36mm] (ident) at (88,-48) {identifiability [T]:\\latent {\fontsize{8.2}{10}\selectfont$=$} generative structure\\only under the stated\\assumptions};
+% ===== lane (iii): symbolic / structured state =====
+\node[rs/gData, minimum width=56mm] (sym) at (40,-63) {retrieved spans \textperiodcentered{} typed records \textperiodcentered{} explicit task state};
+% ===== lane captions =====
+\node[rs/l2note] at (-2,4)   {(i) tokens};
+\node[rs/l2note] at (-2,-29) {(ii) latent\\prediction};
+\node[rs/l2note] at (-2,-63) {(iii) structured\\state};
+% ===== edges =====
+\draw[rs/gFlow]  (txt.east) -- (fork);
+\draw[rs/gFlow]  (fork) |- (tokm.west);
+\draw[rs/gFlowD] (fork) |- (bytm.west);
+\draw[rs/gFlow]  (tokm.east) -- (109,10);
+\draw[rs/gFlowD] (bytm.east) -- (109,-2);
+\draw[rs/gFlow]  (ctx.east) -- (cenc.west);
+\draw[rs/gFlow]  (cenc.east) -- (pred.west);
+\draw[rs/gFlow]  (pred.east) -- ([yshift=2mm]space.west);
+\draw[rs/gFlow]  (tgt.east) -- (tenc.west);
+\draw[rs/gFlow]  (tenc.east) -- ([yshift=-2mm]space.west);
+\draw[rs/gFlow]  (space.east) -- (109,-24);
+\draw[rs/gFlow]  (sym.east) -- (109,-63);
+\draw[rs/gFlowD] (ident.north) -- (space.south);
+% ===== claims sited on the marks (no foot) =====
+\node[rs/l2entry] at (112,10) {discrete symbols:\\schema and grammar\\checks have a\\target [S]};
+\node[rs/l2entry] at (112,-2) {no tokenizer: same\\check target, longer\\sequences [S]};
+\node[rs/l2entry] at (112,-24) {similarity only:\\no P(true), and\\prediction is not\\decision utility [S];\\needs a calibrated\\layer [T]};
+\node[rs/l2entry] at (112,-63) {typed state:\\deterministic\\checks by\\construction [S]};
+\end{tikzpicture}

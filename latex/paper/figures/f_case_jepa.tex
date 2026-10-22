@@ -1,0 +1,59 @@
+% figures/f_case_jepa.tex — Case-study sketch (pack 4): JEPA world-model + planner (control tasks).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar).
+% Roles: observation / action = rs/gData; encoder, predictor, latent state, planner = rs/gModel;
+%   identifiability conditions = rs/gAccent (the ONE ledger-defended item, [T]); planning-cap note =
+%   rs/gRisk (failure-direction caveat; dashed = claim to defend).
+% Chain: observation -> shared encoder -> latent predictor (squared-error, embedding space) ->
+%   latent state (the world model) -> planner (MPC/CEM over imagined rollouts) -> action.
+% Accent: the item the evidence ledger defends is identifiability conditions [T] — assumption-bound,
+%   not an [E] guarantee. Dashed wires = claims-to-defend: identifiability -> latent state;
+%   planning-cap note -> planner. The planning-cap numbers (5-step vs 16-53-step tasks) stay in the
+%   CAPTION NOTE only — not in the figure.
+% Notation note: the old "$z$" glyph is dropped from the latent-state label (semantics unchanged:
+%   "the world model" carries it); math symbols ride the 8.2pt commands.
+% label: fig:case-jepa   (figure env + \label live in main.tex; case-studies slot, owner wires)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. [T] identifiability trio 2605.26379 + 2606.12471 + 2607.22430: latents reflect the true
+%      degrees of freedom only under stated assumptions; no anchor connects identifiability to
+%      downstream decision quality [GAP];
+%   2. planning cap [W]: 5-step rollout vs 16-53-step tasks; persists under perfect prediction
+%      (real-simulator success 92% -> 41%; 23% pure imagination -> 30% with feedback); pin
+%      2609.39235 BEFORE citing - it sits outside the verified matrix;
+%   3. honest counterpoint: text-modality transfer collapses (2607.23531, conditional
+%      concentration) — JEPA stays a foundational L2 contrast, not a flagship case;
+%   4. L4 = action / latent state only; no text contract in this instance.
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figneq}{{\fontsize{8.2}{10}\selectfont $\ne$}}
+\begin{tikzpicture}
+% ===== chain =====
+\node[rs/gData] (obs) {observation\\(pixels)};
+\node[rs/gModel, right=8mm of obs] (enc) {shared\\encoder};
+\node[rs/gModel, right=8mm of enc] (pred) {latent predictor\\squared-error loss};
+\node[rs/gModel, right=8mm of pred] (lat) {latent state\\(the world model)};
+\node[rs/gModel, right=8mm of lat] (plan) {planner\\MPC/CEM rollouts};
+\node[rs/gData, right=8mm of plan] (act) {action};
+% ===== identifiability annotation (accent, above lat; dashed = claim to defend) =====
+\node[rs/gAccent, above=10mm of lat] (ident) {identifiability\\conditions [T]};
+% ===== planning-cap annotation (risk, below plan; numbers stay in the caption note) =====
+\node[rs/gRisk, below=10mm of plan] (cap) {planning cap [W]};
+% ===== edges =====
+\draw[rs/gFlow] (obs.east) -- (enc.west);
+\draw[rs/gFlow] (enc.east) -- (pred.west);
+\draw[rs/gFlow] (pred.east) -- (lat.west);
+\draw[rs/gFlow] (lat.east) -- (plan.west);
+\draw[rs/gFlow] (plan.east) -- (act.west);
+\draw[rs/gFlowD] (ident.south) -- (lat.north);
+\draw[rs/gFlowD] (cap.north) -- (plan.south);
+% ===== foot =====
+\coordinate (mid) at ($(obs.center)!0.5!(act.center)$);
+\node[rs/gFoot] at ([yshift=-8mm]mid |- cap.south) {prediction \figneq\ planning: the reported planning-horizon cap is unverified [W] --- full text pending\\identifiability is assumption-bound [T]; no anchor bridges it to decision quality [GAP]};
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsNoClaim}{\textbf{[T]} identifiability conditions}
+\rsRibSeg{rsNoClaim}{\textbf{[W]} planning cap persists}
+\rsRibbonRow{-5.8mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} text-modality transfer collapses}
+\rsRibSeg{rsNoClaim}{\textbf{[N]} no bridge to decision quality}
+\end{tikzpicture}

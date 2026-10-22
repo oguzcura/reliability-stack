@@ -1,0 +1,489 @@
+% The Reliability Stack — survey skeleton (working draft shell)
+% Compile: tectonic main.tex   (single-column article, TMLR-style feel; venue revisit = template swap)
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{float}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{placeins}
+% float pack: let large displays (Table 1 ~464 pt) take a top slot with a text tail
+\renewcommand{\topfraction}{0.8}
+\renewcommand{\textfraction}{0.10}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+\usepackage{xurl}
+\usepackage[capitalise]{cleveref}
+\input{figures/style.tex}
+\input{figures/style_v2_tokens.tex}
+
+\newcommand{\reliabilitystack}{Reliability Stack}
+% evidence-class tags used throughout the paper's claim ledger
+\newcommand{\evtheory}[1]{#1~\textsf{[T]}}    % theoretical guarantee under stated assumptions
+\newcommand{\evindep}[1]{#1~\textsf{[E]}}     % independently evaluated empirical finding
+\newcommand{\evaurep}[1]{#1~\textsf{[A]}}     % author-reported (results the artifact's authors report; not independently reproduced)
+\newcommand{\evvendor}[1]{#1~\textsf{[V]}}    % vendor/developer-reported result
+\newcommand{\evsynth}[1]{#1~\textsf{[S]}}     % synthesis from multiple sources
+\newcommand{\evjudge}[1]{#1~\textsf{[J]}}      % our analytic judgement (never a measurement)
+
+\title{The Reliability Stack: A Cross-Layer Taxonomy for\\ Engineering Reliable AI Systems}
+\author{O\u{g}uz Emre Cura\\ Independent Researcher\\ \texttt{oguzemrecura@gmail.com}\\
+\texttt{github.com/oguzcura}\thanks{Generative AI tools were used for research
+assistance, drafting, and editing. The author reviewed the manuscript and takes
+responsibility for its claims, citations, and artifacts.}}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+% Build note (not rendered): title per paste-3 audit recommendation (Reliable, not Trustworthy;
+% provisional until the novelty statement is frozen against the MDPI closest competitor).
+% Scope: LLM-centric systems with non-LLM stack components.
+
+\begin{abstract}
+Reliability engineering for AI systems is dominated by two narratives: scale a general-purpose
+model, or hand-assemble safeguards per problem. We ask the routing question between them: when
+does scaling buy reliability, and when do changes at other layers---task and risk specification,
+learning objective, representation, inference architecture, output contract, and assurance---buy
+more? We organize the reliability-bearing decisions into a cross-layer taxonomy, the
+\reliabilitystack{} (L0--L5), and read reliability claims as inherited failure envelopes per layer
+rather than per-method scores (the objective space is still expanding: hierarchical code
+prediction and reasoning post-training entered the map while we drafted \cite{kumbong2026ncm}).
+From this we derive a selection framework: two axes, answer-space openness and cost of error,
+return a candidate operating mode plus the evidence a team needs before deploying it, with
+thresholds set by a stated risk budget. The synthesis is evidence-typed by construction: eighteen
+claim families, each carrying one of six evidence classes ([T] theory, [E] independent empirical,
+[A] author-reported, [V] vendor-reported, [S] verified synthesis, [W] watch), applied to
+individual numbers rather than whole papers (\cref{fig:evidence}), with three contested rows named
+--- calibration direction, language-JEPA stability, monitor-evasion attackability --- and
+exclusions recorded. Across seven stack-instance case studies---grounded assistant, decision-model
+serving, hybrid specialist, latent-prediction planner, discriminative baseline, a
+rules/formal-verification null, and production diffusion serving---no reliability currency is
+guaranteed at any single layer: scaling buys coverage and fluency, contracts buy validity,
+assurance buys operational dependability. The engineering problem is choosing which currency the
+task needs and which layer to change next.
+\end{abstract}
+
+\section{Introduction}\label{sec:intro}
+\input{sections/intro.tex}
+
+\section{Reliability, Precisely}\label{sec:reliability}
+\input{sections/defs.tex}
+\FloatBarrier
+
+\section{The Reliability Stack}\label{sec:stack}
+\input{sections/stacklead.tex}
+
+\begin{figure}[!t]
+  \centering
+  % \includegraphics[width=\linewidth]{figures/f1_reliability_stack.pdf}
+  \input{figures/f1_reliability_stack_draft.tex}
+  \caption{ The \reliabilitystack{} (L0--L5) with two example instances in parallel columns. Layers read top-down, L0 specification to L5 assurance; a choice at any layer constrains what the layers below can deliver. Cells appear only where the two instances choose a different kind of thing, and the diamond marks those four layers; L1--L2 carry one shared phrase because both instances make the same kind of choice there. No layer repairs another's gap: the layers assemble into a stack, and no layer outranks another. Layer cuts and cell placements are an analytic synthesis [J]; instance cells are candidate placements --- column B vendor-reported [V], column A our own reconstructed instance [S]; evaluation + monitoring apply at every layer.}
+  \label{fig:stack}
+\end{figure}
+\FloatBarrier
+
+\section{Layer 1 --- Learning Objectives}\label{sec:objectives}
+\label{sec:objectives-cards}
+This layer collects the method cards for \emph{how a system is trained}; the shared objective-space map is Table \ref{tab:objspace}, and the four-signal comparison is \cref{fig:signals}.
+
+% ===== P4 DRAFT: section 4 (Layer 1) — first written pass, 2026-10-17 =====
+\subsection{An objective-space map: Table 1}
+\label{sec:objspace}
+
+\begin{table}[!t]
+\centering
+\small
+\begin{tabular}{@{}p{2.5cm}p{3.2cm}p{3.6cm}p{4.2cm}p{0.9cm}@{}}
+\toprule
+Family & Modelling principle & Reliability question & Not guaranteed / fails & Ev. \\
+\midrule
+Autoregressive NLL & next-token conditional prediction & does sequence mastery buy factual + constraint correctness? & fluency $\ne$ grounding; poor calibration; unbounded generation & {[E]} \\
+Masked / denoising & corrupt-then-recover & does recovery training build faithful representations? & generation is not the objective; encoder-only scope & {[E]} \\
+Diffusion / flow matching, incl. production serving (\S\ref{sec:familycards}) & iterative denoising, learned vector fields & quality--latency--risk trade-off of the sampler? & multi-step cost; variability across samplers; risk is reference-relative & {[T, E]} \\
+Energy-based & inference as energy-landscape search (NRGPT) & does a different inference principle change reliability? & small-scale evidence; no superiority vs.\ production AR & {[T, E]} \\
+Supervised discrimination & $P(y\,|\,x)$ mapping head & is the mapping stable in deployment? & distribution shift; no ``why''; label-space drift & {[E]} \\
+Contrastive (CLIP-class) \cite{radford2021clip} & agreement of matching pairs & does embedding similarity imply semantic correctness? & retrieval errors; OOD embeddings; fine-grained mismatch & {[E]} \\
+Latent prediction (JEPA family) & predict target representations in latent space & which structure is recoverable, and does prediction help planning? & \emph{JEPA paradox in language}: authors report conditional-concentration failures on ambiguous text & {[A]} \\
+Hierarchical code prediction (NCM-class) & coarse-to-fine multiscale residual VQ codes; all codes per level in parallel & does the tokenizer carry meaning exact enough for downstream checks? & tokenizer-stage substitutions (entities, numerals); codebook compounding: authors' provisional analysis; no released production guard & {[A]} \\
+Preference / reward post-training & alignment training on top of an objective & does the reward measure what we want? & reward hacking \cite{gao2022overoptimization}; miscalibrated verifiers \cite{id260601066} & {[E]} \\
+Reasoning post-training (RLVR) & policy optimization against a programmatic checker, reusing the AR factorization & does verifier-checkable correctness at training time survive deployment? & verifier gaming \cite{id260601066}, length inflation \cite{id250405185}, coverage loss at large $k$ \cite{id250413837}, unfaithful traces \cite{id230504388}, compute saturation \cite{id261019362} & {[E, A]} \\
+\bottomrule
+\end{tabular}
+\caption{Objective-space map. Each family is optimized for a different currency; no column
+is interchangeable. Ev.\ = the class of a row's strongest anchor; where two classes appear, the
+first governs. Chips carry the dominant class of the single claim they name; [C]/[N] mark
+contradiction and absence; the full alphabet is
+\cref{tab:evidence-classes}. Rows are \emph{candidates}; the
+selection procedure lives in Section~\ref{sec:selection}.}
+\label{tab:objspace}
+\end{table}
+
+The first layer of the \reliabilitystack{} asks what a model is trained to be. We treat a
+\emph{learning objective} as the pair (training signal, probability factorization): autoregressive
+next-token prediction combines a factorization of the joint distribution with a negative-log-likelihood
+signal~\cite{vaswani2017attention,kaplan2020scaling,hoffmann2022compute}; a language model's
+architecture (mostly Transformer) is a separable choice. Keeping the two apart matters for
+reliability claims, because a change of factorization converts an architectural family into a
+different objective \cite{mdm2025orderar}, and a change of architecture under a fixed objective
+changes failure modes without changing what the signal encourages.
+
+Table~\ref{tab:objspace} maps the ten objective families our review identifies (the two newest
+entered while we were drafting: hierarchical code prediction, included because it moves failure
+into the tokenizer rather than removing it, and reasoning post-training). The columns
+follow the method-card schema of Section~\ref{sec:protocol}: the modelling principle, the
+reliability question it inherits, and --- critically --- the properties the objective does
+\emph{not} deliver. Our claim throughout is that a strong score on any of these signals is not a
+downstream property: likelihood, fidelity, sample quality, calibration and semantic correctness are
+different currencies \cite{nichol2021improved,acm2023diffusionsurvey,engreports2025modecollapse}.
+
+Three observations from Table~\ref{tab:objspace} carry through the paper.
+
+\textbf{(i) Transfer:} an objective that works in one modality need not
+concentrate its signal for another. The clearest documented case is the JEPA paradox: deterministic
+squared-error latent prediction presumes \emph{conditional concentration} of target representations,
+which masked text violates because several valid continuations are near-equidistant
+\cite{klindt2026lejepa,identifiability2026}. The same caution applies to importing image-era
+diffusion assumptions into language: D3PM ties masked-diffusion training to discrete state
+spaces~\cite{austin2021d3pm}, recent theory shows those trainers implicitly learn token-order
+strategies, i.e.\ a factorization in disguise~\cite{mdm2025orderar}, and controlled generation
+arrives only with a redesigned continuous objective~\cite{li2022diffusionlm}.
+
+\textbf{(ii) Historical trade-offs are our thesis in miniature.} GANs optimized realism via
+adversarial play and inherited mode collapse and unstable games~\cite{goodfellow2014gan,
+arjovsky2017wgan,engreports2025modecollapse}; VAE regularized a latent space and paid with posterior
+collapse and blurry samples~\cite{kingma2014vae,higgins2017betavae}; normalizing flows bought exact
+likelihood with architectural constraints on capacity~\cite{pmlr2021nf}; flow matching replaced
+stochastic diffusion transport with regression along probability paths, separately from any
+invertibility constraint~\cite{lipman2023flow}. Each is an instance of our central question ---
+\emph{the objective decides what the system cannot deliver} --- long before the scale debate; we
+use them as comparative rows (the catalogue genre is
+already served, e.g.\ \cite{almuammar2026genai,yazdani2025genaidepth}).
+
+\textbf{(iii) The assurance layer is objective-agnostic and always needed.} Grounding, validators,
+calibrated acceptance and escalation (L5) wrap \emph{any} row of Table~\ref{tab:objspace}; the
+objective changes only \emph{where} the inherited failures sit; assurance is
+needed on every row. The
+block-diffusion serving literature is today's cleanest demonstration that an inference
+configuration can be chosen against a reference-relative risk budget rather than a mean
+benchmark score, and that the same selection procedure transfers, up to precision limits and with
+batch-invariant sampling, to speculative-decoding acceptance rules and to weight
+quantization~\cite{id260933887} --- the
+pattern we generalize in Sections~\ref{sec:contracts}--\ref{sec:assurance}.
+
+
+
+
+\begin{figure}[t]
+  \centering
+  % \includegraphics[width=\linewidth]{figures/f3_learning_signals.pdf}
+  \resizebox{\linewidth}{!}{\input{figures/f3_learning_signals.tex}}
+  \caption{ Four training signals on one stage grid --- input, what is optimized, prediction target, and what the signal cannot deliver: autoregressive next-token, supervised discrimination, typed decisions, latent prediction. The amber chip marks the typed-decision mechanism, the item the ledger carries as threshold-as-policy [V] with independent benchmarking [E] (\cref{sec:contracts}); it is a claim, not a failure; each row's failure sits in the last column. The grid compares four signals; the ten-family objective map is Table~\ref{tab:objspace}. Signals and their failures are candidates.}
+  \label{fig:signals}
+\end{figure}
+
+\subsection{Family cards: objectives, envelopes, complements}
+\label{sec:familycards}
+
+We expand the ten Table~\ref{tab:objspace} rows into eight compact cards: what the objective
+\emph{optimizes}, where it \emph{excels}, where it \emph{fails}, and which complementary chapters (Sections~\ref{sec:contracts}--\ref{sec:assurance}) cover the residual. Eight cards cover ten rows because discrimination and contrastive learning share one card --- their inherited failure is the same mapping-stability question (Fig.~\ref{fig:fam-contrastive}) --- and latent prediction (JEPA) is argued in prose below and instantiated in Case~4 (\cref{sec:case-jepa}), which is where its envelope becomes measurable. Each card reads left to right --- data in, the training mechanism, the learned object, the output --- with the inherited failure hung below the learned object on a dashed arrow and the training signal in the footer. Cards are
+candidates; the selection procedure in \cref{sec:selection} consumes them.
+
+\paragraph{Autoregressive next-token prediction.}
+\noindent The mechanism is sketched in \cref{fig:fam-ar}.
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_fam_ar.tex}}
+  \caption{Family card: autoregressive next-token prediction. Yellow = the inherited failure with the strongest ledger support.}
+  \label{fig:fam-ar}
+\end{figure}
+
+\textit{Optimizes} conditional sequence likelihood (left-to-right factorization over the joint, NLL signal); compute scaling follows observed
+laws~\cite{kaplan2020scaling,hoffmann2022compute}. \textit{Excels at} open-ended generation,
+in-context adaptation, and tool-readable instruction following --- the substrate every layer
+above assumes. \textit{Fails at} factual guarantees (fluency is not truth; hallucination
+surveys report persistent inconsistency across elicitation formats
+~\cite{id251006265}) and calibration out of the box. \textit{Complements:} retrieval
+grounding, output contracts, calibrated acceptance and escalation (\S\ref{sec:contracts}--\S\ref{sec:assurance}).
+
+\paragraph{Masked and denoising objectives.}
+\noindent The mechanism is sketched in \cref{fig:fam-masked}.
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_fam_masked.tex}}
+  \caption{Family card: masked / denoising objectives.}
+  \label{fig:fam-masked}
+\end{figure}
+
+\textit{Optimizes} recovery from corruptions; trains representations that transfer broadly.
+\textit{Excels at} encoder tasks and representation learning with modest data.
+\textit{Fails at} generation: the training signal is recovery, and the D3PM contrast with
+masked-diffusion generation shows the same corruption family splits into
+representation-trainers and sequence-generators only when sampling is defined
+~\cite{austin2021d3pm,mdm2025orderar}. \textit{Complements:} pair with a decoding layer or
+use as the base for specialist encoders.
+
+\paragraph{Diffusion and flow matching.}
+\noindent The mechanism is sketched in \cref{fig:fam-diffusion}.
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_fam_diffusion.tex}}
+  \caption{Family card: diffusion and flow matching (sampler sensitivity as the inherited failure).}
+  \label{fig:fam-diffusion}
+\end{figure}
+
+\textit{Optimizes} iterative denoising (DDPM; improved variants tie likelihood to
+FID-style diversity \cite{ho2020ddpm,nichol2021improved}) or regression along probability paths
+\cite{lipman2023flow}; discrete state spaces and controllable formulations carry these into
+text \cite{austin2021d3pm,li2022diffusionlm}, with parallel-decoding latency arguments spanning
+the DLM survey~\cite{zhan2025dlmsurvey}, Turkish masked-diffusion proof-of-concept
+ Diffutron~\cite{id260320466}, and order-learning bridges~\cite{mdm2025orderar}.
+\textit{Fails at} sampler sensitivity: the same trainer yields different samples across samplers
+(DDIM \cite{song2021ddim}); the comprehensive survey documents likelihood-vs-sample-quality separations
+\cite{acm2023diffusionsurvey}. \textit{Complements:} risk-budgeted serving (\S\ref{sec:l5-calibrated}) turns
+sampler choice into an assurance question rather than a benchmark answer.
+
+\paragraph{Energy-based objectives.}
+\noindent The mechanism is sketched in \cref{fig:fam-energy}.
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_fam_energy.tex}}
+  \caption{Family card: energy-based objectives. Gray = absent evidence ([N]): no quantitative anchor in our ledger; the card's [GAP] label marks the specific unmeasured link behind that absence, not a second finding.}
+  \label{fig:fam-energy}
+\end{figure}
+
+\textit{Optimizes} an energy landscape whose minima are plausible outputs (NRGPT
+class~\cite{nrgpt2025}, [T]);
+inference is an iterative search. \textit{Excels at} making inference a tunable
+computation, in principle aligning effort with difficulty. \textit{Fails at} scale evidence:
+demonstrations remain small; no superiority over production AR systems is established, and we
+flag this as an honest open row rather than a case for exclusion. \textit{Complements:} the usual
+assurance stack applies; value today is conceptual (search-driven inference).
+
+\paragraph{Discriminative and contrastive representation objectives.}
+\noindent The mechanism is sketched in \cref{fig:fam-contrastive}.
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_fam_contrastive.tex}}
+  \caption{Family card: contrastive representation objectives (Table 1 rows 5--6 --- the supervised-discrimination family shares this row's computed-agreement signal; its own row lives in \cref{tab:objspace}).}
+  \label{fig:fam-contrastive}
+\end{figure}
+
+\textit{Optimizes} a mapping head or agreement of pairs; typically the cheapest, most
+auditable family. \textit{Excels at} narrow, well-instrumented decision regimes where OOD
+-monitoring and calibration methods have matured (\S\ref{sec:assurance} cites the UQ
+ surveys~\cite{id250315850,id240718418}). \textit{Fails at} open-ended tasks and
+distribution shift; embeddings are not calibrated probabilities and break
+threshold policies built on them. \textit{Complements:} acceptance/escalation
+machinery, designed jointly with the L4 contract.
+
+\paragraph{Latent-predictive joint-embedding objectives (JEPA family).}
+\textit{Optimizes} predictability of target representations under partial context
+(I-JEPA lineage; the identifiability gap we treat as open in \cref{sec:l2-jepa}
+\cite{klindt2026lejepa}). \textit{Excels at} vision-style regimes where the objective matches the
+data's structure; attractive because prediction concentrates signal without generative cost.
+\textit{Fails at} language: the paradox thesis is that ambiguous-text targets lack
+concentration, so squared-error training degrades \cite{identifiability2026};
+assumption conditions (e.g.\ non-Gaussian identifiability lifts \cite{id260612471}) remain
+unclosed in production settings. \textit{Complements:} world-model planners need an output
+contract (\S\ref{sec:contracts}) and monitors (\S\ref{sec:assurance}) exactly because prediction
+quality alone does not certify planning quality.
+
+\paragraph{Preference, reward and rule-grounded post-training.}
+\noindent The mechanism is sketched in \cref{fig:fam-preference}.
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_fam_preference.tex}}
+  \caption{Family card: preference / reward post-training (contested calibration direction named).}
+  \label{fig:fam-preference}
+\end{figure}
+
+\textit{Optimizes} alignment of outputs to explicit preferences or verifiable rules on top of
+any base objective (RLHF/DPO families; the Laya-class recipe trains decision heads with proper scoring
+rules~\evvendor{}; the Jev-class System-One benchmark family shows decision-model
+serving gains \cite{rauk2026jevbenchmark}). \textit{Excels at} instilling response shape
+and typed decision distributions without re-architecting. \textit{Fails at} reward hacking and
+miscalibrated verifiers: the signal reflects the reward model's beliefs, not ground truth
+\cite{gao2022overoptimization,id260601066}; direction-of-miscalibration disagreements across independent reproductions
+are documented for the Laya-class architecture and reported as contested and unresolved
+(\S\ref{sec:contracts}). \textit{Complements:} The entire L5 stack; post-training changes the
+prior, assurance changes the posterior of use.
+
+\paragraph{Reasoning post-training (RLVR).}
+\noindent The mechanism is sketched in \cref{fig:fam-reasoning}.
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_fam_reasoning.tex}}
+  \caption{Family card: reasoning post-training (verifier gaming as the inherited failure).}
+  \label{fig:fam-reasoning}
+\end{figure}
+
+\textit{Optimizes} expected verifiable reward over a rollout group: a programmatic checker scores
+sampled chains under KL/clip, keeping the autoregressive factorization and changing only the
+signal. \textit{Excels at} domains with executable ground truth, where it converts latent capability
+into pass@1 --- R1-Zero moves AIME 2024 from 15.6 to 77.9~\cite{id250112948}. \textit{Fails at} the
+checker: fuzzed verifiers return false-positive rates of 0.832, 0.869 and 0.557 by verifier
+family~\cite{id260601066}; on Qwen2.5-Math-7B/MATH-500, randomly assigned rewards still buy
+21.4 pp of gain against 29.1 pp from ground truth, though Llama3 and OLMo2 do not reproduce the
+gain~\cite{id250610947}; base models overtake their RLVR versions at large $k$~\cite{id250413837};
+length inflation follows from the loss on incorrect answers~\cite{id250405185}; returns diminish
+polynomially~\cite{id261019362}; and traces need not be
+faithful~\cite{id230504388}. \textit{Complements:} typed outputs make rewards checkable
+(\S\ref{sec:contracts}); assurance audits the checker as well as the policy.
+
+\paragraph{Hierarchical code prediction (NCM-class).}
+\textit{Optimizes} a coarse-to-fine factorization over levels with a residual-VQ code signal: a frozen multiscale residual VQ-VAE tokenizer
+represents text as $K$ levels of discrete codes over $L$ tokens (with $\ell_k$ the number of
+code positions at level $k$, $K \ll L$), and a
+transformer generates each level in one parallel forward pass conditioned on the cumulative
+reconstruction --- inheriting next-scale prediction from image hierarchies
+\cite{kumbong2026ncm}. \textit{Excels at} short generation paths ($K \ll L$):
+\evaurep{reports 21$\times$ faster decoding on LM1B at matched parameter scale and 31$\times$ on
+XSum at matched ROUGE-L}, with quality at or above masked-diffusion baselines,
+\evaurep{Sudoku accuracy above all evaluated baselines}, and \evaurep{$4.9\times$ lower
+training-token exposure}~\cite{kumbong2026ncm}.
+\textit{Fails at} tokenizer-stage semantic risk: reconstruction is near-exact per dataset (\evaurep{98.79--100\%}), but the released evaluation shows
+substitutions of named entities or numerals --- a \evaurep{99.79\%-reconstruction summarisation case}
+does not certify meaning-level fidelity --- and the tokenizer fixes
+what downstream checks can distinguish. Math/data/correctness goals shift the exact-recovery
+requirement, and the authors' conditioning-corruption training buys code-error robustness inside
+the representation, not at the contract ([A]-class). \textit{Complements:} output contracts must define token-exactness vs.\
+meaning-equivalence boundaries; acceptance machinery resumes.
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_fam_ncm.tex}}
+  \caption{Family card: hierarchical code prediction (NCM-class). Accent = the tokenizer-stage semantic-risk boundary; dashed = contested/undocumented wiring (codebook compounding). Speed, NFE and Sudoku evidence is highlighted on the ribbon. Ribbon segments carry the dominant class ([T]/[E]/[A]/[V]); the full alphabet is \cref{tab:evidence-classes}. Colour key: teal = [E] independently evaluated, purple = [A] author-reported, teal outline = [T] theory-under-assumptions, purple outline = [V] vendor-reported, vermillion = [C] contradicted (anchor named), gray = [N] not claimable; all dashed outlines = contradicted (global dashed grammar). The frozen tokenizer is drawn as a store: a fixed codebook consulted at generation, not a component trained in this card.}
+  \label{fig:fam-ncm}
+\end{figure}
+
+A schedule is a factorization choice, not an architecture, and the objective families above
+instantiate three of them (\cref{fig:schedule-atlas}). Autoregressive generation is the chain
+rule: one commitment per token, none revisable. Iterative denoising revisits every position on
+every pass, so revision is free but nothing is settled until the last pass. Coarse-to-fine
+hierarchies commit one level at a time and stay revisable until the next level resolves them,
+at $K \ll L$ sequential steps. What differs across the three is how many sequential decisions
+an output contract must accept and whether any of them can be taken back --- the quantity a
+contract inspects at acceptance time (\cref{sec:contracts}).
+
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_schedule_atlas.tex}}
+  \caption{ Generation-schedule atlas: the three factorizations differ in how many sequential decisions they make and whether a decision can be revised. Lanes are in Table 1 order, not cost-ranked: left-to-right chain rule ($L\times1$: one commitment per token, never revised), iterative sequence denoising ($T\times L$: every position revisited each pass, so any position can be re-masked), and the coarse-to-fine code hierarchy ($K$ sequential levels with $\ell_k$ code positions at level $k$, parallel within a level; every level spans the same token sequence at rising resolution, it does not append). Each level is fed by the conditioning spine (conditioned on $z(k{-}1)$) and hands its codes to a cumulative reconstruction $z(k)$; a single decode follows the last level and is the acceptance surface. Dashed ports are diagnostic per-level previews off the $K$-step path. The only quantitative claim is $K\ll L$; no wall-clock numbers are drawn.}
+  \label{fig:schedule-atlas}
+\end{figure}
+
+
+\paragraph{What the cards jointly establish.}
+\looseness=-1
+No family wins across currencies: likelihood, fidelity, calibration and semantic correctness
+are different objectives, so a stack that mixes families (L1) with contracts (L4) and
+assurance (L5) is the actual engineering answer, and Section~\ref{sec:selection} formalizes
+the choice.
+
+
+\section{Layer 2 --- Representations and What They Guarantee}\label{sec:representations}
+\input{sections/l2_representations.tex}
+\FloatBarrier
+
+\noindent The mechanism is sketched in \cref{fig:layer2-reps}.
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_layer2_reps.tex}}
+  \caption{ Layer 2 schematic: three representation families and what each hands the layers above. Tokens are discrete symbols, so schema and grammar checks have a target; the tokenizer-free byte fork keeps that target and pays in sequence length [J]; joint-embedding latents carry similarity only --- no $P(\text{true})$ and no decision utility --- so a scalar risk estimate needs a calibration layer with its own assumptions [T]; symbolic or structured state supports deterministic checks by construction. Yellow: identifiability [T], the latent equals generative structure only under the stated assumptions, with no anchor in our set bridging it to decision quality [GAP]. In API-served models the tokenizer is fixed by the serving stack [S].}
+  \label{fig:layer2-reps}
+\end{figure}
+
+
+
+\section{Layer 3 --- Inference Architectures}\label{sec:architectures}
+\input{sections/l3_architectures.tex}
+\FloatBarrier
+
+\noindent The mechanism is sketched in \cref{fig:layer3-route}.
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_layer3_route.tex}}
+  \caption{ Layer 3 schematic: one selector shape, three scopes --- per token, per step, per request. Per token (expert routing), per step (looped depth) and per request (tier choice across generalist, specialist and cascade members, or escalation) the same signal--select--compute--output shape appears; only the per-token case merges parallel work (expert outputs), the other two return one result. What differs is the honesty of the signal --- a learned router logit [S], a loop count chosen offline (a design constant, not a per-input signal; the tied-depth bound is [T]), and a gate score calibrated per member [E]. The thicker-bordered box in the third band (gate score) is the only signal with a measured calibration anchor (C3, SATER). Cost--quality allocation is a first-class reliability lever [S]; the cost when the signal is wrong or absent is our analytic cut [J], and none of the three composes into a system guarantee.}
+  \label{fig:layer3-route}
+\end{figure}
+
+
+
+\section{Layer 4 --- Output Contracts: Validity Is Not Truth}\label{sec:contracts}
+\input{sections/l4_contracts.tex}
+\FloatBarrier
+
+\noindent The mechanism is sketched in \cref{fig:layer4-contract}.
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_layer4_contract.tex}}
+  \caption{ Layer 4 schematic: four contract tiers, ordered by what each adds to the return --- an ordering that is our analytic cut [J]; T4's metadata is an add-on to any of T1--T3. Each tier is printed with its own defeat --- free-form text guarantees nothing checkable; schemas buy parseability, not truth [S]; typed decisions make confidence auditable, not accurate; structured metadata is attachable, not attached or faithful. Yellow: T2's schema compliance is table stakes [S]. Right of the divider (validity $\ne$ truth) sit the L5 rungs a contract can reach, numbered as in \cref{fig:layer5-assur}: 1 grounding, 2 rule checks (deterministic validators), 4 calibrated abstention (selective prediction at a threshold), 5 escalation to human review. Two receive a named object: T4 hands grounding evidence to check, T3 hands selective prediction a scalar to threshold; rung 3 (model-based checking) consumes no contract object. No tier reaches the truth of the values it carries, and the contract cannot walk the rung column.}
+  \label{fig:layer4-contract}
+\end{figure}
+
+
+
+\section{Layer 5 --- Assurance and Verification}\label{sec:assurance}
+Cross-cutting safeguard coverage is summarized in \cref{fig:failmatrix}: which failure modes have
+evidence-tagged coverage, and which cells are named gaps.
+\input{sections/l5_assurance.tex}
+\FloatBarrier
+
+\noindent The mechanism is sketched in \cref{fig:layer5-assur}.
+\begin{figure}[t]\centering
+  \resizebox{\linewidth}{!}{\input{figures/f_layer5_assur.tex}}
+  \caption{ Layer 5 schematic: the chosen budget line against the residual it leaves. Five rungs in cost order (x) against residual risk (y); both axes are ordinal. The residual steps down at each rung and every step leaks --- attribution is not truth, correction racing, verifier relocation [E], thresholds are policies [T], escalation capacity [S] --- and the gap between the chosen budget and the last step is bracketed as the residual. The fourth envelope item, unsound auditing, is not a rung: monitors are evadable under ordinary task pressure (\cref{sec:l5-monitoring}). No rates are encoded: step heights are deliberately uneven and the crossing point is schematic. The budget line is drawn where the operator chooses --- its placement is illustrative.}
+  \label{fig:layer5-assur}
+\end{figure}
+
+
+
+\begin{figure}[t]
+  \centering
+  \resizebox{\linewidth}{!}{\input{figures/f4_failmatrix_draft.tex}}
+  \caption{ Failure modes sorted by the layer where they arise, against the safeguard families that catch them. Read each row as a sentence --- originates at Lx, caught by --- and the argument appears: origins cluster at L2 (representation) while filled cells cluster in the last three columns, so the layer where a failure originates is usually not the layer that catches it. The amber cell is the single same-layer catch: structured-schema (validity) error caught by output contracts and validators --- and it closes only the validity half; the value error survives (validity $\ne$ truth). Origin assignment is our analytic cut [J] --- distribution shift is the ambiguous row, filed at L0 and stated as such. Glyphs: E/T/V = documented coverage of that failure and the evidence class of the anchor; $\varnothing$ = named [GAP]; empty = family not claimed. No coverage rates are claimed.}
+  \label{fig:failmatrix}
+\end{figure}
+
+\section{Case Studies}\label{sec:cases}
+\input{sections/cases.tex}
+\FloatBarrier
+
+\section{Task Selection Framework}\label{sec:selection}
+\begin{figure}[t]
+  \centering
+  % \includegraphics[width=\linewidth]{figures/f2_task_map.pdf}
+  \input{figures/f2_task_map_draft.tex}
+  \caption{ Task-selection map: quadrant mode lists are candidate operating modes [S]; the two probes are our own cases placed illustratively --- case 2 sits at high cost because a typed decision acts without a human reader in the loop --- and the dashed elbow runs from probe 1 to the reversibility callout --- it names the lever that would move the placement, not a measured trajectory; modifier callouts are claims-to-defend; the escalation band is the high-error-cost row (default response: defer, verify, escalate).}
+  \label{fig:map}
+\end{figure}
+\input{sections/selection.tex}
+\FloatBarrier
+
+\section{Evidence Typology and Review Protocol}\label{sec:protocol}
+\input{sections/protocol.tex}
+\FloatBarrier
+
+\section{Related Work}\label{sec:related}
+\input{sections/related.tex}
+\FloatBarrier
+
+\section{Discussion and Open Questions}\label{sec:discussion}
+\input{sections/discussion.tex}
+\FloatBarrier
+
+\FloatBarrier
+\clearpage
+\appendix
+\input{sections/appendix_codebook.tex}
+
+\clearpage
+\begingroup
+% shim until refs.bib notes are sanitized (bib owned by the figures/bib sibling):
+% some VERIFIED-X notes carry a literal `id_list' underscore, which plainnat prints in text mode
+\catcode`\_=12
+\bibliographystyle{plainnat}
+\bibliography{refs}
+\endgroup
+
+\end{document}

@@ -1,0 +1,1139 @@
+\begin{thebibliography}{164}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Al-Lawati et~al.(2026)Al-Lawati, Lucas, Lee, and
+  Wang]{contamresist2026}
+Ali Al-Lawati, Jason Lucas, Dongwon Lee, and Suhang Wang.
+\newblock Llm benchmark datasets should be contamination-resistant.
+\newblock In \emph{Proceedings of the International Conference on Machine
+  Learning (ICML 2026), Position Paper Track}, 2026.
+\newblock Preprint arXiv:2605.19999.
+
+\bibitem[Alansari and Luqman(2025)]{id251006265}
+Aisha Alansari and Hamzah Luqman.
+\newblock Large language models hallucination: A comprehensive survey.
+\newblock \emph{arXiv preprint arXiv:2510.06265}, 2025.
+
+\bibitem[Almuammar et~al.(2026)Almuammar, Alsultan, and
+  Altukhaim]{almuammar2026genai}
+Mishal Almuammar, Ahmed Alsultan, and Nouf Altukhaim.
+\newblock Generative artificial intelligence models: A survey.
+\newblock \emph{Artificial Intelligence Review 59:160}, 2026.
+
+\bibitem[Alrasheed et~al.(2026)]{id260939235}
+Ali Alrasheed et~al.
+\newblock The planning limits of latent world models.
+\newblock \emph{arXiv preprint arXiv:2609.39235}, 2026.
+
+\bibitem[{Amnesty International}(2021)]{amnesty2021xenophobic}
+{Amnesty International}.
+\newblock {Xenophobic Machines: Discrimination through Unregulated Use of
+  Algorithms in the {Dutch} Childcare Benefits Scandal}.
+\newblock \url{https://www.amnesty.org/en/documents/eur35/4686/2021/en/}, 2021.
+\newblock EUR 35/4686/2021, 25 October 2021; accessed 2026-10-20.
+
+\bibitem[An et~al.(2026)An, Chen, Jing, Tao, and Li]{raie2026}
+Jiayu An, Zheng Chen, Yongcheng Jing, Dacheng Tao, and Bo~Li.
+\newblock A review on test-time scaling for agentic large language models.
+\newblock In \emph{Proceedings of the International Joint Conference on
+  Artificial Intelligence (IJCAI-26), Survey Track}, pages 7731--7737, 2026.
+\newblock IJCAI proceedings 2026/859; verified 2026-10-17.
+
+\bibitem[{Anthropic}(2025)]{anthropic2025context}
+{Anthropic}.
+\newblock Effective context engineering for {AI} agents.
+\newblock Anthropic Engineering, September 2025.
+\newblock URL
+  \url{https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents}.
+\newblock 29 September 2025; vendor guidance on compaction, note-taking and
+  sub-agents, no independent replication. [V].
+
+\bibitem[Arjovsky et~al.(2017)Arjovsky, Chintala, and Bottou]{arjovsky2017wgan}
+Martin Arjovsky, Soumith Chintala, and L{\'e}on Bottou.
+\newblock Wasserstein {GAN}.
+\newblock \emph{arXiv preprint arXiv:1701.07875}, 2017.
+
+\bibitem[{Artificial Analysis}(2026)]{artificialanalysis2026mercury25}
+{Artificial Analysis}.
+\newblock Mercury 2.5 --- intelligence, performance \& price analysis.
+\newblock Artificial Analysis, 2026.
+\newblock URL \url{https://artificialanalysis.ai/models/mercury-2-5}.
+\newblock Independent evaluation; output throughput on a fixed $\sim$10k-in /
+  1.5k-out workload. [E].
+
+\bibitem[Assran et~al.(2023)Assran, Duval, Misra, et~al.]{id230108243}
+Mahmoud Assran, Quentin Duval, Ishan Misra, et~al.
+\newblock Self-supervised learning from images with a joint-embedding
+  predictive architecture.
+\newblock \emph{arXiv preprint arXiv:2301.08243}, 2023.
+
+\bibitem[Atman et~al.(2026)Atman, Uludag, Uzun, Agaran, Eskalen, and
+  Karaca]{atman2026llm}
+Ebru~Dusunceli Atman, Sena~Bozer Uludag, {\c{C}}a{\u{g}}lar Uzun, Gizem Agaran,
+  Zeynep Eskalen, and Kazim~Burak Karaca.
+\newblock The influence of large language model-generated artificial
+  intelligence risk estimates on clinical decision-making in breast imaging: A
+  simulation-based study.
+\newblock \emph{Diagnostics}, 16\penalty0 (19):\penalty0 3241, 2026.
+\newblock \doi{10.3390/diagnostics16193241}.
+
+\bibitem[Austin et~al.(2021)Austin, Johnson, Ho, Tarlow, and van~den
+  Berg]{austin2021d3pm}
+Jacob Austin, Daniel~D. Johnson, Jonathan Ho, Daniel Tarlow, and Rianne van~den
+  Berg.
+\newblock Structured denoising diffusion models in discrete state-spaces.
+\newblock \emph{arXiv preprint arXiv:2107.03006}, 2021.
+
+\bibitem[Avi{\v{z}}ienis et~al.(2004)Avi{\v{z}}ienis, Laprie, Randell, and
+  Landwehr]{avizienis2004}
+Algirdas Avi{\v{z}}ienis, Jean-Claude Laprie, Brian Randell, and Carl Landwehr.
+\newblock Basic concepts and taxonomy of dependable and secure computing.
+\newblock \emph{IEEE Transactions on Dependable and Secure Computing},
+  1\penalty0 (1):\penalty0 11--33, January 2004.
+\newblock \doi{10.1109/TDSC.2004.2}.
+
+\bibitem[Bachar et~al.(2026)Bachar, Levi, Mishra, Levi, Minhas, Miller,
+  Ben-Porat, Sheetrit, and Morra]{bachar2026lpp}
+Or~Bachar, Or~Levi, Sardhendu Mishra, Adi Levi, Manpreet~Singh Minhas, Justin
+  Miller, Omer Ben-Porat, Eilon Sheetrit, and Jonathan Morra.
+\newblock Llm performance predictors: Learning when to escalate in hybrid
+  human-ai moderation systems.
+\newblock In \emph{Proceedings of the 25th International Conference on
+  Autonomous Agents and Multiagent Systems (AAMAS 2026)}, 2026.
+\newblock Full paper; preprint arXiv:2601.07006.
+
+\bibitem[Baumeister et~al.(2026)Baumeister, Finkbeiner, Krsmanovic,
+  et~al.]{id260926123}
+Jan Baumeister, Bernd Finkbeiner, Vladimir Krsmanovic, et~al.
+\newblock Fairmon: A tool for monitoring and visualizing algorithmic fairness.
+\newblock \emph{arXiv preprint arXiv:2609.26123}, 2026.
+
+\bibitem[Bean et~al.(2025)Bean, Kearns, Romanou, Hafner, Mayne, Batzner,
+  Foroutan, Schmitz, Korgul, Batra, Deb, Beharry, Emde, Foster, Gausen,
+  Grandury, Han, Hofmann, Ibrahim, Kim, Kirk, Lin, Liu, Luettgau, Magomere,
+  Rystr{\o}m, Sotnikova, Yang, Zhao, Bibi, Bosselut, Clark, Cohan, Foerster,
+  Gal, Hale, Raji, Summerfield, Torr, Ududec, Rocher, and
+  Mahdi]{measwhatmatters2025}
+Andrew~M. Bean, Ryan~Othniel Kearns, Angelika Romanou, Franziska~Sofia Hafner,
+  Harry Mayne, Jan Batzner, Negar Foroutan, Chris Schmitz, Karolina Korgul,
+  Hunar Batra, Oishi Deb, Emma Beharry, Cornelius Emde, Thomas Foster, Anna
+  Gausen, Mar{\'i}a Grandury, Simeng Han, Valentin Hofmann, Lujain Ibrahim,
+  Hazel Kim, Hannah~Rose Kirk, Fangru Lin, Gabrielle Kaili-May Liu, Lennart
+  Luettgau, Jabez Magomere, Jonathan Rystr{\o}m, Anna Sotnikova, Yushi Yang,
+  Yilun Zhao, Adel Bibi, Antoine Bosselut, Ronald Clark, Arman Cohan, Jakob
+  Foerster, Yarin Gal, Scott~A. Hale, Inioluwa~Deborah Raji, Christopher
+  Summerfield, Philip H.~S. Torr, Cozmin Ududec, Luc Rocher, and Adam Mahdi.
+\newblock Measuring what matters: Construct validity in large language model
+  benchmarks.
+\newblock In \emph{Advances in Neural Information Processing Systems 38
+  (NeurIPS 2025), Datasets and Benchmarks Track}, 2025.
+\newblock Preprint arXiv:2511.04703.
+
+\bibitem[Behera et~al.(2025)Behera, Champati, Morabito, et~al.]{id250606579}
+Adarsh~Prasad Behera, Jaya~Prakash Champati, Roberto Morabito, et~al.
+\newblock Towards efficient multi-llm inference: Characterization and analysis
+  of llm routing and hierarchical techniques.
+\newblock \emph{arXiv preprint arXiv:2506.06579}, 2025.
+
+\bibitem[Behrouz et~al.(2024)Behrouz, Zhong, and Mirrokni]{id250100663}
+Ali Behrouz, Peilin Zhong, and Vahab Mirrokni.
+\newblock Titans: Learning to memorize at test time.
+\newblock \emph{arXiv preprint arXiv:2501.00663}, 2024.
+
+\bibitem[{Benchmark Heaven}(2026)]{jevbench2026board}
+{Benchmark Heaven}.
+\newblock {JevBench} v1.6.1 --- capability score and model ranking.
+\newblock Benchmark Heaven, 2026.
+\newblock URL \url{https://benchmarkheaven.com/jev-models/v1.6.1}.
+\newblock Decision-model board, read 20 October 2026; v1.6.1 release. [E].
+
+\bibitem[Bie et~al.(2025)Bie, Cao, Chen, Du, Gong, Gong, Gu, Hu,
+  et~al.]{llada2026two}
+Tiwei Bie, Maosong Cao, Kun Chen, Lun Du, Mingliang Gong, Zhuochen Gong, Yanmei
+  Gu, Jiaqi Hu, et~al.
+\newblock {LLaDA2.0}: Scaling up diffusion language models to 100{B}.
+\newblock \emph{arXiv preprint arXiv:2512.15745}, 2025.
+\newblock URL \url{https://arxiv.org/abs/2512.15745}.
+
+\bibitem[Cai et~al.(2024)Cai, Jiang, Wang, et~al.]{id240706204}
+Weilin Cai, Juyong Jiang, Fan Wang, et~al.
+\newblock A survey on mixture of experts in large language models.
+\newblock \emph{arXiv preprint arXiv:2407.06204}, 2024.
+
+\bibitem[Chameleon et~al.(2025)]{id240509818}
+Team Chameleon et~al.
+\newblock Chameleon: Mixed-modal early-fusion foundation models.
+\newblock \emph{arXiv preprint arXiv:2405.09818}, 2025.
+
+\bibitem[Chandrahas(2026)]{evalci2026}
+Shreyas~K Chandrahas.
+\newblock evalci: A python library for statistically rigorous comparison of
+  language model evaluations.
+\newblock \emph{arXiv preprint arXiv:2607.04429}, 2026.
+\newblock Software: \url{https://pypi.org/project/evalci/}; archived at Zenodo,
+  DOI 10.5281/zenodo.21201815.
+
+\bibitem[{Check Point Team}(2026)]{checkpoint2026jevredteam}
+{Check Point Team}.
+\newblock A decision model breaks like any other language model: A first look
+  at {Jev}.
+\newblock Check Point Blog, AI Security, September 2026.
+\newblock URL
+  \url{https://blog.checkpoint.com/ai-security/jev-is-not-a-language-model-but-it-breaks-like-one-prompt-injection-against-a-typed-decision-model}.
+\newblock Red-team of a typed decision model in a due-diligence app: 25/27
+  configurations broken, $\sim$\$0.50 per break, strongest attacker 9/9. [E].
+
+\bibitem[Chen et~al.(2024)Chen, Zhao, Chen, et~al.]{id240611353}
+Guanjie Chen, Xinyu Zhao, Tianlong Chen, et~al.
+\newblock {MoE-RBench}: Towards building reliable language models with sparse
+  mixture-of-experts.
+\newblock \emph{arXiv preprint arXiv:2406.11353}, 2024.
+
+\bibitem[Chen et~al.(2023)Chen, Zaharia, and Zou]{frugalgpt2023}
+Lingjiao Chen, Matei Zaharia, and James Zou.
+\newblock {FrugalGPT}: How to use large language models while reducing cost and
+  improving performance.
+\newblock \emph{arXiv preprint arXiv:2305.05176}, 2023.
+
+\bibitem[Cheng et~al.(2025)Cheng, Chang, and Wu]{contamsurvey2025}
+Yuxing Cheng, Yi~Chang, and Yuan Wu.
+\newblock A survey on data contamination for large language models.
+\newblock \emph{arXiv preprint arXiv:2502.14425}, 2025.
+
+\bibitem[Cho et~al.(2026)Cho, Cui, Kim, et~al.]{id260917184}
+SangLyul Cho, Langqing Cui, Sehoon Kim, et~al.
+\newblock Loopspec: Pipelined self-speculative decoding for looped
+  transformers.
+\newblock \emph{arXiv preprint arXiv:2609.17184}, 2026.
+
+\bibitem[Chouhan et~al.(2026)]{id261020778}
+Avdhesh~Singh Chouhan et~al.
+\newblock Verdict: Encode once, decide many.
+\newblock \emph{arXiv preprint arXiv:2610.20778}, 2026.
+
+\bibitem[{Chroma Research}(2025)]{chroma2025contextrot}
+{Chroma Research}.
+\newblock Context rot: How increasing input tokens impacts {LLM} performance.
+\newblock Chroma Technical Report, July 2025.
+\newblock URL \url{https://research.trychroma.com/context-rot}.
+\newblock 14 July 2025; 18 models, degradation with input length on tasks that
+  need no retrieval. [E].
+
+\bibitem[Cobbinah et~al.(2025)Cobbinah, Nunoo-Mensah, Ebenezer~Adjei,
+  Adoma~Acheampong, et~al.]{engreports2025modecollapse}
+Matthew Cobbinah, Henry Nunoo-Mensah, Prince Ebenezer~Adjei, Francisca
+  Adoma~Acheampong, et~al.
+\newblock Diversity in stable {GANs}: A systematic review of mode collapse
+  mitigation strategies, 2025.
+
+\bibitem[Dastin(2018)]{reuters2018amazon}
+Jeffrey Dastin.
+\newblock {Amazon Scraps Secret {AI} Recruiting Tool That Showed Bias Against
+  Women}.
+\newblock Reuters, 10 October 2018; verified copy at
+  \url{https://mediawell.ssrc.org/news-items/amazon-scraps-secret-ai-recruiting-tool-that-showed-bias-against-women-reuters},
+  2018.
+\newblock Accessed 2026-10-20.
+
+\bibitem[{DeepSeek-AI} et~al.(2025){DeepSeek-AI}, Guo, Yang, Zhang, Song, Wang,
+  Zhu, Xu, et~al.]{id250112948}
+{DeepSeek-AI}, Daya Guo, Dejian Yang, Haowei Zhang, Junxiao Song, Peiyi Wang,
+  Qihao Zhu, Runxin Xu, et~al.
+\newblock {DeepSeek-R1}: Incentivizing reasoning capability in {LLMs} via
+  reinforcement learning.
+\newblock \emph{Nature}, 645:\penalty0 633--638, 2025.
+\newblock \doi{10.1038/s41586-025-09422-z}.
+\newblock URL \url{https://arxiv.org/abs/2501.12948}.
+
+\bibitem[Dehmamy et~al.(2025)Dehmamy, Hoover, Saha, Kozachkov, Slotine, and
+  Krotov]{nrgpt2025}
+Nima Dehmamy, Benjamin Hoover, Bishwajit Saha, Leo Kozachkov, Jean-Jacques
+  Slotine, and Dmitry Krotov.
+\newblock {NRGPT}: An energy-based alternative for {GPT}.
+\newblock \emph{arXiv preprint arXiv:2512.16762}, 2025.
+\newblock [VERIFIED-X 2026-10-19, arXiv abs page]; cited as arXiv preprint only
+  --- the ICLR-2026 venue claim has no independent verification.
+
+\bibitem[Deußer et~al.(2026)Deußer, Sparrenberg, and
+  Sifa]{rauk2026jevbenchmark}
+Tobias Deußer, Lorenz Sparrenberg, and Rafet Sifa.
+\newblock Evaluating and benchmarking the system one model {J}ev.
+\newblock \emph{arXiv preprint arXiv:2609.37647}, 2026.
+
+\bibitem[Dinh and Vo(2026)]{id260723531}
+Anh Trac~Duc Dinh and Khang Nhat~Hoang Vo.
+\newblock The jepa paradox in language: The geometry of linguistic
+  alternatives.
+\newblock \emph{arXiv preprint arXiv:2607.23531}, 2026.
+
+\bibitem[Dmello and Hindocha(2026)]{ssrn2026fiveaxis}
+Lovina Dmello and Raj Hindocha.
+\newblock Software quality assurance for agentic {AI} systems: A five-axis
+  survey of 147 systems with an audited evidence map, 2026.
+\newblock SSRN.
+
+\bibitem[Dobrin and Łukasz Chmiel(2026)]{id260612471}
+Seth Dobrin and Łukasz Chmiel.
+\newblock Identifiability without gaussianity: Symbolic world models and
+  near-infinite temporal consistency.
+\newblock \emph{arXiv preprint arXiv:2606.12471}, 2026.
+
+\bibitem[Dong and Shinnou(2026)]{id260704430}
+Sijin Dong and Hiroyuki Shinnou.
+\newblock Uncertainty-aware abstention in large language models with provable
+  alignment guarantees.
+\newblock \emph{arXiv preprint arXiv:2607.04430}, 2026.
+
+\bibitem[Dong et~al.(2024)Dong, Ruan, Cai, et~al.]{xgrammar2024}
+Yixin Dong, Charlie~F. Ruan, Yaxing Cai, et~al.
+\newblock {XGrammar}: Flexible and efficient structured generation engine for
+  large language models.
+\newblock \emph{arXiv preprint arXiv:2411.15100}, 2024.
+
+\bibitem[dos Santos~Barbosa et~al.(2026{\natexlab{a}})]{id260928940}
+Joas~Antonio dos Santos~Barbosa et~al.
+\newblock Calibrated decision models for autonomous penetration-testing
+  harnesses.
+\newblock \emph{arXiv preprint arXiv:2609.28940}, 2026{\natexlab{a}}.
+
+\bibitem[dos Santos~Barbosa et~al.(2026{\natexlab{b}})]{id261013675}
+Joas~Antonio dos Santos~Barbosa et~al.
+\newblock {CLEF}: A multimodal decision-model benchmark.
+\newblock \emph{arXiv preprint arXiv:2610.13675}, 2026{\natexlab{b}}.
+
+\bibitem[Du et~al.(2026)Du, Zhao, Zhao, et~al.]{id261018529}
+Yanrui Du, Danyang Zhao, Sendong Zhao, et~al.
+\newblock How reliable are system-one decisions in medicine? a comparative
+  study of jev, jev-like models, and llms.
+\newblock \emph{arXiv preprint arXiv:2610.18529}, 2026.
+
+\bibitem[Edge et~al.(2024)Edge, Trinh, Cheng, Bradley, Chao, Mody, Truitt,
+  Metropolitansky, Ness, and Larson]{id240416130}
+Darren Edge, Ha~Trinh, Newman Cheng, Joshua Bradley, Alex Chao, Apurva Mody,
+  Steven Truitt, Dasha Metropolitansky, Robert~Osazuwa Ness, and Jonathan
+  Larson.
+\newblock From local to global: A graph {RAG} approach to query-focused
+  summarization.
+\newblock \emph{arXiv preprint arXiv:2404.16130}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2404.16130}.
+
+\bibitem[Es'kin and Smorkalov(2026)]{id260322871}
+Vasiliy~A. Es'kin and Mikhail~E. Smorkalov.
+\newblock Dynamical systems theory behind a hierarchical reasoning model.
+\newblock \emph{arXiv preprint arXiv:2603.22871}, 2026.
+
+\bibitem[{European Parliament and Council of the European
+  Union}(2024)]{euaiact2024}
+{European Parliament and Council of the European Union}.
+\newblock Regulation ({EU}) 2024/1689 of the european parliament and of the
+  council of 13 june 2024 laying down harmonised rules on artificial
+  intelligence and amending regulations ({EC}) no 300/2008, ({EU}) no 167/2013,
+  ({EU}) no 168/2013, ({EU}) 2018/858, ({EU}) 2018/1139 and ({EU}) 2019/2144
+  and directives 2014/90/{EU}, ({EU}) 2016/797 and ({EU}) 2020/1828 (artificial
+  intelligence act).
+\newblock Official Journal of the European Union, OJ L, 2024/1689, 12 July
+  2024, 2024.
+\newblock URL \url{https://eur-lex.europa.eu/eli/reg/2024/1689/oj}.
+
+\bibitem[{European Parliament and Council of the European
+  Union}(2026)]{omnibus2026}
+{European Parliament and Council of the European Union}.
+\newblock Regulation ({EU}) 2026/1744 of the european parliament and of the
+  council of 8 july 2026 amending regulations ({EU}) 2024/1689, ({EU})
+  2018/1139 and ({EU}) 2023/1230 as regards the simplification of the
+  implementation of harmonised rules on artificial intelligence (digital
+  omnibus on {AI}).
+\newblock Official Journal of the European Union, OJ L, 2026/1744, 24 July
+  2026, 2026.
+\newblock URL \url{https://eur-lex.europa.eu/eli/reg/2026/1744/oj}.
+
+\bibitem[Fanconi and van~der Schaar(2025)]{humandeferral2025}
+Claudio Fanconi and Mihaela van~der Schaar.
+\newblock Cascaded language models for cost-effective human--{AI}
+  decision-making.
+\newblock In \emph{Advances in Neural Information Processing Systems 38
+  (NeurIPS 2025)}, pages 12896--12930, 2025.
+\newblock Preprint arXiv:2506.11887.
+
+\bibitem[Fang et~al.(2026)Fang, Powell, Painter, Bate, and Li]{fang2026right}
+Kacey Fang, Greg Powell, Jeffery Painter, Andrew Bate, and Michael~Lingzhi Li.
+\newblock The right amount of wrong: Error injection for {AI} oversight.
+\newblock SSRN Working Paper No. 7108438, 2026.
+\newblock URL \url{https://ssrn.com/abstract=7108438}.
+\newblock Preprint.
+
+\bibitem[Fatemi et~al.(2025)Fatemi, Rafiee, Tang, and
+  Talamadupula]{id250405185}
+Mehdi Fatemi, Banafsheh Rafiee, Mingjie Tang, and Kartik Talamadupula.
+\newblock Concise reasoning via reinforcement learning.
+\newblock \emph{arXiv preprint arXiv:2504.05185}, 2025.
+
+\bibitem[Ferdous(2026)]{id260724440}
+M~M~Asif Ferdous.
+\newblock Bigger or cheaper? scale and quantization effects on uncertainty
+  signals in vision-language models under image degradation.
+\newblock \emph{arXiv preprint arXiv:2607.24440}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2607.24440}.
+
+\bibitem[Fu et~al.(2026{\natexlab{a}})Fu, Mart{\'i}nez, Conde, Arriaga,
+  Reviriego, Qi, and Liu]{id260106118}
+Tairan Fu, Gonzalo Mart{\'i}nez, Javier Conde, Carlos Arriaga, Pedro Reviriego,
+  Xiuyuan Qi, and Shanshan Liu.
+\newblock Beyond reproducibility: Token probabilities expose large language
+  model nondeterminism.
+\newblock \emph{IEEE Transactions on Computers}, 2026{\natexlab{a}}.
+\newblock URL \url{https://arxiv.org/abs/2601.06118}.
+\newblock arXiv:2601.06118.
+
+\bibitem[Fu et~al.(2026{\natexlab{b}})Fu, Ramasubbu, and
+  Galletta]{fu2026knowing}
+Xinyu Fu, Narayan Ramasubbu, and Dennis Galletta.
+\newblock Knowing is not enough: Information retrievability as a precondition
+  to effective llm oversight.
+\newblock \emph{arXiv preprint arXiv:2609.01976}, 2026{\natexlab{b}}.
+
+\bibitem[Furfaro(2025)]{id250617671}
+Fabien Furfaro.
+\newblock Tptt: Transforming pretrained transformers into titans.
+\newblock \emph{arXiv preprint arXiv:2506.17671}, 2025.
+
+\bibitem[Gao et~al.(2023{\natexlab{a}})Gao, Schulman, and
+  Hilton]{gao2022overoptimization}
+Leo Gao, John Schulman, and Jacob Hilton.
+\newblock Scaling laws for reward model overoptimization.
+\newblock In \emph{Proceedings of the 40th International Conference on Machine
+  Learning ({ICML})}, volume 202 of \emph{Proceedings of Machine Learning
+  Research}, pages 10835--10866. PMLR, 2023{\natexlab{a}}.
+\newblock URL \url{https://proceedings.mlr.press/v202/gao23h.html}.
+\newblock arXiv:2210.10760.
+
+\bibitem[Gao et~al.(2023{\natexlab{b}})Gao, Yen, Yu, and Chen]{id230514627}
+Tianyu Gao, Howard Yen, Jiatong Yu, and Danqi Chen.
+\newblock Enabling large language models to generate text with citations.
+\newblock \emph{arXiv preprint arXiv:2305.14627}, 2023{\natexlab{b}}.
+
+\bibitem[Garg et~al.(2025)Garg, Kohli, and Sarawagi]{mdm2025orderar}
+Prateek Garg, Bhavya Kohli, and Sunita Sarawagi.
+\newblock Masked diffusion models are secretly learned-order autoregressive
+  models.
+\newblock \emph{arXiv preprint arXiv:2511.19152}, 2025.
+
+\bibitem[Ge et~al.(2025)Ge, Liao, and Poggio]{id251000355}
+Renee Ge, Qianli Liao, and Tomaso Poggio.
+\newblock Hierarchical reasoning models: Perspectives and misconceptions.
+\newblock \emph{arXiv preprint arXiv:2510.00355}, 2025.
+
+\bibitem[Geifman and El-Yaniv(2017)]{geifman2017selective}
+Yonatan Geifman and Ran El-Yaniv.
+\newblock Selective classification for deep neural networks.
+\newblock \emph{arXiv preprint arXiv:1705.08500}, 2017.
+\newblock [VERIFIED-X 2026-10-20, arXiv id_list: 1705.08500v2 2017-05-23;
+  NeurIPS 2017].
+
+\bibitem[Geifman et~al.(2019)Geifman, Uziel, and
+  El-Yaniv]{geifman2019selectivenet}
+Yonatan Geifman, Guy Uziel, and Ran El-Yaniv.
+\newblock Selectivenet: A deep neural network with an integrated reject option.
+\newblock \emph{arXiv preprint arXiv:1901.09192}, 2019.
+\newblock [VERIFIED-X 2026-10-20, arXiv id_list: 1901.09192v4 2019-01-26; ICML
+  2019].
+
+\bibitem[Geng et~al.(2023{\natexlab{a}})Geng, Cai, Wang, et~al.]{id231108298}
+Jiahui Geng, Fengyu Cai, Yuxia Wang, et~al.
+\newblock A survey of confidence estimation and calibration in large language
+  models.
+\newblock \emph{arXiv preprint arXiv:2311.08298}, 2023{\natexlab{a}}.
+
+\bibitem[Geng et~al.(2023{\natexlab{b}})Geng, Josifoski, Peyrard,
+  et~al.]{id230513971}
+Saibo Geng, Martin Josifoski, Maxime Peyrard, et~al.
+\newblock Grammar-constrained decoding for structured nlp tasks without
+  finetuning.
+\newblock \emph{arXiv preprint arXiv:2305.13971}, 2023{\natexlab{b}}.
+
+\bibitem[Geng et~al.(2025)Geng, Cooper, Moskal, et~al.]{jsonschemabench2025}
+Saibo Geng, Hudson Cooper, Michał Moskal, et~al.
+\newblock {JSONSchemaBench}: A rigorous benchmark of structured outputs for
+  language models.
+\newblock \emph{arXiv preprint arXiv:2501.10868}, 2025.
+
+\bibitem[Goodfellow et~al.(2014)Goodfellow, Pouget-Abadie, Mirza,
+  et~al.]{goodfellow2014gan}
+Ian~J. Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, et~al.
+\newblock Generative adversarial networks.
+\newblock \emph{arXiv preprint arXiv:1406.2661}, 2014.
+
+\bibitem[Guti{\'e}rrez et~al.(2024)Guti{\'e}rrez, Shu, Gu, Yasunaga, and
+  Su]{id240514831}
+Bernal~Jim{\'e}nez Guti{\'e}rrez, Yiheng Shu, Yu~Gu, Michihiro Yasunaga, and
+  Yu~Su.
+\newblock {HippoRAG}: Neurobiologically inspired long-term memory for large
+  language models.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  ({NeurIPS})}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2405.14831}.
+\newblock arXiv:2405.14831.
+
+\bibitem[Guérin et~al.(2022)Guérin, Delmas, Ferreira, et~al.]{id221116158}
+Joris Guérin, Kevin Delmas, Raul~Sena Ferreira, et~al.
+\newblock Out-of-distribution detection is not all you need.
+\newblock \emph{arXiv preprint arXiv:2211.16158}, 2022.
+
+\bibitem[Higgins et~al.(2017)Higgins, Matthey, Pal, et~al.]{higgins2017betavae}
+Irina Higgins, Lo{\"i}c Matthey, Arka Pal, et~al.
+\newblock Understanding disentangling in $\beta$-vae.
+\newblock \emph{arXiv preprint arXiv:1804.03599}, 2017.
+
+\bibitem[Ho et~al.(2020)Ho, Jain, and Abbeel]{ho2020ddpm}
+Jonathan Ho, Ajay Jain, and Pieter Abbeel.
+\newblock Denoising diffusion probabilistic models.
+\newblock \emph{arXiv preprint arXiv:2006.11239}, 2020.
+
+\bibitem[Hoffmann et~al.(2022)Hoffmann, Borgeaud, Mensch,
+  et~al.]{hoffmann2022compute}
+Jordan Hoffmann, Sebastian Borgeaud, Arthur Mensch, et~al.
+\newblock Training compute-optimal large language models.
+\newblock \emph{arXiv preprint arXiv:2203.15556}, 2022.
+
+\bibitem[Hsieh et~al.(2024)Hsieh, Sun, Kriman, Acharya, Rekesh, Jia, Zhang, and
+  Ginsburg]{id240406654}
+Cheng-Ping Hsieh, Simeng Sun, Samuel Kriman, Shantanu Acharya, Dima Rekesh, Fei
+  Jia, Yang Zhang, and Boris Ginsburg.
+\newblock {RULER}: What's the real context size of your long-context language
+  models?
+\newblock In \emph{Conference on Language Modeling ({COLM})}, 2024.
+\newblock URL \url{https://arxiv.org/abs/2404.06654}.
+\newblock arXiv:2404.06654.
+
+\bibitem[Hu et~al.(2026)]{id260931142}
+Jianyi Hu et~al.
+\newblock {JevAdvBench}: A benchmark and black-box attacks for reinforcement
+  learning from verified rewards.
+\newblock \emph{arXiv preprint arXiv:2609.31142}, 2026.
+
+\bibitem[Huang et~al.(2026)Huang, Michal, Djinbachian, Oleksiw, Rex, Battat,
+  Deslandres, Bouin, Kiow, Panzini, Bouchard, Daoud, Bernard, Orlicka, Leduc,
+  D'Aoust, and von Renteln]{huang2026cade}
+Felix Huang, Victoire Michal, Roupen Djinbachian, Megan Oleksiw, Douglas~K.
+  Rex, Robert Battat, Erik Deslandres, Mickael Bouin, Jeremy Liu~Chen Kiow,
+  Benoit Panzini, Simon Bouchard, Dane~Christina Daoud, Edmond~Jean Bernard,
+  Katarzyna Orlicka, Raymond Leduc, Louise D'Aoust, and Daniel von Renteln.
+\newblock Computer-aided colonoscopy alert fatigue and its effect on adenoma
+  detection.
+\newblock \emph{American Journal of Gastroenterology}, 121\penalty0
+  (4):\penalty0 899--906, April 2026.
+\newblock \doi{10.14309/ajg.0000000000003955}.
+
+\bibitem[Huang and Qi(2026)]{id260921662}
+Gaoxiang Huang and Lei Qi.
+\newblock When steering fails in latent reasoning: A latent-to-language
+  transition gap.
+\newblock \emph{arXiv preprint arXiv:2609.21662}, 2026.
+
+\bibitem[Huang et~al.(2024)Huang, Liu, Chen, et~al.]{id240202716}
+Xu~Huang, Weiwen Liu, Xiaolong Chen, et~al.
+\newblock Understanding the planning of llm agents: A survey.
+\newblock \emph{arXiv preprint arXiv:2402.02716}, 2024.
+
+\bibitem[Hwang et~al.(2025)Hwang, Wang, and Gu]{hnet2025}
+Sukjun Hwang, Brandon Wang, and Albert Gu.
+\newblock Dynamic chunking for end-to-end hierarchical sequence modeling.
+\newblock \emph{arXiv preprint arXiv:2507.07955}, 2025.
+\newblock [VERIFIED-X 2026-10-19, arXiv abs page; H-Net].
+
+\bibitem[{Inception Labs}(2026{\natexlab{a}})]{inception2026mercury25}
+{Inception Labs}.
+\newblock Introducing mercury 2.5.
+\newblock Inception Labs blog, September 2026{\natexlab{a}}.
+\newblock URL \url{https://www.inceptionlabs.ai/blog/introducing-mercury-2-5}.
+\newblock Launch post, 8 September 2026; vendor-reported served throughput.
+  [V].
+
+\bibitem[{Inception Labs}(2026{\natexlab{b}})]{inception2026mercury3}
+{Inception Labs}.
+\newblock Diffusion at scale: Introducing mercury 3.
+\newblock Inception Labs blog, October 2026{\natexlab{b}}.
+\newblock URL \url{https://www.inceptionlabs.ai/blog/introducing-mercury-3}.
+\newblock Announced 19 October 2026, after the 2026-10-17 corpus cutoff; vendor
+  claims only, no independent evaluation. [V].
+
+\bibitem[{Intern-NCP Team} et~al.(2026){Intern-NCP Team}, Cao, Chen,
+  et~al.]{ncparch2026}
+{Intern-NCP Team}, Jiaqi Cao, Chiyu Chen, et~al.
+\newblock {NCP-ArchPreview} technical report: Moving towards latent space
+  language models through next concept prediction.
+\newblock \emph{arXiv preprint arXiv:2609.10715}, 2026.
+\newblock [VERIFIED-X 2026-10-19, arXiv abs page].
+
+\bibitem[{International Electrotechnical Commission}(2018)]{iec60812}
+{International Electrotechnical Commission}.
+\newblock Failure modes and effects analysis ({FMEA} and {FMECA}).
+\newblock International Standard IEC 60812:2018, International Electrotechnical
+  Commission, August 2018.
+\newblock URL \url{https://webstore.iec.ch/en/publication/26359}.
+
+\bibitem[{International Organization for Standardization}(2023)]{iso42001}
+{International Organization for Standardization}.
+\newblock Information technology --- artificial intelligence --- management
+  system.
+\newblock ISO/IEC 42001:2023, Edition 1, 2023.
+\newblock URL \url{https://www.iso.org/standard/81230.html}.
+
+\bibitem[Jitkrittum et~al.(2025)Jitkrittum, Narasimhan, Rawat,
+  et~al.]{id250208773}
+Wittawat Jitkrittum, Harikrishna Narasimhan, Ankit~Singh Rawat, et~al.
+\newblock Universal model routing for efficient llm inference.
+\newblock \emph{arXiv preprint arXiv:2502.08773}, 2025.
+
+\bibitem[Kaplan et~al.(2020)Kaplan, McCandlish, Henighan,
+  et~al.]{kaplan2020scaling}
+Jared Kaplan, Sam McCandlish, Tom Henighan, et~al.
+\newblock Scaling laws for neural language models.
+\newblock \emph{arXiv preprint arXiv:2001.08361}, 2020.
+
+\bibitem[Kearns(2026)]{quantconstruct2026}
+Ryan~Othniel Kearns.
+\newblock Quantifying construct validity in large language model evaluations.
+\newblock \emph{arXiv preprint arXiv:2602.15532}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2602.15532}.
+
+\bibitem[Khan and Bhuyan(2026)]{id260923053}
+Mehedi Khan and Md. Shariful~Islam Bhuyan.
+\newblock Attributable post-rationalization in {RAG} citations: A controlled
+  reproduction and an {RLVR} comparison.
+\newblock \emph{arXiv preprint arXiv:2609.23053}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2609.23053}.
+
+\bibitem[Khurdula et~al.(2026)Khurdula, Agarwal, and Khemlani]{interfaze2026}
+Harsha~Vardhan Khurdula, Vineet Agarwal, and Yoeven~D Khemlani.
+\newblock Interfaze: The future of {AI} is built on task-specific small models.
+\newblock \emph{arXiv preprint arXiv:2602.04101}, 2026.
+
+\bibitem[Kingma and Welling(2014)]{kingma2014vae}
+Diederik~P. Kingma and Max Welling.
+\newblock Auto-encoding variational bayes.
+\newblock \emph{arXiv preprint arXiv:1312.6114}, 2014.
+
+\bibitem[Klindt et~al.(2026)Klindt, LeCun, and Balestriero]{klindt2026lejepa}
+Thomas Klindt, Yann LeCun, and Randall Balestriero.
+\newblock When does {LeJEPA} learn a world model?
+\newblock \emph{arXiv preprint arXiv:2605.26379}, 2026.
+
+\bibitem[Kojima et~al.(2022)Kojima, Gu, Reid, et~al.]{id220511916}
+Takeshi Kojima, Shixiang~Shane Gu, Machel Reid, et~al.
+\newblock Large language models are zero-shot reasoners.
+\newblock \emph{arXiv preprint arXiv:2205.11916}, 2022.
+
+\bibitem[Kumbong et~al.(2026)Kumbong, Khare, Mlauzi, Woen, Ding, Buchanan,
+  Arora, Mirhoseini, and R{\'e}]{kumbong2026ncm}
+Hermann Kumbong, Ishan~S. Khare, Iddah Mlauzi, Andrew Woen, Charles Ding,
+  E.~Kelly Buchanan, Simran Arora, Azalia Mirhoseini, and Christopher R{\'e}.
+\newblock Next-concept modeling: Fast, parallel coarse-to-fine text generation.
+\newblock \emph{arXiv preprint arXiv:2610.14162}, 2026.
+\newblock [VERIFIED-X 2026-10-18, arXiv abs page + GitHub HazyResearch/ncm + HF
+  checkpoints inspected].
+
+\bibitem[{LCM Team} et~al.(2024){LCM Team}, Barrault, Duquenne, Elbayad,
+  et~al.]{lcm2024}
+{LCM Team}, Lo{\"i}c Barrault, Paul-Ambroise Duquenne, Maha Elbayad, et~al.
+\newblock Large concept models: Language modeling in a sentence representation
+  space.
+\newblock \emph{arXiv preprint arXiv:2412.08821}, 2024.
+\newblock [VERIFIED-X 2026-10-19, arXiv abs page].
+
+\bibitem[Lee et~al.(2026{\natexlab{a}})Lee, Oh, Kim, Lee, Song, Jang, and
+  Youn]{id260911065}
+EunKyeong Lee, Kyeong-Jin Oh, Jinwon Kim, Hye~Woo Lee, Minsang Song, Hyeongjun
+  Jang, and Junyoung Youn.
+\newblock {MOSAIC}: Query-aware exploration policy adaptation for {GraphRAG}.
+\newblock \emph{arXiv preprint arXiv:2609.11065}, 2026{\natexlab{a}}.
+\newblock URL \url{https://arxiv.org/abs/2609.11065}.
+
+\bibitem[Lee et~al.(2026{\natexlab{b}})Lee, Lee, Park, et~al.]{id260933887}
+Jungseob Lee, Dongyub~Jude Lee, Chanjun Park, et~al.
+\newblock Faster block-diffusion serving with distribution-free risk
+  guarantees.
+\newblock \emph{arXiv preprint arXiv:2609.33887}, 2026{\natexlab{b}}.
+
+\bibitem[Leveson(2011)]{leveson2011}
+Nancy~G. Leveson.
+\newblock \emph{Engineering a Safer World: Systems Thinking Applied to Safety}.
+\newblock MIT Press, Cambridge, MA, 2011.
+\newblock ISBN 9780262016629.
+\newblock URL
+  \url{https://mitpress.mit.edu/9780262016629/engineering-a-safer-world/}.
+
+\bibitem[Leveson and Thomas(2018)]{leveson2018stpa}
+Nancy~G. Leveson and John~P. Thomas.
+\newblock {STPA} handbook.
+\newblock Massachusetts Institute of Technology, Cambridge, MA, 2018.
+\newblock URL
+  \url{https://psas.scripts.mit.edu/home/get_file.php?name=STPA_handbook.pdf}.
+\newblock March 2018.
+
+\bibitem[Li(2026)]{id261002267}
+Jiawei Li.
+\newblock Fast models, slow evidence: A paired and self-audited evaluation of
+  system-1 decision models for llm agent harnesses.
+\newblock \emph{arXiv preprint arXiv:2610.02267}, 2026.
+
+\bibitem[Li et~al.(2026)Li, Zhang, Guo, et~al.]{id260713491}
+Shuzhen Li, Yifan Zhang, Jiacheng Guo, et~al.
+\newblock Deeploop: Depth scaling for looped transformers.
+\newblock \emph{arXiv preprint arXiv:2607.13491}, 2026.
+
+\bibitem[Li et~al.(2025{\natexlab{a}})Li, Chen, Guo, and
+  Shen]{zhan2025dlmsurvey}
+Tianyi Li, Mingda Chen, Bowei Guo, and Zhiqiang Shen.
+\newblock A survey on diffusion language models.
+\newblock \emph{arXiv preprint arXiv:2508.10875}, 2025{\natexlab{a}}.
+
+\bibitem[Li et~al.(2022)Li, Thickstun, Gulrajani, and Liang]{li2022diffusionlm}
+Xiang~Lisa Li, John Thickstun, Ishaan Gulrajani, and Percy Liang.
+\newblock Diffusion-{LM} improves controllable text generation.
+\newblock \emph{arXiv preprint arXiv:2205.14217}, 2022.
+
+\bibitem[Li et~al.(2025{\natexlab{b}})Li, He, Zhang, et~al.]{id251016732}
+Xinqing Li, Xin He, Le~Zhang, et~al.
+\newblock A comprehensive survey on world models for embodied ai.
+\newblock \emph{arXiv preprint arXiv:2510.16732}, 2025{\natexlab{b}}.
+
+\bibitem[Li and Wagle(2026)]{id261002076}
+Yinheng Li and Justin Wagle.
+\newblock Llm-as-jev: Llms are already jev-style decision models -- when and
+  how to fine-tune them.
+\newblock \emph{arXiv preprint arXiv:2610.02076}, 2026.
+
+\bibitem[Li et~al.(2024)Li, Xia, Chang, et~al.]{id241214847}
+Zhiyuan Li, Tingyu Xia, Yi~Chang, et~al.
+\newblock A survey of rwkv.
+\newblock \emph{arXiv preprint arXiv:2412.14847}, 2024.
+
+\bibitem[Lipman et~al.(2023)Lipman, Chen, Ben-Hamu, Nickel, and
+  Le]{lipman2023flow}
+Yaron Lipman, Ricky T.~Q. Chen, Heli Ben-Hamu, Maximilian Nickel, and Matt Le.
+\newblock Flow matching for generative modeling.
+\newblock \emph{arXiv preprint arXiv:2210.02747}, 2023.
+
+\bibitem[Liu et~al.(2025)Liu, Chen, Da, et~al.]{id250315850}
+Xiaoou Liu, Tiejin Chen, Longchao Da, et~al.
+\newblock Uncertainty quantification and confidence calibration in large
+  language models: A survey.
+\newblock \emph{arXiv preprint arXiv:2503.15850}, 2025.
+
+\bibitem[Liu et~al.(2026)Liu, Xue, Bao, et~al.]{id261021594}
+Zixuan Liu, Nan Xue, Rui Bao, et~al.
+\newblock Loopahead: Speculating ahead for faster decoding in looped language
+  models.
+\newblock \emph{arXiv preprint arXiv:2610.21594}, 2026.
+
+\bibitem[Lu et~al.(2024)Lu, Wang, Shao, et~al.]{id240215991}
+Taixi Lu, Haoyu Wang, Huajie Shao, et~al.
+\newblock {C\textsuperscript{3}}: Confidence calibration model cascade for
+  inference-efficient cross-lingual natural language understanding.
+\newblock \emph{arXiv preprint arXiv:2402.15991}, 2024.
+
+\bibitem[Luo et~al.(2025)Luo, Zhang, Yuan, et~al.]{id250321460}
+Junyu Luo, Weizhi Zhang, Ye~Yuan, et~al.
+\newblock Large language model agent: A survey on methodology, applications and
+  challenges.
+\newblock \emph{arXiv preprint arXiv:2503.21460}, 2025.
+
+\bibitem[Madrid-García and Merino-Barbancho(2026)]{id260934024}
+Alfredo Madrid-García and Beatriz Merino-Barbancho.
+\newblock Jev in medicine: A benchmark evaluation.
+\newblock \emph{arXiv preprint arXiv:2609.34024}, 2026.
+
+\bibitem[{McCarthy T\'etrault}(2024)]{aircanada2024bccrt}
+{McCarthy T\'etrault}.
+\newblock {Moffatt v. {Air Canada}: Misrepresentation by {AI} Chatbot}.
+\newblock
+  \url{https://www.mccarthy.ca/en/insights/blogs/techlex/moffatt-v-air-canada-misrepresentation-ai-chatbot},
+  2024.
+\newblock TechLex Blog, February 2024, on 2024 BCCRT 149; accessed 2026-10-20.
+
+\bibitem[Messoudi and Mansar(2026)]{id261019811}
+Soundouss Messoudi and Youness Mansar.
+\newblock Calibration and risk-budgeted decisions with system one models.
+\newblock \emph{arXiv preprint arXiv:2610.19811}, 2026.
+
+\bibitem[Miller(2024)]{errorbars2024}
+Evan Miller.
+\newblock Adding error bars to evals: A statistical approach to language model
+  evaluations.
+\newblock \emph{arXiv preprint arXiv:2411.00640}, 2024.
+
+\bibitem[Modarressi et~al.(2025)Modarressi, Deilamsalehy, Dernoncourt, Bui,
+  Rossi, Yoon, and Sch{\"u}tze]{id250205167}
+Ali Modarressi, Hanieh Deilamsalehy, Franck Dernoncourt, Trung Bui, Ryan~A.
+  Rossi, Seunghyun Yoon, and Hinrich Sch{\"u}tze.
+\newblock {NoLiMa}: Long-context evaluation beyond literal matching.
+\newblock \emph{arXiv preprint arXiv:2502.05167}, 2025.
+
+\bibitem[Moradi et~al.(2025)Moradi, Amer, Mudur, et~al.]{id250519475}
+Mohammad~Mahdi Moradi, Hossam Amer, Sudhir Mudur, et~al.
+\newblock Continuous self-improvement of large language models by test-time
+  training with verifier-driven sample selection.
+\newblock \emph{arXiv preprint arXiv:2505.19475}, 2025.
+
+\bibitem[Musacchio et~al.(2026)Musacchio, Siciliani, and Basile]{mimir2026}
+Elio Musacchio, Lucia Siciliani, and Pierpaolo Basile.
+\newblock Mimir: Large-scale multilingual concept modeling.
+\newblock \emph{arXiv preprint arXiv:2605.25263}, 2026.
+\newblock [VERIFIED-X 2026-10-19, arXiv abs page]; 1.6B concept model;
+  pretraining corpus spans 46 languages, instruction tuning 35.
+
+\bibitem[Nandakishore(2026)]{id260933843}
+Gowthamkumar Nandakishore.
+\newblock Laya as a typed probabilistic assessor: An independent reproduction
+  and a preregistered study of calibration and selective escalation.
+\newblock \emph{arXiv preprint arXiv:2609.33843}, 2026.
+
+\bibitem[{National Institute of Standards and Technology}(2023)]{nistairmf}
+{National Institute of Standards and Technology}.
+\newblock Artificial intelligence risk management framework ({AI RMF} 1.0).
+\newblock NIST Trustworthy and Responsible AI NIST AI 100-1, National Institute
+  of Standards and Technology, January 2023.
+\newblock URL \url{https://doi.org/10.6028/NIST.AI.100-1}.
+
+\bibitem[{National Institute of Standards and Technology}(2024)]{nistgai600}
+{National Institute of Standards and Technology}.
+\newblock Artificial intelligence risk management framework: Generative
+  artificial intelligence profile.
+\newblock NIST Trustworthy and Responsible AI NIST AI 600-1, National Institute
+  of Standards and Technology, July 2024.
+\newblock URL \url{https://doi.org/10.6028/NIST.AI.600-1}.
+
+\bibitem[Ni et~al.(2025)Ni, Liu, Wang, et~al.]{id250206872}
+Bo~Ni, Zheyuan Liu, Leyao Wang, et~al.
+\newblock Towards trustworthy retrieval augmented generation for large language
+  models: A survey.
+\newblock \emph{arXiv preprint arXiv:2502.06872}, 2025.
+
+\bibitem[Nichol and Dhariwal(2021)]{nichol2021improved}
+Alex Nichol and Prafulla Dhariwal.
+\newblock Improved denoising diffusion probabilistic models.
+\newblock \emph{arXiv preprint arXiv:2102.09672}, 2021.
+
+\bibitem[{OpenRouter}(2026)]{openrouter2026mercury}
+{OpenRouter}.
+\newblock Mercury 2.5 --- {API} pricing \& benchmarks.
+\newblock OpenRouter, 2026.
+\newblock URL \url{https://openrouter.ai/inception/mercury-2.5}.
+\newblock Model page and router telemetry, read 20 October 2026. [E].
+
+\bibitem[Papamakarios et~al.(2021)Papamakarios, Nalisnick, Rezende, Mohamed,
+  and Lakshminarayanan]{pmlr2021nf}
+George Papamakarios, Eric Nalisnick, Danilo~Jimenez Rezende, Shakir Mohamed,
+  and Balaji Lakshminarayanan.
+\newblock Normalizing flows for probabilistic modeling and inference.
+\newblock \emph{Journal of Machine Learning Research 22(57)}, 2021.
+
+\bibitem[Pape et~al.(2026)Pape, Evertz, and Sch{\"o}nnherr]{id260519537}
+David Pape, Jonathan Evertz, and Lea Sch{\"o}nnherr.
+\newblock The silent hyperparameter: Quantifying the impact of inference
+  backends on {LLM} reproducibility.
+\newblock \emph{arXiv preprint arXiv:2605.19537}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2605.19537}.
+
+\bibitem[Prasad and Pal(2026)]{id260629581}
+Hari Prasad and Ritam Pal.
+\newblock The joint effect of quantization and sampling temperature on {LLM}
+  safety alignment: A factorial analysis.
+\newblock \emph{arXiv preprint arXiv:2606.29581}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2606.29581}.
+
+\bibitem[Rabanser et~al.(2025)Rabanser, Rauschmayr, Kulshrestha, Poklukar,
+  Jitkrittum, Augenstein, Wang, and Tombari]{gatekeeper2025}
+Stephan Rabanser, Nathalie Rauschmayr, Achin Kulshrestha, Petra Poklukar,
+  Wittawat Jitkrittum, Sean Augenstein, Congchao Wang, and Federico Tombari.
+\newblock Gatekeeper: Improving model cascades through confidence tuning.
+\newblock In \emph{Advances in Neural Information Processing Systems 38
+  (NeurIPS 2025)}, 2025.
+\newblock Preprint arXiv:2502.19335.
+
+\bibitem[Rabanser et~al.(2026)Rabanser, Kapoor, Kirgis, Liu, Utpala, and
+  Narayanan]{rabanser2026agent}
+Stephan Rabanser, Sayash Kapoor, Peter Kirgis, Kangheng Liu, Saiteja Utpala,
+  and Arvind Narayanan.
+\newblock Towards a science of {AI} agent reliability.
+\newblock In \emph{Proceedings of the 43rd International Conference on Machine
+  Learning (ICML)}, 2026.
+\newblock arXiv:2602.16666.
+
+\bibitem[Radford et~al.(2021)Radford, Kim, Hallacy, Ramesh, Goh, Agarwal,
+  Sastry, Askell, Mishkin, Clark, Krueger, and Sutskever]{radford2021clip}
+Alec Radford, Jong~Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh,
+  Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark,
+  Gretchen Krueger, and Ilya Sutskever.
+\newblock Learning transferable visual models from natural language
+  supervision.
+\newblock \emph{arXiv preprint arXiv:2103.00020}, 2021.
+\newblock [VERIFIED-X 2026-10-19, arXiv id_list: 2103.00020v1 2021-02-26].
+
+\bibitem[Ramjee(2026)]{id260423460}
+Sharan Ramjee.
+\newblock Ulterior motives: Detecting misaligned reasoning in continuous
+  thought models.
+\newblock \emph{arXiv preprint arXiv:2604.23460}, 2026.
+
+\bibitem[Ray et~al.(2026)]{id260601066}
+Jaideep Ray et~al.
+\newblock Before the model learns the bug: Fuzzing {RLVR} verifiers.
+\newblock \emph{arXiv preprint arXiv:2606.01066}, 2026.
+
+\bibitem[Ricciardi~Celsi and McCann(2026)]{mdpi2026arlm}
+Lorenzo Ricciardi~Celsi and Julie McCann.
+\newblock Beyond next-token prediction: A standards-aligned survey of
+  autoregressive {LLM} failure modes, deployment patterns, and the potential
+  role of world models.
+\newblock \emph{Electronics 15(5):966}, 2026.
+\newblock \doi{10.3390/electronics15050966}.
+
+\bibitem[Rosbach et~al.(2026)Rosbach, Ammeling, Ganz, Bertram, Conrad, Riener,
+  and Aubreville]{rosbach2026stuck}
+Emely Rosbach, Jonas Ammeling, Jonathan Ganz, Christof~Albert Bertram, Thomas
+  Conrad, Andreas Riener, and Marc Aubreville.
+\newblock Stuck on suggestions: Automation bias, the anchoring effect, and the
+  factors that shape them in computational pathology.
+\newblock \emph{Machine Learning for Biomedical Imaging}, 2026:\penalty0
+  126--147, 2026.
+\newblock \doi{10.59275/j.melba.2026-87b1}.
+\newblock MELBA--BVM 2025 Special Issue; preprint arXiv:2603.11821.
+
+\bibitem[Schmidt et~al.(2024)Schmidt, Reddy, Zhang, et~al.]{id240218376}
+Craig~W. Schmidt, Varshini Reddy, Haoran Zhang, et~al.
+\newblock Tokenization is more than compression.
+\newblock \emph{arXiv preprint arXiv:2402.18376}, 2024.
+
+\bibitem[Schmotz et~al.(2026)Schmotz, Prinzhorn, Beurer-Kellner,
+  et~al.]{id260930217}
+David Schmotz, Derck Prinzhorn, Luca Beurer-Kellner, et~al.
+\newblock Instrumental monitor evasion emerges under ordinary task pressure.
+\newblock \emph{arXiv preprint arXiv:2609.30217}, 2026.
+
+\bibitem[Shah and Shridhar(2025)]{selectroute2025}
+Soham Shah and Kumar Shridhar.
+\newblock Select-then-route: Taxonomy guided routing for {LLMs}.
+\newblock In \emph{Proceedings of the 2025 Conference on Empirical Methods in
+  Natural Language Processing: Industry Track}, pages 425--441. Association for
+  Computational Linguistics, 2025.
+
+\bibitem[Shao et~al.(2025)Shao, Li, Xin, Geng, Wang, Oh, Du, Lambert, Min,
+  Krishna, Tsvetkov, Hajishirzi, Koh, and Zettlemoyer]{id250610947}
+Rulin Shao, Shuyue~Stella Li, Rui Xin, Scott Geng, Yiping Wang, Sewoong Oh,
+  Simon~Shaolei Du, Nathan Lambert, Sewon Min, Ranjay Krishna, Yulia Tsvetkov,
+  Hannaneh Hajishirzi, Pang~Wei Koh, and Luke Zettlemoyer.
+\newblock Spurious rewards: Rethinking training signals in {RLVR}.
+\newblock \emph{arXiv preprint arXiv:2506.10947}, 2025.
+\newblock URL \url{https://arxiv.org/abs/2506.10947}.
+
+\bibitem[Shen et~al.(2023)]{id230317580}
+Yongliang Shen et~al.
+\newblock {HuggingGPT}: Solving {AI} tasks with {ChatGPT} and its friends in
+  {HuggingFace}.
+\newblock \emph{arXiv preprint arXiv:2303.17580}, 2023.
+
+\bibitem[Shen et~al.(2025)Shen, Liu, Huang, et~al.]{id251005164}
+Yuanzhe Shen, Yide Liu, Zisu Huang, et~al.
+\newblock Sater: A self-aware and token-efficient approach to routing and
+  cascading.
+\newblock \emph{arXiv preprint arXiv:2510.05164}, 2025.
+
+\bibitem[Singh et~al.(2025)Singh, Nan, Wang, D'Souza, Kapoor, {\"U}st{\"u}n,
+  Koyejo, Deng, Longpre, Smith, Ermis, Fadaee, and Hooker]{leaderillusion2025}
+Shivalika Singh, Yiyang Nan, Alex Wang, Daniel D'Souza, Sayash Kapoor, Ahmet
+  {\"U}st{\"u}n, Sanmi Koyejo, Yuntian Deng, Shayne Longpre, Noah~A. Smith,
+  Beyza Ermis, Marzieh Fadaee, and Sara Hooker.
+\newblock The leaderboard illusion.
+\newblock In \emph{Advances in Neural Information Processing Systems 38
+  (NeurIPS 2025), Datasets and Benchmarks Track}, 2025.
+\newblock \doi{10.52202/085713-2620}.
+\newblock Preprint arXiv:2504.20879.
+
+\bibitem[Song et~al.(2020)Song, Meng, and Ermon]{song2021ddim}
+Jiaming Song, Chenlin Meng, and Stefano Ermon.
+\newblock Denoising diffusion implicit models.
+\newblock \emph{arXiv preprint arXiv:2010.02502}, 2020.
+
+\bibitem[Tian et~al.(2024)Tian, Jiang, Yuan, Peng, and Wang]{var2024}
+Keyu Tian, Yi~Jiang, Zehuan Yuan, Bingyue Peng, and Liwei Wang.
+\newblock Visual autoregressive modeling: Scalable image generation via
+  next-scale prediction.
+\newblock \emph{arXiv preprint arXiv:2404.02905}, 2024.
+\newblock [VERIFIED-X 2026-10-19, arXiv abs page].
+
+\bibitem[Turpin et~al.(2023)Turpin, Michael, Perez, and Bowman]{id230504388}
+Miles Turpin, Julian Michael, Ethan Perez, and Samuel~R. Bowman.
+\newblock Language models don't always say what they think: Unfaithful
+  explanations in chain-of-thought prompting.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  ({NeurIPS})}, 2023.
+\newblock URL \url{https://arxiv.org/abs/2305.04388}.
+
+\bibitem[Vaswani et~al.(2017)Vaswani, Shazeer, Parmar,
+  et~al.]{vaswani2017attention}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, et~al.
+\newblock Attention is all you need.
+\newblock \emph{arXiv preprint arXiv:1706.03762}, 2017.
+
+\bibitem[Vinay(2026)]{ieeecai2026failure}
+Vaishali Vinay.
+\newblock A system-level taxonomy of failure modes in large language model
+  applications.
+\newblock In \emph{2026 IEEE Conference on Artificial Intelligence (CAI)},
+  2026.
+\newblock \doi{10.1109/cai68641.2026.11536235}.
+
+\bibitem[{vLLM Team}(2026)]{vllmfaq2026}
+{vLLM Team}.
+\newblock {vLLM} frequently asked questions: Batch invariance and output
+  nondeterminism, 2026.
+\newblock URL \url{https://docs.vllm.ai/en/latest/usage/faq.html}.
+\newblock Accessed 2026-10-21.
+
+\bibitem[Wang et~al.(2025{\natexlab{a}})Wang, Zhu, Abreu, et~al.]{id250706457}
+Dustin Wang, Rui-Jie Zhu, Steven Abreu, et~al.
+\newblock A systematic analysis of hybrid linear attention.
+\newblock \emph{arXiv preprint arXiv:2507.06457}, 2025{\natexlab{a}}.
+
+\bibitem[Wang et~al.(2025{\natexlab{b}})Wang, Li, Sun, et~al.]{id250621734}
+Guan Wang, Jin Li, Yuhao Sun, et~al.
+\newblock Hierarchical reasoning model.
+\newblock \emph{arXiv preprint arXiv:2506.21734}, 2025{\natexlab{b}}.
+
+\bibitem[Wang et~al.(2025{\natexlab{c}})]{ida25192}
+Kun Wang et~al.
+\newblock A comprehensive survey in {LLM}(-agent) full stack safety: Data,
+  training and deployment.
+\newblock \emph{arXiv preprint arXiv:2504.15585}, 2025{\natexlab{c}}.
+
+\bibitem[Wang et~al.(2022)Wang, Wei, Schuurmans, et~al.]{id220311171}
+Xuezhi Wang, Jason Wei, Dale Schuurmans, et~al.
+\newblock Self-consistency improves chain of thought reasoning in language
+  models.
+\newblock \emph{arXiv preprint arXiv:2203.11171}, 2022.
+
+\bibitem[Wang et~al.(2026)Wang, Aniri, Chen, Zhang, Shen, Shi, and Xu]{lec2026}
+Zhiyuan Wang, Aniri, Tianlong Chen, Yue Zhang, Heng~Tao Shen, Xiaoshuang Shi,
+  and Kaidi Xu.
+\newblock {LEC}: Linear expectation constraints for selection-conditioned risk
+  control in selective prediction and routing systems.
+\newblock In \emph{Proceedings of the 43rd International Conference on Machine
+  Learning (ICML)}, 2026.
+\newblock arXiv:2512.01556.
+
+\bibitem[Wen et~al.(2024)Wen, Yao, Feng, et~al.]{id240718418}
+Bingbing Wen, Jihan Yao, Shangbin Feng, et~al.
+\newblock Know your limits: A survey of abstention in large language models.
+\newblock \emph{arXiv preprint arXiv:2407.18418}, 2024.
+
+\bibitem[Won et~al.(2026)]{id260935794}
+Jongbin Won et~al.
+\newblock Sieve and sage: Efficient distraction filtering for reliable r-alm
+  abstention.
+\newblock \emph{arXiv preprint arXiv:2609.35794}, 2026.
+
+\bibitem[Yadkori et~al.(2024)Yadkori, Kuzborskij, Stutz, et~al.]{id240501563}
+Yasin~Abbasi Yadkori, Ilja Kuzborskij, David Stutz, et~al.
+\newblock Mitigating llm hallucinations via conformal abstention.
+\newblock \emph{arXiv preprint arXiv:2405.01563}, 2024.
+
+\bibitem[Yamaguchi et~al.(2026)Yamaguchi, Palucha, Bijar, et~al.]{id260701444}
+Atsuki Yamaguchi, Szymon Palucha, Léo Bijar, et~al.
+\newblock On the utility and factual reliability of pruned mixture-of-experts
+  models in the biomedical domain.
+\newblock \emph{arXiv preprint arXiv:2607.01444}, 2026.
+
+\bibitem[Yang et~al.(2023)Yang, Zhang, Song, Hong, Xu, Zhao, Zhang, Cui, and
+  Yang]{acm2023diffusionsurvey}
+Ling Yang, Zhilong Zhang, Yang Song, Shenda Hong, Runsheng Xu, Yue Zhao, Wentao
+  Zhang, Bin Cui, and Ming-Hsuan Yang.
+\newblock Diffusion models: A comprehensive survey of methods and applications,
+  2023.
+
+\bibitem[Yano et~al.(2026)Yano, Ishibashi, and Oyamada]{id261019362}
+Taro Yano, Yoichi Ishibashi, and Masafumi Oyamada.
+\newblock Tail competition explains scaling in best-of-{N} sampling for
+  verifiable problems.
+\newblock In \emph{Advances in Neural Information Processing Systems
+  ({NeurIPS})}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2610.19362}.
+\newblock Accepted; arXiv:2610.19362.
+
+\bibitem[Yao et~al.(2022)Yao, Zhao, Yu, et~al.]{id221003629}
+Shunyu Yao, Jeffrey Zhao, Dian Yu, et~al.
+\newblock React: Synergizing reasoning and acting in language models.
+\newblock \emph{arXiv preprint arXiv:2210.03629}, 2022.
+
+\bibitem[Yazdani et~al.(2025)]{yazdani2025genaidepth}
+Shamim Yazdani et~al.
+\newblock Generative {AI} in depth: A survey of recent advances, model
+  variants, and real-world applications.
+\newblock \emph{arXiv preprint arXiv:2510.21887}, 2025.
+
+\bibitem[Yu et~al.(2023)Yu, Simig, Flaherty, et~al.]{id230507185}
+Lili Yu, Dániel Simig, Colin Flaherty, et~al.
+\newblock Megabyte: Predicting million-byte sequences with multiscale
+  transformers.
+\newblock \emph{arXiv preprint arXiv:2305.07185}, 2023.
+
+\bibitem[Yue et~al.(2025)Yue, Chen, Lu, Zhao, Wang, Song, and
+  Huang]{id250413837}
+Yang Yue, Zhiqi Chen, Rui Lu, Andrew Zhao, Zhaokai Wang, Shiji Song, and Gao
+  Huang.
+\newblock Does reinforcement learning really incentivize reasoning capacity in
+  {LLMs} beyond the base model?
+\newblock \emph{arXiv preprint arXiv:2504.13837}, 2025.
+\newblock URL \url{https://arxiv.org/abs/2504.13837}.
+
+\bibitem[Zhang et~al.(2026)Zhang, Guan, Zhang, et~al.]{identifiability2026}
+Xiangteng Zhang, Yang Guan, Bo~Zhang, et~al.
+\newblock On the identifiability of controlled world models.
+\newblock \emph{arXiv preprint arXiv:2607.22430}, 2026.
+
+\bibitem[Zhang et~al.(2023)Zhang, Li, Cui, et~al.]{id230901219}
+Yue Zhang, Yafu Li, Leyang Cui, et~al.
+\newblock Siren's song in the ai ocean: A survey on hallucination in large
+  language models.
+\newblock \emph{arXiv preprint arXiv:2309.01219}, 2023.
+
+\bibitem[Zhao et~al.(2026)Zhao, Yang, Chen, Hu, Zheng, Chen, and
+  Chen]{id260814376}
+Shiju Zhao, Jiacheng Yang, Qihang Chen, Junhao Hu, Jiaqi Zheng, Guihai Chen,
+  and Xusheng Chen.
+\newblock {CoRun}: Padding is simple and efficient for deterministic {LLM}
+  inference.
+\newblock \emph{arXiv preprint arXiv:2608.14376}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2608.14376}.
+
+\bibitem[Zheng et~al.(2025)Zheng, Zhu, Ou, et~al.]{id251008049}
+Congmin Zheng, Jiachen Zhu, Zhuoying Ou, et~al.
+\newblock A survey of process reward models: From outcome signals to process
+  supervisions for large language models.
+\newblock \emph{arXiv preprint arXiv:2510.08049}, 2025.
+
+\bibitem[Zhou et~al.(2024)Zhou, Zhang, Shao, et~al.]{id240910102}
+Yujia Zhou, Wenbo Zhang, Jingying Shao, et~al.
+\newblock Trustworthiness in retrieval-augmented generation systems: A survey.
+\newblock \emph{arXiv preprint arXiv:2409.10102}, 2024.
+
+\bibitem[{Zillow Group}(2021)]{zillow2021winddown}
+{Zillow Group}.
+\newblock {Zillow Group Reports Third-Quarter 2021 Financial Results and Shares
+  Plan to Wind Down Zillow Offers Operations}.
+\newblock
+  \url{https://investors.zillowgroup.com/news-and-events/news/news-details/2021/Zillow-Group-Reports-Third-Quarter-2021-Financial-Results--Shares-Plan-to-Wind-Down-Zillow-Offers-Operations/default.aspx},
+  2021.
+\newblock Press release, 2 November 2021; accessed 2026-10-20.
+
+\bibitem[Şuayp Talha~Kocabay and Akkuş(2026)]{id260320466}
+Şuayp Talha~Kocabay and Talha~Rüzgar Akkuş.
+\newblock Diffutron: A masked diffusion language model for turkish language.
+\newblock \emph{arXiv preprint arXiv:2603.20466}, 2026.
+
+\end{thebibliography}

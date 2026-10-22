@@ -1,0 +1,117 @@
+% figures/f_fam_reasoning.tex — Family card: reasoning post-training / RLVR (Table 1 row 10).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: problem+key and the selected
+%   trajectory = rs/gData; policy and its rollout group = rs/gModel; the programmatic checker =
+%   rs/gControl (amber octagon — the grammar reserves the octagon for a gate that stops flow);
+%   the inherited-failure strip = rs/gAccent (the ONE yellow); edges rs/gFlow / rs/gFlowD.
+% Chain: verifiable problem -> policy rollouts -> programmatic checker -> selected trajectory.
+%   The dashed loop above the chain is the TEST-TIME pass (resample N, keep the checker's pick);
+%   the training signal is NOT a second loop — it is the loss tape under the rollouts (one
+%   advantage per group), the same division of labour as the other cards.
+% label: fig:fam-reasoning   (figure env + \label live in main.tex, sec:familycards)
+%
+% Panels: (a) the loop; (b) compute saturates -- a rational (polynomial-tail) curve, not an
+%   exponential; (c) pass@k vs maj@k: coverage keeps climbing, maj@k plateaus, base overtakes
+%   RLVR; (d) the accent strip = the four named failures. Both panels are SCHEMATIC: no ticks,
+%   no rates, no measured heights — the axes are ordinal/log-ordered only.
+%
+% CAPTION NOTE — items the paper must defend (mirrors main.tex's paragraph):
+%   1. checker FPR 0.832 (math) / 0.869 (JSON) / 0.557 (code), strict reference verifiers 0.000,
+%      10 seeds [E] arXiv 2606.01066 (= id260601066) — the strip prints the 0.83--0.87 span only,
+%      no mean, and no code-checker value;
+%   2. base models overtake their RLVR versions at large k, gap above 40 points [A] id250413837;
+%   3. convergence is polynomial, not exponential, with an incorrect-tail regime where more
+%      samples can lower accuracy [T,E] arXiv 2610.19362; maj@k plateaus past several hundred
+%      samples while coverage stays log-linear to 10,000 [A] arXiv 2407.21787;
+%   4. length inflation follows from the loss on incorrect answers [T] arXiv 2504.05185
+%      (measurements arXiv 2502.08235 are [A]) — the card says "artifact", not a rate;
+%   5. traces need not be faithful: up to 36% accuracy swing on 13 tasks [A] id230504388,
+%      necessity replicated over 11 models [E] arXiv 2610.24495;
+%   6. test-time compute raising monitor evasion (98%/88%) is [E] arXiv 2609.30217 but is NOT
+%      verifier gaming — that bridge is [J] and the card does not draw it.
+%   7. DASHED READ: this card uses dashed for the test-time arc and the accent leader only, i.e.
+%      "not the training path", NOT the global contested state — no claim on this card is
+%      contested, so the contested device is unused. Say so in the caption; the arc's own label
+%      ("test-time loop") carries the reading inside the figure.
+% Curves are schematic [J]; no clip rates, no win rates, no wall-clock.
+%
+% \rstaperlvr is a local tape mode: style_v2_tokens.tex owns the mode list (ar|masked|diffusion|
+%   energy|contrastive|preference|ncm), so this file defines the missing one with \providecommand
+%   and the style file wins if the mode is later hoisted there. Geometry matches the family.
+\providecommand{\rstaperlvr}{% one group-level score over G parallel rollouts
+  \foreach \x in {0.8,3.4,6.0,8.6,11.2,13.8,16.4}{%
+    \node[rstapecell] at (\x,0.75) {};}
+  \draw[rstaperail] (0.8,1.95) -- (16.4,1.95);
+  \draw[rstapetick] (0.8,1.75) -- (0.8,2.15);
+  \draw[rstapetick] (16.4,1.75) -- (16.4,2.15);
+  \draw[rstaperail, -{Stealth[length=0.6mm, width=0.4mm]}] (16.9,0.75) -- (18.6,0.75);}
+\begin{tikzpicture}[x=1mm, y=1mm]
+\tikzset{
+  rs/rpnote/.style={rs/gTiny, font=\fontsize{7.2}{8.6}\selectfont, text=black!85},
+}
+% ===== (a) chain: problem -> rollouts -> checker -> selected trajectory =====
+\node[rs/gData,  minimum width=30mm] (prob) at (15,0)  {verifiable problem\\+ answer key};
+\node[rs/gModel, minimum width=32mm] (roll) at (57,0)  {reasoning policy\\$G$ rollouts, long CoT};
+\node[rs/gControl, minimum width=21mm] (chk) at (99,0) {programmatic\\checker};
+\node[rs/gData,  minimum width=26mm] (out)  at (141,0) {selected\\trajectory};
+\draw[rs/gFlow] (prob.east) -- (roll.west);
+\draw[rs/gFlow] (roll.east) -- (chk.west);
+\draw[rs/gFlow] (chk.east)  -- (out.west);
+% test-time loop: the same checker re-ranks fresh samples; training is the tape, not this arc
+\draw[rs/gFlowD] (chk.north) .. controls (99,18) and (57,18) .. (roll.north);
+\node[rs/gEdgeLbl] at (78,20.5) {test-time loop: resample $N$, keep the checker's pick};
+% ===== (b) inherited-failure strip (the ONE accent; hung off the checker it optimizes) =====
+\node[rs/gAccent, align=center, text width=136mm, inner sep=3pt] (fail) at (77,-22)
+  {inherited: verifier gaming, FPR 0.83--0.87 [E] \textemdash{} length inflation is an artifact [T]\\
+   coverage loss at large $k$: base $>$ RLVR [A] \textemdash{} traces need not be faithful [A]};
+\draw[rs/gFlowD] (chk.south) -- (chk.south |- fail.north);
+% ===== (c) compute saturates: rational curve (algebraic tail), incorrect-tail stub =====
+\begin{scope}[shift={(2,-45)}]
+  \draw[black!45, line width=0.4pt] (0,0) -- (56,0);
+  \draw[black!45, line width=0.4pt] (0,0) -- (0,16);
+  \draw[line width=1.0pt] plot[domain=0:56, samples=80]
+    (\x, {16*(\x/56)/((\x/56)+0.20)});
+  % not a continuation of the fit: marks the incorrect-tail-dominant regime (dashed = regime)
+  \draw[black!55, line width=0.8pt, dashed, -{Stealth[length=1.2mm]}]
+    (46,12.87) -- (56,10.4);
+  \node[rs/rpnote, anchor=north west] at (1,15.2) {y: solve rate};
+  \node[rs/rpnote, anchor=north east] at (56,-1)  {x: samples $N$ (log)};
+  \node[rs/rpnote, anchor=north east] at (56,4.2) {incorrect tail [T,E]};
+  \draw[black!45, line width=0.3pt] (52.8,4.8) -- (55,10.0);
+  \node[rs/rpnote, align=center, text width=58mm] at (28,-7.5)
+    {saturates: polynomial, not exponential [A]};
+\end{scope}
+% ===== (d) pass@k vs maj@k: coverage climbs, maj plateaus, base overtakes RLVR =====
+\begin{scope}[shift={(80,-45)}]
+  \draw[black!45, line width=0.4pt] (0,0) -- (56,0);
+  \draw[black!45, line width=0.4pt] (0,0) -- (0,16);
+  % base pass@k: log-linear, still climbing at the right edge
+  \draw[line width=1.1pt] plot[domain=0:56, samples=80]
+    (\x, {3.6+12*ln(1+9*(\x/56))/ln(10)});
+  % RLVR pass@k: starts above base, grows slowly, is overtaken
+  \draw[line width=0.7pt] plot[domain=0:56, samples=80]
+    (\x, {7.2+5*ln(1+9*(\x/56))/ln(10)});
+  % maj@k: same pass@1 as the RLVR policy, then flat past a few hundred samples
+  \draw[black!55, line width=0.8pt, dashed] plot[domain=0:56, samples=80]
+    (\x, {7.2+1.6*(1-1/(1+10*(\x/56)))});
+  % crossover: no rate is marked, the open dot only says where the two orders swap
+  \draw[line width=0.6pt, fill=white] (14.1,9.78) circle[radius=0.8mm];
+  \node[rs/rpnote, anchor=west]  at (57,15.6) {base};
+  \node[rs/rpnote, anchor=west]  at (57,12.2) {RLVR};
+  \node[rs/rpnote, anchor=west]  at (57,8.65) {maj@$k$};
+  \node[rs/rpnote, anchor=north west] at (1,15.2) {y: solve rate};
+  \node[rs/rpnote, anchor=north east] at (56,-1)  {x: samples $k$ (log)};
+  \node[rs/rpnote, align=center, text width=58mm] at (28,-7.5)
+    {base overtakes RLVR; maj@$k$ plateaus [A]};
+\end{scope}
+% ===== foot: the training signal, and what L5 audits =====
+\node[rs/gFoot] (foot) at (77,-59)
+  {signal: programmatic 0/1 or step reward [A] \textemdash{} assurance audits the checker as well as the policy (L5)};
+% --- loss tape: one advantage per rollout group (parallel samples, one score) ---
+\rsLossTape{rlvr}{roll.south}{-2.4mm}{advantage per group}
+% --- evidence ribbon: segments are claims already carried above; tag = the claim's class ---
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} verifier FPR 0.83--0.87}
+\rsRibSeg{rsAuthorRep}{\textbf{[A]} pass@1 $\ne$ coverage}
+\rsRibSeg{rsTheory}{\textbf{[T]} length is an artifact}
+\end{tikzpicture}

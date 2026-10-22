@@ -1,0 +1,63 @@
+% Section 1: introduction (P4, LAST per S3 freeze order)
+\subsection{The motivating question}
+A settled habit in AI engineering treats progress as trajectory: make the general-purpose
+model larger and better-trained, and reliability follows. The habit deserves the question, and it
+rarely gets asked in the form engineering decisions need: \emph{when does scaling a
+general-purpose model improve reliability, and when does changing how a system learns,
+represents, decides, or verifies buy more of it?} The question admits documented wins on both
+sides, and the engineering-relevant answer is a \emph{routing rule}
+\cite{leaderillusion2025}: given a task's openness and its error cost, which stack layer should
+absorb the next round of engineering work?
+
+\subsection{What we observe}
+The parts exist but are not connected. Objective-space research knows what each training signal
+cannot deliver \cite{klindt2026lejepa,austin2021d3pm,nichol2021improved}. Deployment-facing
+surveys catalogue failure modes and safeguards \cite{mdpi2026arlm,id250206872,id221116158}.
+Benchmark and instrument efforts assess calibration, abstention, and interface stability
+\cite{id261002267,id260933843}. The assurance literature owns a mature toolset: conformal
+and provable-alignment selective prediction, monitoring, human escalation
+\cite{id240501563,id260704430}. The connective tissue is missing: no survey we examined
+integrates the stack's layers, from learning objectives and representations through
+architectures and output contracts to decision interfaces and assurance, into one
+\emph{selection} procedure for reliability-constrained workloads (\cref{sec:related}).
+\footnote{Comparison set: \cref{sec:related}, corpus cutoff 2026-10-17. The works there do not
+integrate the five positioning axes into one selection procedure: the closest cross-layer
+survey \cite{ida25192} is a roadmap of threats, the closest selection procedure \cite{raie2026}
+is scoped to inference-time scaling, and the January 2026 five-axis survey of 147 systems
+\cite{ssrn2026fiveaxis} uses different axes (architecture, memory, planning, coordination,
+safety).} Model-family surveys answer a different question (which generative model family exists
+and how it trains
+\cite{almuammar2026genai,yazdani2025genaidepth}).
+
+\subsection{What we contribute}
+\begin{itemize}[leftmargin=1.8em, itemsep=1pt]
+\item \textbf{C1 --- the \reliabilitystack{} (L0--L5):} a cross-layer taxonomy that assigns each
+reliability decision to one of six named layers (task and risk specification, learning objective,
+representation, inference architecture, output contract, assurance and control), with
+evaluation/monitoring cutting across all layers (\cref{fig:stack}). The objective-space map is
+maintained against a moving field (hierarchical next-scale code prediction and reasoning
+post-training both entered it while we drafted \cite{kumbong2026ncm}), and the taxonomy is
+framed by what each layer \emph{cannot} deliver.
+\item \textbf{C2 --- a selection framework} that consumes the taxonomy: routing by answer-space
+openness and cost of error, four placement modifiers, a six-step selection procedure,
+thresholds derived from the risk budget, and escalation conditions instead of ``safe zones''
+(\cref{fig:map,sec:selection}). It is exercised on seven author-chosen stack instances and on a
+four-incident retrospective probe (\cref{app:codebook}); the probe's cases were chosen for
+record quality, which is also what makes their design choices visible, so it tests
+applicability, not generalization.
+\item \textbf{C3 --- an evidence-typed synthesis:} a claim ledger that separates theory-under-assumptions,
+independent empirical results, vendor-reported claims and synthesis, with an exclusions register
+and contested rows that are surfaced rather than footnoted (\cref{sec:protocol,fig:evidence}).
+\end{itemize}
+None of C1--C3 is a new model or mechanism. The contribution is the argument plus the ledger:
+reliability is an assembly property, and the assembly can be selected with instruments that
+already exist --- calibration, contracts, monitors, escalation.
+
+\subsection{Paper map}
+\cref{sec:reliability} fixes the reliability vocabulary, and \cref{sec:stack} introduces the stack.
+Sections \ref{sec:objectives}--\ref{sec:assurance} walk the layers L1--L5 with method cards and
+per-family envelopes; \cref{sec:cases} develops seven stack instances with their inherited failure
+modes and named evidence gaps; \cref{sec:selection} presents the selection framework;
+\cref{sec:protocol} states the evidence typology used throughout; \cref{sec:related} positions
+the work against the three genres of prior work; \cref{sec:discussion} discusses where the stack
+itself fails, eight named measurement gaps, and the limitations of survey-grade evidence.

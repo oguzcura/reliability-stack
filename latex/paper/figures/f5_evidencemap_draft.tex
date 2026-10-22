@@ -1,0 +1,93 @@
+% figures/f5_evidencemap_draft.tex — F5 v4 (2026-10-19): V4 redesign D1 "ribbon ledger".
+% One row per paper section (y), one rsRibSeg chip per claim family (x). Segment length therefore
+% carries WHERE a family sits and how many the section holds; class is carried by the chip itself
+% (fill weight + letter badge), so the old five-band x-grid -- and its 63mm index (41% of figure
+% height) -- are gone. The 18 ids are the 16 first-pass families plus 17 (S4/L1, reasoning
+% post-training) and 18 (S9, diffusion serving); both sit at the END of their row, so the rows
+% still read in ledger order, and neither row grows past S8's five-chip row. The picture's natural
+% width is set by the annotation lines below the ledger, not by any chip row, so nothing re-scales,
+% no chip width changes, and the font floor is unchanged.
+% 17 is [E] on the strongest anchor the family has (fuzzed checkers, FPR 0.83--0.87) rather than
+% on the RLVR pass@1 gain, which is author-reported ([A]) and would have mislabelled the row's
+% only [E]; 18 is [E] because the deployed-vs-declared gap rests on router telemetry, not on the
+% vendor's declared rate.
+% Contested is a STATE of a claim, not a class: ids 2, 11, 12 are the same [E] chip (green 16% fill)
+% with a dashed vermillion BORDER -- the class is never replaced, the state rides the border only.
+% [A] id 16 = purple fill, solid. Class key = one T-E-A-V-S row (five chips, same grammar), plus
+% [C]/[N] annotations under the ledger. Thin rows (S5, S6) hold one family each: labelled, because
+% the whitespace is a count, not a finding (D3).
+% label: fig:evidence   (figure env + \label live in main.tex, sec:protocol)
+%
+% CAPTION NOTE — the main.tex caption still says "one hex = ..." and must be rewritten:
+%   one chip = one claim family from the claim ledger; row = paper section, chip order inside a
+%   row = ledger order (both are our placement [S]); chip length carries no quantity beyond the
+%   count of families in that section; class = chip fill + letter badge ([T] outline, [E] filled
+%   green, [A] filled pink, [V] outline pink, [S] filled slate); contested = the same chip,
+%   dashed vermillion, for the three most contested families (2 JEPA-in-language stability,
+%   11 monitor-evasion attackability, 12 calibration direction) -- surfaced, not hidden; delete
+%   the "[W]" from that clause (the figure's state tag is [C], per H4).
+%   No counts of papers, rates or sample sizes are encoded.
+% Anchor companions (caption may list): #3 = 2605.26379 + 2606.12471 + 2607.22430; #4 = 2402.15991
+%   + 2406.11353; #5 = 2305.13971 + 2501.10868 + 2411.15100; #1 = Laya repo TD card [V];
+%   #14 = 2602.04101 [V]; #15 = CM test_3_verdict over 11 deep-reads [S]; #16 = 2610.14162 [A].
+% Fonts: 7.2pt chips at natural ~157mm; published (resizebox to 165.1) ~7.6pt.
+\begin{tikzpicture}[x=1mm,y=1mm]
+\tikzset{
+  rs/f5row/.style={anchor=east, align=right, font=\fontsize{7.5}{9.0}\selectfont, text=black!85},
+  rs/f5note/.style={anchor=west, font=\fontsize{7.5}{9.0}\selectfont, text=black!70},
+  rs/f5seg/.style={align=center, minimum width=24mm, minimum height=8.6mm,
+    font=\fontsize{7.2}{8.4}\selectfont},
+}
+% ===== class key: one T-E-A-V-S row, same chip grammar as the ledger =====
+\rsRibbonAt{0}{8.5}
+\rsRibSeg{rsTheory}{\textbf{[T]} theory}
+\rsRibSeg{rsVerified}{\textbf{[E]} empirical}
+\rsRibSeg{rsAuthorRep}{\textbf{[A]} author}
+\rsRibSeg{rsVendor}{\textbf{[V]} vendor}
+\rsRibSeg{rsNoClaim}{\textbf{[S]} synthesis}
+% ===== ledger rows (11mm pitch), sections top-down =====
+% -- S4 L1 learning objectives: 1 [V], 2 [E] contested, 16 [A], 17 [E]
+\rsRibbonAt{0}{0}
+\rsRibSeg[rs/f5seg]{rsVendor}{\textbf{[V]} 1\\proper scoring}
+\rsRibSeg[rs/f5seg, dashed, draw=rsContested]{rsVerified}{\textbf{[E]} 2\\JEPA stability}
+\rsRibSeg[rs/f5seg]{rsAuthorRep}{\textbf{[A]} 16\\staged tokenizer}
+\rsRibSeg[rs/f5seg]{rsVerified}{\textbf{[E]} 17\\verifier gaming}
+% -- S5 L2 representations: 3 [T] only
+\rsRibbonAt{0}{-11}
+\rsRibSeg[rs/f5seg]{rsTheory}{\textbf{[T]} 3\\identifiability}
+% -- S6 L3 inference architectures: 4 [E] only
+\rsRibbonAt{0}{-22}
+\rsRibSeg[rs/f5seg]{rsVerified}{\textbf{[E]} 4\\cascade gaps}
+% -- S7 L4 output contracts: 5 [E], 6 [E], 7 [T]
+\rsRibbonAt{0}{-33}
+\rsRibSeg[rs/f5seg]{rsVerified}{\textbf{[E]} 5\\syntax checks}
+\rsRibSeg[rs/f5seg]{rsVerified}{\textbf{[E]} 6\\typed decision}
+\rsRibSeg[rs/f5seg]{rsTheory}{\textbf{[T]} 7\\risk selection}
+% -- S8 L5 assurance: 8 [T], 9 [S], 10 [E], 11 [E] contested, 12 [E] contested
+\rsRibbonAt{0}{-44}
+\rsRibSeg[rs/f5seg]{rsTheory}{\textbf{[T]} 8\\conformal gate}
+\rsRibSeg[rs/f5seg]{rsNoClaim}{\textbf{[S]} 9\\UQ inventory}
+\rsRibSeg[rs/f5seg]{rsVerified}{\textbf{[E]} 10\\verifier fail}
+\rsRibSeg[rs/f5seg, dashed, draw=rsContested]{rsVerified}{\textbf{[E]} 11\\monitor evasion}
+\rsRibSeg[rs/f5seg, dashed, draw=rsContested]{rsVerified}{\textbf{[E]} 12\\calib. direction}
+% -- S9 case studies: 13 [E], 14 [V], 18 [E]
+\rsRibbonAt{0}{-55}
+\rsRibSeg[rs/f5seg]{rsVerified}{\textbf{[E]} 13\\option flips}
+\rsRibSeg[rs/f5seg]{rsVendor}{\textbf{[V]} 14\\hybrid gaps}
+\rsRibSeg[rs/f5seg]{rsVerified}{\textbf{[E]} 18\\deployed vs declared}
+% -- S11 review protocol: 15 [S]
+\rsRibbonAt{0}{-66}
+\rsRibSeg[rs/f5seg]{rsNoClaim}{\textbf{[S]} 15\\novelty verdict}
+% ===== section labels (left) =====
+\node[rs/f5row] at (-2,0)    {\S4 L1\\learning objectives};
+\node[rs/f5row] at (-2,-11)  {\S5 L2\\representations};
+\node[rs/f5row] at (-2,-22)  {\S6 L3\\inference architectures};
+\node[rs/f5row] at (-2,-33)  {\S7 L4\\output contracts};
+\node[rs/f5row] at (-2,-44)  {\S8 L5\\assurance};
+\node[rs/f5row] at (-2,-55)  {\S9\\case studies};
+\node[rs/f5row] at (-2,-66)  {\S11\\review protocol};
+% ===== annotations: contested state, absent class, thin-row count =====
+\node[rs/f5note] at (-2,-78)   {\textbf{[C]} contested: the same chip, dashed vermillion (ids 2, 11, 12).};
+\node[rs/f5note] at (-2,-81.6) {\textbf{[N]} absence flag --- no family in this ledger is plotted as one.};
+\node[rs/f5note] at (-2,-85.2) {thin rows (\S5, \S6) hold one family each; \S10 adds none --- counts, not findings.};
+\end{tikzpicture}

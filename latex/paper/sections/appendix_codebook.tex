@@ -1,0 +1,113 @@
+% sections/appendix_codebook.tex — Appendix A: coding manual for the retrospective probe (C2).
+% Parent wiring: main.tex emits \appendix before this \input, so this file starts at \section
+% and becomes Appendix A; Table 4 is tab:codebook.
+% Sources: docs/retro-test-cases.md and docs/scout-contrib.md §3. No new claims.
+\section{Coding manual for the retrospective probe}
+\label{app:codebook}
+
+This appendix publishes the manual behind the probe in \cref{sec:selection}. It is written to be
+re-run: every row of \cref{tab:codebook} records the layer, the documented design choice that puts
+the origin there, and the safeguard inside the deployed system that produced, or failed to
+produce, a signal before harm. A reader who disagrees with an assignment can see which cell to
+disagree with, and the manual is what fixes it.
+
+Two limits belong on the record. The rule was fixed before the incidents were assigned, the cases
+were chosen for the quality of their public record rather than their fit, and the coding is
+retrospective: one coder, unblinded to the matrix, with no agreement coefficient to report
+because there is no second coder. And the count is four. ``In all four'' is a statement about
+these cases; nothing in \cref{sec:selection} should be read as an estimate of how often
+failures originate early. Record quality is also what makes design choices visible, so the probe
+tests applicability, not generalization.
+
+Three rules fix the coding. \textbf{Origin rule.} The earliest layer whose documented design choice
+made the harmful outcome likely --- not the layer where the loss was recorded (finance, liability,
+press), and not the layer where a fix was later attempted. \textbf{Catch rule.} A safeguard
+\emph{inside} the deployed system or its pre-deployment gate that produced a blocking or escalating
+signal \emph{before} harm; external actors --- courts, regulators, journalists, plaintiffs,
+auditors --- are recorded as \emph{none}, because the matrix's columns are internal safeguards.
+\textbf{Ties and selection.} Where two layers are jointly causal the earliest is recorded and the
+co-origin is named in the last column; cases were chosen for record quality, not fit.
+
+\begin{table}[H]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.3cm}
+                  >{\raggedright\arraybackslash}p{3.0cm}
+                  >{\raggedright\arraybackslash}p{3.5cm}
+                  >{\raggedright\arraybackslash}p{3.1cm}
+                  >{\raggedright\arraybackslash}p{3.1cm}@{}}
+\toprule
+Incident (year) & What failed & Origin: layer and documented choice & Catch: layer and signal & Alternative coding \\
+\midrule
+1.\ Amazon recruiting (2018)~\cite{reuters2018amazon} &
+A r\'esum\'e ranker trained on a decade of mostly male applications learned to penalise
+``women's'' and two women's colleges. &
+\textbf{L1} --- the target was similarity to past hires; the historical label carried the
+disparity. &
+\textbf{L5} --- internal review and cancellation before general deployment; the same-layer patch
+(neutralise the term) did not hold. &
+\textbf{L0} is defensible: ``top talent'' was never specified, so no objective could have been
+right; the record names the label. \\
+\addlinespace[2pt]
+2.\ Dutch childcare (2013--21)~\cite{amnesty2021xenophobic} &
+A risk classifier used nationality as an input feature; non-Dutch families were scored higher,
+investigated, and had benefits clawed back. &
+\textbf{L2} --- \emph{Dutch citizenship: yes/no} as a feature; the report also records a
+self-learning element. &
+\textbf{none} --- the review step carried no reason code; exposure came from the press, the
+data-protection authority and the courts. &
+\textbf{L0} if the risk definition is the seat (fraud risk including nationality); we code the
+documented artefact, the feature set. \\
+\addlinespace[2pt]
+3.\ Zillow Offers (2021)~\cite{zillow2021winddown} &
+An iBuying unit made cash offers from a model built and measured for current market value, then
+absorbed the gap when resale values fell. &
+\textbf{L1} --- the objective and error metric priced value today ($A$) while leaving resale value
+later ($B$) unpriced; the loss is the $A-B$ gap. &
+\textbf{none} --- no internal check priced forecast error before offers; the first signal was the
+quarterly write-down. &
+\textbf{L4} co-origin: the estimate \emph{was} the offer and experts were barred from adjusting
+it; under that reading one of the four origins moves to L4. Weakest of the four. \\
+\addlinespace[2pt]
+4.\ Air Canada chatbot (2024)~\cite{aircanada2024bccrt} &
+The chatbot asserted a retroactive bereavement fare that contradicted the airline's own published
+policy. &
+\textbf{L2} --- the answer was generated with no anchor to the authoritative policy text. &
+\textbf{none} --- no check against the policy page; the claim surfaced only when the airline
+refused it. &
+\textbf{L4} if the licence to answer policy questions definitively (no citation or validity
+contract) is the seat. \\
+\midrule
+\multicolumn{5}{@{}p{16.0cm}@{}}{\emph{Excluded: named, left uncoded --- the record does not settle
+  the origin, so coding would record a preference.}} \\
+\addlinespace[1.5pt]
+Robodebt (2016--2020) &
+\multicolumn{4}{@{}p{13.2cm}@{}}{Income averaging by a rules engine, with no learned component;
+  debts were raised from a mismatch between reported and assessed income. Exercises L0 and a
+  rules layer the paper does not model; useful, and outside the failure class the matrix is about.} \\
+\addlinespace[2pt]
+Detroit facial recognition (2020) &
+\multicolumn{4}{@{}p{13.2cm}@{}}{A recognition model's candidate list was treated as an
+  identification. The record does not settle whether the defect is the recognition model (L2) or
+  the decision rule that treats a candidate list as an identification (L4).} \\
+\bottomrule
+\end{tabular}
+
+\caption{Coding manual for the retrospective probe: the origin and catch rules, the four coded
+incidents, and the two excluded cases. Each assignment records the documented choice behind it, so
+it can be re-derived from the table; the layer boundaries are our analytic cut [J], and no
+agreement coefficient is reported (one coder).}
+\label{tab:codebook}
+\end{table}
+
+\smallskip
+\noindent\textit{Notes.} In all four coded cases the earliest documented origin is L1 or L2 (two at
+L1, two at L2), and no internal safeguard produced a blocking or escalating signal at or before that
+layer: three had none at all, and the fourth was stopped only by project cancellation at L5. No
+case in the sample carries an L0 origin. A nominal review step that carries no reason code is not
+a catch (Dutch case): the catch column describes safeguards that exist, not safeguards that fire.
+Zillow's L4 co-origin is the boundary case and the weakest of the four codings; counting it at L4
+lowers the early-origin count to three. One coder, rule fixed before assignment; retrospective
+coding of public records.

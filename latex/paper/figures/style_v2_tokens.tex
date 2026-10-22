@@ -1,0 +1,178 @@
+% figures/style_v2_tokens.tex — semantic-ROLE token extension (v2), ADDITIVE to style.tex.
+% Do not edit style.tex for v2 work: this file layers on top and is selectable alongside rs/*.
+% Role families (paste-7 semantic taxonomy), each token = shape + fill + role word at the use site:
+%   rs/gModel  model/learning        soft blue pastel, rounded box
+%   rs/gData   data/evidence payload soft green pastel, rounded box (artifacts in transit)
+%   rs/gStore  data store            soft green pastel, CYLINDER (vector DB / cache / index: a store, not a step)
+%   rs/gControl control/validation   soft amber pastel, OCTAGON (a gate, not a branch -> diamond reserved)
+%   rs/gRisk   failure/risk          soft warm red pastel (fallback / failure path); undocumented wiring = dashed edge
+%   rs/gInfra  infra service/resource slate pastel, SHARP rectangle (a service is not a store and not a model)
+%   rs/gPanelFill + rs/gPanelEdge  nesting container (PAIR: tint underlay + border/title; see file body)
+%   rs/gAccent the ONE ledger-defended item (evidence-anchored claim only): yellow fill + 1.2pt border
+% Encoding contract: every role is redundant-encoded (shape + color + word). Fills stay in a narrowed
+% luminance band so the figure survives grayscale: role identity is carried by SHAPE and the legend,
+% not by hue. Outline weight is BLACK 0.9pt for all role tokens (0.7pt flows, 1.3pt critical path).
+% Fonts are sized for natural size == published size (shrink ~1.0): floor 7.5pt >= 7pt after resizebox.
+\RequirePackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit, backgrounds}
+\providecolor{rsyellow}{HTML}{E69F00}   % accent hue; provided only if style.tex is not loaded first
+\providecolor{rsVerified}{HTML}{009E73} % [V] verified claim — reserved, never decorative
+\providecolor{rsAuthorRep}{HTML}{CC79A7}% [A] author-reported / system report
+\providecolor{rsContested}{HTML}{D55E00}% [C] contested — also error semantic
+\providecolor{rsNoClaim}{HTML}{8B95A5}  % [N] not-claimable / absent
+\definecolor{rsBluePale}{HTML}{DCE8F6}  % model/learning fill
+\definecolor{rsGreenPale}{HTML}{E8F5E4} % data/evidence fill
+\definecolor{rsAmberPale}{HTML}{F5CF8C} % control/validation fill (darker than accent so amber != yellow at a glance)
+\definecolor{rsRedPale}{HTML}{F7D6CC}   % failure/risk fill
+\definecolor{rsSlatePale}{HTML}{DFE3E9} % infra service fill
+\definecolor{rsPanelTint}{HTML}{F3F4F6} % nesting-panel fill (very light, just above paper white)
+\tikzset{
+  % ---- model/learning roles: rounded = learned component ----
+  rs/gModel/.style={rounded corners=2.5pt, draw=black, line width=0.9pt, fill=rsBluePale,
+    align=center, inner sep=3pt, minimum height=6.8mm, font=\fontsize{7.6}{9.2}\selectfont},
+  % ---- data/evidence roles: rounded = payload in transit ----
+  rs/gData/.style={rs/gModel, fill=rsGreenPale},
+  % ---- data stores: STORE GLYPH = flat body + two thin full-width "record" rules near the
+  %      bottom edge (records in a store). History: cylinder drum -> A5-11 sag fix -> closed-
+  %      lens lid; the lens STILL read as a hat / double-line at 13mm (author flagged the NCM
+  %      tokenizer box twice), so the glyph is now FLAT: zero 3D, unambiguous at any scale,
+  %      consistent with the flat 2D grammar (every other node is flat). Distinguish from
+  %      gInfra (flat too): stores = green fill + record rules; infra = slate fill, no rules.
+  %      Rules sit below the text. CAVEAT: a text-saturated label (3 lines, 27pt of ink in a
+  %      10mm box ~0.6mm margins) cannot clear ANY interior mark — those nodes must set
+  %      path picture= (see f_fam_ncm tokenizer); every 1-2-line store keeps the rules.
+  rs/gStore/.style={rs/gData, minimum width=13mm, minimum height=9.5mm, inner sep=2.5pt,
+    font=\fontsize{7.5}{9.0}\selectfont,
+    path picture={
+      \draw[black, line width=0.9pt]
+        let \p1=($(path picture bounding box.north east)-(path picture bounding box.north west)$) in
+        ([xshift=2.5pt,yshift=2.2mm]path picture bounding box.south west)
+        -- ++({\x1-5pt},0);
+      \draw[black, line width=0.9pt]
+        let \p1=($(path picture bounding box.north east)-(path picture bounding box.north west)$) in
+        ([xshift=2.5pt,yshift=1.3mm]path picture bounding box.south west)
+        -- ++({\x1-5pt},0);}},
+  % ---- control/validation roles: octagon = gate that stops flow (diamond kept for decision branches) ----
+  rs/gControl/.style={regular polygon, regular polygon sides=8, draw=black, line width=0.9pt,
+    fill=rsAmberPale, align=center, inner sep=3pt, minimum width=21mm,
+    font=\fontsize{7.6}{9.2}\selectfont},
+  % ---- failure/risk roles: warm red = failure path (undocumented WIRING uses dashed edges, see flows) ----
+  rs/gRisk/.style={rs/gModel, fill=rsRedPale, font=\fontsize{7.5}{9.0}\selectfont},
+  % ---- infra service/resource: sharp rectangle = service (not a store, not a model) ----
+  rs/gInfra/.style={draw=black, line width=0.9pt, fill=rsSlatePale, align=center, inner sep=2.5pt,
+    minimum height=7mm, font=\fontsize{7.5}{9.0}\selectfont},
+  % ---- nesting panels: use as a PAIR (fill underlay on the background layer + border/title on
+  %      main), because a fit node created AFTER its children would otherwise paint its fill
+  %      OVER them (z-order bug); pair both with the same fit/inner-sep values ----
+  rs/gPanelFill/.style={rounded corners=4pt, draw=none, fill=rsPanelTint, inner xsep=6pt, inner ysep=14pt},
+  rs/gPanelEdge/.style={rounded corners=4pt, draw=black, line width=0.9pt, fill=none, inner xsep=6pt, inner ysep=14pt},
+  rs/gPanelTitle/.style={anchor=west, font=\fontsize{8.2}{10.0}\selectfont\bfseries, text=black},
+  % ---- the ONE accent: ledger-defended item only (rsyellow!40 fill + 1.2pt border; grayscale-visible by weight) ----
+  rs/gAccent/.style={rs/gModel, fill=rsyellow!40, line width=1.2pt},
+  % ---- edges: solid = documented wiring; dashed = vendor-undocumented wiring; long heavy dash = critical path ----
+  rs/gFlow/.style={-{Stealth[length=1.7mm]}, line width=0.7pt, draw=black},
+  rs/gFlowD/.style={rs/gFlow, dashed, line width=0.9pt},
+  rs/gFlowCrit/.style={rs/gFlow, dashed, line width=1.3pt, dash pattern=on 5pt off 2.5pt},
+  rs/gFlowDB/.style={rs/gFlow, {Stealth[length=1.7mm]}-{Stealth[length=1.7mm]}, dashed, line width=0.9pt},  % bidirectional undocumented lane
+  % ---- text layer: all >= 7.5pt so published size clears the 7pt floor at shrink ~1.0 ----
+  rs/gEdgeLbl/.style={font=\fontsize{7.5}{9.0}\selectfont, text=black!80, inner sep=1pt},
+  rs/gLegend/.style={font=\fontsize{7.5}{9.0}\selectfont, text=black},
+  rs/gFoot/.style={font=\fontsize{7.5}{9.0}\selectfont, text=black!80, align=center},
+  rs/gTiny/.style={font=\fontsize{7.5}{9.0}\selectfont, text=black},
+  % ---- evidence ribbon (P1): one horizontal strip of tag-coded claim segments ----
+  % Usage:  \rsRibbonAt{x}{y}                  left end of the strip, picture coords (mm)
+  %         \rsRibSeg[<edge>]{<tag>}{<label>}  one call per segment, laid left-to-right
+  % <tag>  = rsVerified | rsAuthorRep | rsContested | rsNoClaim | rsTheory | rsVendor
+  % <edge> = solid (default) | dashed (global grammar: dashed = contested / claim-to-defend)
+  % The tag is double-encoded: colour + a letter badge baked into <label>, so the strip
+  % still reads in grayscale and under CVD; the fill stays at 16% so text keeps contrast.
+  % rsTheory / rsVendor are OUTLINE-ONLY chips (white fill, thin border): theory and vendor
+  % classes are asserted, not measured, so they must not borrow a filled chip's weight.
+  rs/ribseg/.style={draw, line width=0.7pt, rounded corners=1.2pt, anchor=west,
+    minimum height=4.6mm, inner xsep=2.4pt, font=\fontsize{7.2}{8.6}\selectfont, text=black},
+  rs/ribsegTheory/.style={draw=rsVerified, fill=white, line width=0.6pt},
+  rs/ribsegVendor/.style={draw=rsAuthorRep, fill=white, line width=0.6pt},
+}
+\newcommand{\rsRibbonAt}[2]{\coordinate (rsrib@at) at (#1,#2);}
+% ---- ribbon placement helpers (unit-agnostic: family cards use cm, NCM/atlas use mm) ----
+% \rsRibbonBase{<dy>}  once, after ALL card content is drawn: strip sits <dy> below the card bbox
+% \rsRibbonRow{<dy>}   before each row: row origin <dy> from the base (0 for row 1)
+\newcommand{\rsRibbonBase}[1]{%
+  \coordinate (rsrib@base) at ([yshift=#1]current bounding box.south west);}
+\newcommand{\rsRibbonRow}[1]{%
+  \coordinate (rsrib@at) at ([yshift=#1]rsrib@base);}
+\newcommand{\rsRibSeg}[3][solid]{%
+  % outline-only classes carry no fill weight; all other tags keep the 16% tint
+  \def\rsribtag{#2}%
+  \ifx\rsribtag\rsribtheory
+    \node[rs/ribseg, rs/ribsegTheory, #1] (rsrib) at (rsrib@at) {#3};%
+  \else\ifx\rsribtag\rsribvendor
+    \node[rs/ribseg, rs/ribsegVendor, #1] (rsrib) at (rsrib@at) {#3};%
+  \else
+    \node[rs/ribseg, fill=#2!16, draw=#2, #1] (rsrib) at (rsrib@at) {#3};%
+  \fi\fi
+  \coordinate (rsrib@at) at ([xshift=0.7mm]rsrib.east);}
+\def\rsribtheory{rsTheory}
+\def\rsribvendor{rsVendor}
+
+% ---- loss tape (P3): ONE device for the training-signal structure of a family card ----
+% Usage: \rsLossTape{<mode>}{<anchor>}{<dy>}{<label>}
+%   <mode>   = ar | masked | diffusion | energy | contrastive | preference | ncm
+%   <anchor> = a node anchor, e.g. nll.south; the tape is centred on it
+%   <dy>     = offset of the rail from the anchor (a length, e.g. -2.4mm)
+%   <label>  = one short line, 7.2pt, printed once under the tape (<=22 chars)
+% Modes encode the loss structure, not decoration: per-position terms in a chain (ar),
+% per-position terms without order (masked), per-step sums over the whole sequence
+% (diffusion), per-config scores (energy), per-pair terms joined two-by-two
+% (contrastive), a pair of terms per preference pair (preference), and parallel
+% terms per level (ncm). Height-only device: 22.6mm wide in its own mm scope, so a
+% resizebox-by-width scale is unchanged; keep labels short so the card cannot widen.
+\tikzset{
+  rstape/.style={draw=black!70, line width=0.45pt, fill=white, rounded corners=0.4pt},
+  rstapecell/.style={rstape, minimum width=2.4mm, minimum height=1.5mm, inner sep=0pt},
+  rstaperail/.style={draw=black!55, line width=0.5pt},
+  rstapetick/.style={draw=black!70, line width=0.45pt},
+}
+\newcommand{\rsLossTape}[4]{%
+  \coordinate (rstapeo) at ([xshift=-11.3mm, yshift=#3]#2);%
+  \begin{scope}[shift={(rstapeo)}, x=1mm, y=1mm]
+    \csname rstape#1\endcsname
+    \node[anchor=north, align=center, text width=30mm, inner sep=0pt,
+          font=\fontsize{7.2}{8.6}\selectfont, text=black!75]
+      at (11.3,-2.6) {#4};
+  \end{scope}}
+\newcommand{\rstapear}{% chain: one term per position, left-to-right; the rail ends before the last term
+  \draw[rstaperail, -{Stealth[length=0.7mm, width=0.5mm]}] (0,0) -- (17.4,0);
+  \foreach \x in {1.2,5.8,10.4,15.0,19.6}{%
+    \node[rstapecell] at (\x,0.75) {};}}
+\newcommand{\rstapemasked}{% bag: terms only where a target is visible; no rail, no order
+  \foreach \x in {1.2,10.4,15.0}{%
+    \node[rstapecell] at (\x,0.75) {};}
+  \foreach \x in {5.8,19.6}{%
+    \node[rstapecell, dashed, draw=black!40] at (\x,0.75) {};}}
+\newcommand{\rstapediffusion}{% one summed term per denoise step, full sequence each
+  \foreach \y in {0,0.95,1.9}{%
+    \draw[rstape] (0,\y) rectangle (16.4,\y+0.6);
+    \draw[rstaperail, -{Stealth[length=0.6mm, width=0.4mm]}] (16.4,\y+0.3) -- (18.6,\y+0.3);}}
+\newcommand{\rstapeenergy}{% one score term per candidate config; the minimum is marked
+  \draw[rstaperail] (0,0) -- (20.6,0);
+  \foreach \x/\h in {1.6/1.9, 5.6/1.0, 9.6/2.1, 13.6/0.6, 17.6/1.4}{%
+    \draw[rstape, fill=black!8] (\x-1.1,0) rectangle (\x+1.1,\h);}
+  \draw[rstapetick, line width=0.7pt] (12.3,-0.55) -- (14.9,-0.55);}
+\newcommand{\rstapecontrastive}{% paired terms: two cells per bracket
+  \foreach \x in {0.5,7.7,14.9}{%
+    \node[rstapecell] at (\x,0.75) {};
+    \node[rstapecell] at (\x+3.0,0.75) {};
+    \draw[rstaperail] (\x-1.2,1.75) -- (\x-1.2,2.05) -- (\x+4.2,2.05) -- (\x+4.2,1.75);}}
+\newcommand{\rstapepreference}{% one term per pair: a preferred (shaded) and a rejected cell
+  \foreach \x in {0.5,7.7,14.9}{%
+    \node[rstapecell, fill=black!14] at (\x,0.75) {};
+    \node[rstapecell] at (\x+3.0,0.75) {};
+    \draw[rstaperail] (\x-1.2,-0.35) -- (\x-1.2,-0.55) -- (\x+4.2,-0.55) -- (\x+4.2,-0.35);}}
+\newcommand{\rstapencm}{% parallel terms per level: same span, finer cells each level
+  \foreach \x/\w in {0/7.4, 8.6/7.4}{%
+    \draw[rstape] (\x,0) rectangle (\x+\w,0.55);}
+  \foreach \x/\w in {0/3.6, 4.4/3.6, 8.8/3.6, 13.2/3.6}{%
+    \draw[rstape] (\x,0.85) rectangle (\x+\w,1.4);}
+  \foreach \x/\w in {0/1.8, 2.5/1.8, 5.0/1.8, 7.5/1.8, 10.0/1.8, 12.5/1.8, 15.0/1.8}{%
+    \draw[rstape] (\x,1.7) rectangle (\x+\w,2.25);}}

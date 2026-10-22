@@ -1,0 +1,103 @@
+% (v2 layout notes retired 2026-10-19 — see the v3 header below.)
+% figures/f4_failmatrix_draft.tex — F4 v3 (2026-10-19): displacement matrix (FM-A).
+% The matrix is read as a sentence per row: a failure ARISES AT an origin layer and is CAUGHT BY
+% a safeguard family. Rows are therefore sorted by origin (L0 -> L4) and the origin column is part
+% of the matrix (not a marginal note), so the eye sees the argument: origins cluster at L2, and
+% almost every filled cell sits in the last three columns — the layer where a failure originates is
+% usually not the layer that catches it. The single amber cell is the one failure caught where it
+% is caused (structured-schema error, a validity failure, x output contracts+validators).
+% Cells: letter = evidence class of the anchor ([T]/[E]/[V]); dashed gray glyph = named [GAP];
+% empty = family not claimed for that failure. No rates, no scores — tags only.
+% label: fig:failmatrix   (fig/env + \label live in main.tex)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. the ORIGIN assignment is OUR analytic cut [J], not a measured property: hallucination /
+%      ungrounded generation, retrieval miss / stale sources and perception-error propagation are
+%      filed under L2 because the model conditions on a representation that carries no source
+%      anchor; distribution shift under L0 because the specified task distribution is the thing
+%      that moved (the one genuinely ambiguous row — assign L0 and say so); miscalibration /
+%      reward hacking under L1 (objective + procedure); structured-schema error (a validity
+%      failure, not a value error) and decision-model framing under L4 (contract variables).
+%      Sorting by origin is a reading aid, not a claim of causal ordering;
+%   2. the row reading needs ONE worked example per layer in the sec:selection prose (origin ->
+%      catch -> residual). The figure asserts the pattern; the text must carry the instance;
+%   3. anchors per cell are unchanged from v2: R1C4 [E] 2609.35794; R2C3 [E] 2609.33843 + Jev Bench
+%      (CONTESTED direction — keep the caveat); R3C1 [E] 2609.35794, R3C3 [T] 2405.01563, R3C4
+%      [GAP] human-review catch rate; R4C1 [E] 2609.35794; R5C2/R5C4 [GAP] hybrid propagation;
+%      R6C3 [T] 2605.26379 + 2606.12471 + 2607.22430, R6C2/R6C4 [GAP] identifiability bridge;
+%      R7C2 amber [E] 2305.13971 / 2501.10868 / 2411.15100 (validity != truth residual), R7C3 [T]
+%      2607.04430; R8C2 [V] Laya TD option budget + 2610.02267 [E] failure side (30% order flip),
+%      R8C4 [GAP];
+%   4. amber = the ONE ledger-defended item (schema compliance is table stakes): the only cell on
+%      the matrix's diagonal family, where cause and catch are the same layer;
+%   5. the v2 footer is compressed into one line; no rates are claimed anywhere in the figure.
+\providecommand{\figneqa}{{\fontsize{8.2}{10}\selectfont $\ne$}}
+\tikzset{
+  rs/gCell/.style={rounded corners=2.5pt, draw=black, line width=0.9pt, fill=white,
+    minimum size=6.2mm, inner sep=0.4pt, font=\fontsize{7.6}{9.2}\selectfont\bfseries},
+  rs/gCellAcc/.style={rs/gCell, fill=rsyellow!40, line width=1.2pt},
+  rs/gCellGap/.style={rounded corners=2.5pt, draw=black!45, line width=0.9pt, dashed,
+    fill=black!8, minimum size=6.2mm, inner sep=0.4pt,
+    font=\fontsize{7.6}{9.2}\selectfont, text=black!55},
+  rs/gRowLbl/.style={font=\fontsize{7.5}{9.0}\selectfont, text=black, align=right, inner sep=1pt},
+  rs/gColHdr/.style={rs/gInfra, minimum width=25mm, minimum height=8mm,
+    font=\fontsize{7.5}{9.0}\selectfont},
+  rs/gOrig/.style={font=\fontsize{7.5}{9.0}\selectfont\bfseries, text=black!70, align=center},
+}
+\begin{tikzpicture}[x=1mm,y=1mm]
+% ===== geometry: origin spine 0..14, four safeguard columns 14..126 (28mm pitch) =====
+\draw[black!45, line width=0.5pt] (14,0) rectangle (126,-76);
+\foreach \gx in {42,70,98} { \draw[black!45, line width=0.5pt] (\gx,0) -- (\gx,-76); }
+\foreach \gy in {-9.5,-19,-28.5,-38,-47.5,-57,-66.5} { \draw[black!45, line width=0.5pt] (14,\gy) -- (126,\gy); }
+% origin spine: one block per origin layer, no internal row rules
+\draw[black!45, line width=0.5pt] (0,0) rectangle (14,-76);
+\foreach \gy in {-9.5,-19,-57} { \draw[black!45, line width=0.5pt] (0,\gy) -- (14,\gy); }
+\node[rs/gOrig] at (7,-4.75)  {L0};
+\node[rs/gOrig] at (7,-14.25) {L1};
+\node[rs/gOrig] at (7,-38)    {L2};
+\node[rs/gOrig] at (7,-66.5)  {L4};
+% ===== axis titles: arises at / caught by =====
+\node[rs/gLegend, anchor=center, align=center] at (7,15.5) {arises\\at [J]};
+\node[rs/gLegend, anchor=west] at (16,15.5) {caught by};
+% ===== column headers (safeguard families) =====
+\node[rs/gColHdr] at (28,9.5) {retrieval grounding};
+\node[rs/gColHdr] at (56,9.5) {output contracts\\and validators};
+\node[rs/gColHdr] at (84,9.5) {calibrated acceptance\\and abstention};
+\node[rs/gColHdr] at (112,9.5){monitoring\\and escalation};
+% ===== row labels, sorted by origin layer =====
+\node[rs/gRowLbl, anchor=east] at (-3,-4.75)  {distribution shift};
+\node[rs/gRowLbl, anchor=east] at (-3,-14.25) {miscalibration /\\reward hacking};
+\node[rs/gRowLbl, anchor=east] at (-3,-23.75) {hallucination /\\ungrounded generation};
+\node[rs/gRowLbl, anchor=east] at (-3,-33.25) {retrieval miss /\\stale sources};
+\node[rs/gRowLbl, anchor=east] at (-3,-42.75) {perception-error\\propagation (hybrid)};
+\node[rs/gRowLbl, anchor=east] at (-3,-52.25) {JEPA: prediction\\\figneqa\ planning};
+\node[rs/gRowLbl, anchor=east] at (-3,-61.75) {structured-schema\\error (validity)};
+\node[rs/gRowLbl, anchor=east] at (-3,-71.25) {decision-model\\framing sensitivity};
+% ===== coverage glyphs =====
+\node[rs/gCell] at (112,-4.75) {E};        % L0 x monitoring
+\node[rs/gCell] at (84,-14.25) {E};        % L1 x acceptance (contested direction)
+\node[rs/gCell] at (28,-23.75) {E};        % L2 hallucination x grounding
+\node[rs/gCell] at (84,-23.75) {T};        % L2 hallucination x acceptance
+\node[rs/gCellGap] at (112,-23.75) {$\varnothing$};
+\node[rs/gCell] at (28,-33.25) {E};        % L2 retrieval miss x grounding
+\node[rs/gCellGap] at (56,-42.75) {$\varnothing$};
+\node[rs/gCellGap] at (112,-42.75) {$\varnothing$};
+\node[rs/gCellGap] at (56,-52.25) {$\varnothing$};
+\node[rs/gCell] at (84,-52.25) {T};        % L2 JEPA x acceptance
+\node[rs/gCellGap] at (112,-52.25) {$\varnothing$};
+\node[rs/gCellAcc] at (56,-61.75) {E};     % L4 structured-schema (validity) x contracts — caught where caused
+\node[rs/gCell] at (84,-61.75) {T};        % L4 schema x acceptance
+\node[rs/gCell] at (56,-71.25) {V};        % L4 framing x contracts
+\node[rs/gCellGap] at (112,-71.25) {$\varnothing$};
+% ===== legend: two definition lines + one footer line =====
+\node[rs/gCell, minimum size=5mm, font=\fontsize{7.5}{9.0}\selectfont\bfseries] (lg1) at (2.5,-83) {E};
+\node[rs/gLegend, anchor=west] at (6.5,-83) {= documented coverage of that failure; letter = the anchor's evidence class:};
+\node[rs/gLegend, anchor=west] at (10,-87.2) {[T] theory-under-assumptions \textperiodcentered\ [E] independent empirical \textperiodcentered\ [V] vendor/developer-reported};
+\node[rs/gCellGap, minimum size=5mm] (lg2) at (2.5,-92.6) {$\varnothing$};
+\node[rs/gLegend, anchor=west] at (6.5,-92.6) {= named [GAP] in our evidence base; empty cell = family not claimed for that failure;};
+\node[rs/gCellAcc, minimum size=5mm, font=\fontsize{7.5}{9.0}\selectfont\bfseries] (lg3) at (2.5,-97.4) {E};
+\node[rs/gLegend, anchor=west] at (6.5,-97.4) {= ledger-defended item: schema compliance is table stakes --- validity \figneqa\ truth, three [E] anchors;};
+\node[rs/gLegend, anchor=west] at (10,-101.6) {the one cell where the catch sits in the same layer family as the cause};
+\node[rs/gLegend, anchor=west] at (0,-106.5) {unmeasured rows: hybrid error-propagation; identifiability to decision quality ---};
+\node[rs/gLegend, anchor=west] at (10,-110.8) {every glyph is anchored in the claim ledger; no coverage rates are claimed};
+\end{tikzpicture}

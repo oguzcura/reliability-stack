@@ -1,0 +1,118 @@
+% Section 13: discussion, limitations, conclusion (P4)
+\subsection{Where the stack itself fails}
+The honest reading of our own frame is that cross-layer engineering buys no reliability without
+instrumentation, and that two failure modes recur across the case set and bound what the frame can
+promise. First, per-dimension
+certification does not compose: a validated contract plus a calibrated gate plus a grounded
+retriever can still fail on their \emph{interaction}, and no anchor in our evidence base
+measures that composition (cases 1 and 3; \cref{sec:case-rag}, \cref{sec:case-hybrid}).
+Second, verification mechanisms are themselves attackable or miscalibrated
+\cite{id260601066,id260930217} (cases 6 and 5), so the assurance layer needs a threat model of
+its own.
+
+\subsection{What the field still lacks}
+Eight gaps remain open, and each is phrased as a testable ask:
+(i) \emph{end-to-end system evaluations} of assembled stacks (harness + gate + escalation)
+under adversarial conditions;
+(ii) \emph{certified composition} results for chained safeguards (conformal $\circ$ validators
+$\circ$ grounding), which extend the [T]-tier machinery to mismatches between layers;
+(iii) \emph{propagation benchmarks} for hybrid specialist stacks, where the Case 3 gap
+(\cref{sec:case-hybrid}) is the cleanest measurement target our evidence set exposes;
+(iv) \emph{language-native latent-prediction training signals} that survive the
+conditional-concentration objection (JEPA paradox), with assumptions actually testable;
+(v) \emph{decision-model interface stability}: order robustness and option-set scaling are
+measurable, and current evidence suggests they are not incidental \cite{id261002267};
+(vi) \emph{reconstruction-fidelity measurement for staged-tokenizer generators}: a test that
+separates token-exactness from meaning-equivalence, so a contract can state which one it
+enforces;
+(vii) \emph{escalation-queue measurement}: precision, recall and minutes per review for
+reviewers working a production LLM escalation queue, which no study in our sweep reports
+(\cref{sec:l5-calibrated});
+(viii) \emph{a configuration record for deployment}: the engine, precision and co-tenancy a
+score was measured under, published with the cutoff fitted on it (\cref{sec:l5-bridge}).
+
+\subsection{What we refuse to compare}
+Layer identities are inherited envelopes, not benchmark scores; we decline direct comparisons
+across families (e.g., discriminative vs.\ generative ``hallucination rates'') when the error
+currencies are not measurable on a shared task. Where the evidence base has no shared-instrument
+anchor we say so, and where it has one, each row names the instrument it rests on rather than pooling
+across instruments (\cref{tab:crosscase}).
+
+\subsection{Limitations}
+Scope is LLM-centric (text and typed-decision workloads); multimodal and embodied control appear
+only as instances of an architecture. The paper is survey-grade: every claim
+either resolves to a public artifact we checked or is tagged where checking stops --- [W] pending,
+[N]/[GAP] no anchor --- and [V]/[A] mark evidence that is documented but not independently
+reproduced. We run no new benchmarks; contested rows in
+\cref{fig:evidence} remain contested at submission time and are labeled as such. The seven case
+studies cover the stack's decision space but not exhaustively; the exclusion register applies
+to our choices as it did to the candidates'.
+
+The three validity bounds --- instrument, contamination, precision --- are fixed in
+\cref{sec:protocol}, and they apply to our own anchors as much as to the sources we cite. What is
+ours to disclose is narrower: our empirical numbers are point estimates from single harnesses, and
+a point estimate is not a difference \cite{errorbars2024,evalci2026}.
+
+The boundary to standards and regulation is a division of labor, not a crosswalk. The NIST AI
+RMF 1.0 \cite{nistairmf} (January 2023, voluntary, and under revision as of this writing) and
+its Generative AI Profile (NIST AI 600-1 \cite{nistgai600}, July 2024) specify risk-governance
+functions: govern, map, measure, manage. ISO/IEC 42001:2023 \cite{iso42001} defines a
+certifiable AI management system. The EU AI Act (Regulation (EU) 2024/1689 \cite{euaiact2024})
+specifies provider and deployer duties; the digital-omnibus Regulation (EU) 2026/1744
+\cite{omnibus2026} defers the Chapter~III high-risk obligations for Annex~III systems to December
+2027 (Annex~I systems to August 2028), while the post-market monitoring and incident reporting
+duties (Articles 72--73) stay on the 2026 timetable. None of these instruments rules on which layer absorbs a failure;
+their unit is the organization, not the stack instance. They prescribe process: who must
+document, assess, monitor, and report. A certificate attests to the process, never to the
+residual error. Our five axes ask a different question: which stack instance to select for a
+reliability-constrained workload. A management-system certificate does not answer it. The
+relation runs one way. Our evidence classes can describe what a conformity assessment rests
+on, and we do not translate controls into layers or claim that any certificate implies a
+reliability property. A reader who needs compliance should read the instrument; a reader who
+needs a selection decision should read \cref{sec:selection} and then the instrument.
+
+\subsection{Four live fronts}
+Four fronts are live, and we do not forecast which matures. Our claim is narrower: each would
+change a named layer's contract, and none would replace the routing thesis that reliability is
+assembled across L0--L5 and is not won inside any single model. Coarse-to-fine text generation
+\cite{kumbong2026ncm,ncparch2026} is a Layer~1 objective family with a Layer~4 consequence: its
+level order is a schedule (\cref{fig:schedule-atlas}) and the frozen tokenizer behind it is the
+acceptance surface; the authors' own \evaurep{97M$\to$725M check still shows scale helping inside
+the family}. Whether that hierarchy is learned, as in H-Net's dynamic chunking \cite{hnet2025}, or
+fixed by a tokenizer remains an open schedule question; the atlas's three lanes differ in
+commitment count and revisability, and learned chunking would move both.
+
+Verifier-driven test-time training \cite{id250519475} closes a loop the stack now draws open:
+adaptation at inference is only as reliable as the verifier choosing its pseudo-labels, so a
+Layer~3 mechanism imports a Layer~5 obligation.
+
+Risk-controlled serving \cite{id260933887} turns the L0 budget into an operating point rather
+than a fixed constant: the budget rule of \cref{sec:selection} made executable, where
+same-quality-faster buys candidates and checks rather than raw throughput.
+
+Production diffusion serving \cite{inception2026mercury3,llada2026two} is the fourth. A hosted
+text endpoint refines blocks in parallel over a number of passes the vendor sets, exposes no
+step count, seed or token score, and floors temperature at 0.5, so the contract question becomes
+which endpoint reports a score at all; the open-weight branch keeps
+the sampler configurable. Mercury~3 postdates our cutoff, so we read it as vendor documentation
+[V], not corpus evidence.
+
+\subsection{Conclusion}
+We asked when scaling a general-purpose model is the right lever and when a changed learning
+objective, representation, decision interface, or verification pipeline is a better route to
+reliable AI (\cref{sec:intro}). The evidence supports a narrower answer: both levers are real,
+but they buy different currencies, and no currency is guaranteed by any single layer. Objective
+families fail through design choices (an envelope they inherit), and the scaling story
+that dominates current practice sells fluency and coverage without the contract, calibration and
+assurance machinery that makes those properties deployable. Our contribution is a cross-layer
+taxonomy (L0--L5) that names the decision point for each reliability claim, and a selection
+framework that routes by task rather than by model preference. The claim ledger separates
+theoretical guarantees, independent measurement, author- and vendor-reported results, synthesis,
+and what remains genuinely contested, so that the next reliability argument starts from an
+evidence map rather than a benchmark leaderboard \cite{leaderillusion2025}. Seven instances, one
+of them an honest null, showed the same shape: the reliability-bearing move sat above the layer
+where the failure originated, and the newest one, diffusion serving, moved by procurement at L4
+rather than by engineering above the sampler. Configuration-relative reliability changes what a
+cutoff means: an error rate belongs to the engine, precision and co-tenancy it was measured
+under, so a stack change is a model change and the record has to say so. The residual is a
+quantity the operator measures and owns.

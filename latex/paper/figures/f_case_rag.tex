@@ -1,0 +1,59 @@
+% figures/f_case_rag.tex — Case-study sketch (pack 1): RAG-LLM assistant. Grammar: figures/style_v2_tokens.tex (v8 token grammar).
+% Roles: task / answer+citations = rs/gData (payload); embed query, generalist LLM, validators =
+%   rs/gModel; external index = rs/gStore (drum = store, not a step); review escalation = rs/gInfra
+%   (service); retrieval container = rs/gPanelFill/rs/gPanelEdge pair (tint underlay + border/title).
+% Chain: task -> retrieval (embed query -> external index) -> generalist LLM -> free-form answer
+%   -> L5 mitigation chain: grounding gate -> validators -> review escalation.
+% Accent: the ONE yellow = the item the evidence ledger defends, the retrieval-grounding abstention
+%   gate [E]; dashed edges = contested mitigation-composition effects (joint effect unmeasured [GAP]).
+% label: fig:case-rag   (figure env + \label live in main.tex; case-studies slot, owner wires)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. [E] grounding gate = ledger L5 anchor 2609.35794 (abstain when retrieved evidence cannot
+%      support a response); conformal abstention threshold procedure [T] 2405.01563 is assumption-bound;
+%   2. dashed edges = mitigation composition (retrieval + conformal + self-consistency):
+%      joint effect unmeasured in our evidence [GAP]; no system-level acceptance test for an
+%      assembled RAG assistant exists in our anchors [GAP];
+%   3. human review is an L5 control with no quantified error-catch rate [GAP];
+%   4. L4 stays a free-form text contract (no closure); schema enforcement lives in the forms case.
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figplus}{{\fontsize{8.2}{10}\selectfont $+$}}
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\begin{tikzpicture}
+\pgfdeclarelayer{rsbg}\pgfsetlayers{rsbg,main}  % panel tints render UNDER their tiles
+% ===== row 1: task -> retrieval (embed query -> external index) -> generalist LLM =====
+\node[rs/gData] (in1) {task};
+\node[rs/gModel, right=14mm of in1] (r1) {embed query};
+\node[rs/gStore, right=6mm of r1] (r2) {external index};
+\coordinate (padtop) at ([yshift=3.5pt]r2.north);  % opens the title band so the header clears the cylinder top
+\begin{pgfonlayer}{rsbg}
+  \node[rs/gPanelFill, fit=(r1)(r2)(padtop)] {};
+\end{pgfonlayer}
+\node[rs/gPanelEdge, fit=(r1)(r2)(padtop),
+      label={[rs/gPanelTitle, xshift=4pt, yshift=-9pt]north west:retrieval}] (ret) {};
+\node[rs/gModel, right=14mm of ret.east] (llm) {generalist LLM\\AR next-token};
+% ===== row 2: answer -> grounding gate (accent) -> validators -> review escalation =====
+\node[rs/gData, anchor=north west] (ans) at ([yshift=-23mm]in1.north west) {answer \figplus\ citations};
+\node[rs/gAccent, right=18mm of ans] (gate) {grounding gate [E]\\answer \figsep\ abstain};
+\node[rs/gModel, right=18mm of gate] (val) {validators};
+\node[rs/gInfra, right=18mm of val] (esc) {review escalation};
+% ===== edges: solid = documented wiring; dashed = contested mitigation composition [GAP] =====
+\draw[rs/gFlow] (in1.east) -- (r1.west);   % through the container wall to the content: no wall-to-box gutter
+\draw[rs/gFlow] (r1.east) -- (r2.west);
+\draw[rs/gFlow] (r2.east) -- (llm.west);   % leaves the content, crossing the container wall
+\draw[rs/gFlow] (llm.south) -- ++(0,-12mm) -| (ans.north);   % pipe wraps to the L5 row
+\draw[rs/gFlow] (ans.east) -- (gate.west);
+\draw[rs/gFlowD] (gate.east) -- (val.west);
+\draw[rs/gFlowD] (val.east) -- (esc.west);
+% ===== foot =====
+\coordinate (mid) at ($(in1.center)!0.5!(esc.center)$);
+\node[rs/gFoot] at ([yshift=-8mm]mid |- esc.south) {dashed edges = mitigation-composition effects; joint effect unmeasured [GAP]\\no system-level acceptance test for an assembled RAG assistant in our anchors [GAP]};
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} grounding gate: answer or abstain}
+\rsRibSeg{rsNoClaim}{\textbf{[T]} conformal procedure assumption-bound}
+\rsRibbonRow{-5.8mm}
+\rsRibSeg{rsNoClaim}{\textbf{[N]} mitigation composition unmeasured}
+\rsRibSeg{rsNoClaim}{\textbf{[N]} no system-level acceptance test}
+\end{tikzpicture}

@@ -1,0 +1,114 @@
+% Section 3/11: evidence typology & protocol (P4)
+Our claim standard replaces adjectives with ledger entries. Every reliability claim we make about
+a method or system carries one of the following classes, applied at the level of individual
+numbers, not whole papers.
+
+\subsection{Evidence classes}
+\begin{description}[leftmargin=1.5em, itemsep=1pt]
+\item[[T]] Theoretical promise under explicit assumptions (conformal abstention, provable
+alignment, identifiability results, distribution-free risk bounds). Such a claim carries its
+assumption set forward, and the guarantee is conditional by construction.
+\item[[E]] Independent empirical: evaluation of an artifact whose authors are not the evaluators,
+whether the evaluators are a third party measuring what someone else built, shipped or not, or our
+own re-verification of reported results against released artifacts.
+\item[[V]] Vendor-reported: developer-documented claims from a model card, engineering note, or
+commercial system description. Legitimate evidence of what a deployed system does; not evidence
+that an unstudied analogous mechanism would transfer.
+\item[[A]] Author-reported: results the artifact's authors report, whether or not they ran the
+experiment (preprint tables, released evaluation-harness runs, self-evaluations of their own
+prompt or method). Such a report documents what that team demonstrated; it is never independent
+reproduction, and where artifacts are released we record that verification is checkable, not that it happened.
+\item[[S]] Survey or synthesis where the aggregation is verified by us against the primary
+records, or where our own citation-graph verification substitutes for reproduction. Our own
+analytic cuts are [J], distinct from [S]: a placement or ordering we choose is judgement over the
+record.
+\item[[W]] Watch/pending: entities real enough to have acquired separate documentation while
+our verification remains incomplete, or a specific result whose full-text check is not yet
+complete (the card says which). We keep such entries explicit in the ledger so a reader can tell
+what is solid from what is merely plausible.
+\end{description}
+
+\begin{table}[!t]
+\centering
+\small
+\begin{tabular}{@{}l p{5.3cm} p{6.3cm}@{}}
+\toprule
+Token & One-line meaning & Test a reader applies \\
+\midrule
+\textsf{[T]} & theory under stated assumptions & does the claim carry its assumptions, and would the guarantee fail without them? \\
+\textsf{[E]} & independent evaluation of someone else's artifact & did evaluators who did not author the artifact run the measurement? \\
+\textsf{[A]} & results reported by the artifact's authors & is the measurement the authors' own report of their own artifact? \\
+\textsf{[V]} & vendor or developer documentation & is the source the vendor's own description of a deployed system? \\
+\textsf{[S]} & synthesis verified against the primary records & did we check the aggregation against those records? \\
+\textsf{[W]} & watch/pending: verification incomplete & is the check still incomplete? \\
+\textsf{[C]} & contradiction with a named anchor & is the contradicting anchor named? \\
+\textsf{[N]} & named gap: a scoped, still-open absence & is the absence scoped to what was searched? \\
+\textsf{[GAP]} & the specific unmeasured link behind a gap & which step has no anchor? \\
+\textsf{[J]} & our analytic judgement; no chip & is this cut ours rather than a verified aggregation? \\
+\bottomrule
+\end{tabular}
+\caption{The canonical evidence alphabet: six classes ([T], [E], [A], [V], [S], [W]) and four
+annotations ([C], [N], [GAP], [J]). This is the single alphabet every other surface cites; no
+surface defines a second one.}
+\label{tab:evidence-classes}
+\end{table}
+
+Other surfaces list only the classes they use and defer to \cref{tab:evidence-classes}.
+
+Separately from these classes, four annotations record what a card or caption is reacting to,
+while the class carries how strong the evidence is.
+[C] marks a specific contradiction (the anchor is named);
+[N] is an absence flag --- a scoped, still-open gap in what has been measured, not a negative
+finding; [GAP] marks the
+specific unmeasured link behind such a gap, used where a card or a
+table points at the step that has no anchor; and [J] marks our analytic judgement, used in figure
+captions, figure annotations, and procedure steps where a cut is ours rather than a verified
+aggregation. Where a claim carries two classes
+we write them [T, E]: both apply, and the first listed is dominant. A bare tag placed directly
+after a citation is also a valid citation-class badge: it classifies the cited result.
+
+% Fig. 23 declared after the class list: at the section head the float cut the list between
+% [S] and [W], so the last class resumed under the caption and read as a figure note.
+\begin{figure}[!t]
+  \centering
+  % \includegraphics[width=\linewidth]{figures/f5_evidence_map.pdf}
+  \resizebox{\linewidth}{!}{\input{figures/f5_evidencemap_draft.tex}}
+  \caption{ Evidence ledger: one chip = one claim family from the claim ledger; the row is its paper section and the chip order inside a row is ledger order (both our analytic judgement [J]). Row length carries how many families that section contributes: one chip per family; no chip's width and no row's white space encodes a quantity of evidence. Class is carried by the chip: [T] outline, [E] filled green, [A] filled pink, [V] outline pink, [S] filled slate; chip class is the dominant class of the single claim it names, while a Table~1 row tag marks the strongest anchor of the family. The full alphabet, including [W] and the annotations, is \cref{tab:evidence-classes}. Contested stays an annotation: the same class chip, dashed vermillion border, for the three most contested families (2 JEPA-in-language stability, 11 monitor-evasion attackability, 12 calibration direction) --- the [C] annotation, surfaced rather than hidden. No family in the ledger is [N]; thin rows are counts, not findings. No rates, sample sizes or per-paper counts are encoded.}
+  \label{fig:evidence}
+\end{figure}
+
+No evidence class admits a guarantee of universal correctness: [T] names assumption
+conditions, [E] measures one deployment configuration, [V] reports one vendor's own design.
+
+The classes encode provenance, not validity: a tag records who ran the measurement, never
+whether the instrument measured the construct the citing sentence names. An [E] row can rest
+on a contaminated benchmark, on a harness whose prompt format supplies half the effect, or on
+a delta inside sampling noise, independently attributed and still not evidence for the claim
+above it \cite{measwhatmatters2025,quantconstruct2026,contamsurvey2025,contamresist2026}.
+Leaderboard position is the same exposure one level up, where rank rewards access to private
+variants rather than reliability \cite{leaderillusion2025}. Where an anchor reports no
+interval we print its number as the source printed it and do not read a point estimate as a
+difference \cite{errorbars2024,evalci2026}.
+
+\subsection{Claim-ledger construction}
+For every claim that a card surfaces, the ledger records anchor (ID or artifact), verbatim-vs-paraphrase status, the numbers as written in their original context, the direction
+(stats, benchmark structure) with the verification date, and the layer(s) the claim touches.
+Any claim cited from sampling memory fails our protocol; every anchor is re-fetched live
+(arXiv API verification with Microsoft/Elsevier content checks where applicable) before use in
+this manuscript.
+
+\subsection{Exclusions register}
+We exclude claims from the ledger by a single rule: no claimworthy statement enters unless a
+primary source stands behind it. The exclusions this cycle are concrete: a production rules-only / formally-verified pipeline (Case 6 is carried as an honest null on this very point); a JEPA-``SWM-distractors'' benchmark claim that failed verification and was never admitted to the ledger. The list continues with a structured-hallucination
+benchmark without recoverable verification, a universal >20-option cost rule stated as a law (the vendor's per-system mechanism quote remains a [V] row in its own section),
+the 0.85 ``default'' confidence threshold (replaced by threshold-as-policy), and a coinage for
+which we could find no existing use. We treat it as ours to coin only if the definition appears
+in our own terms. Each excluded row is retained verbatim in the build's review ledger so the
+exclusion itself is auditable.
+
+\subsection{Reproducibility record}
+All searches ran the arXiv API (id-list/title/abs search, \(\le 10\) IDs per request) plus
+publisher DOI metadata lookup, with snapshots per batch in the project's scan directory.
+The paper's claim-to-evidence map is \cref{fig:evidence}, and every claim marked
+contested in this manuscript gets its caveat in the same section.
+Search cutoffs: 2026-10-17/18.

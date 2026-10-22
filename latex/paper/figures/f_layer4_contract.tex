@@ -1,0 +1,72 @@
+% (v3 layout notes retired 2026-10-19 — see the v4 header below.)
+% figures/f_layer4_contract.tex — L4 mechanism sketch: ascending contract tiers and the
+% assurance rungs they hand (v4 2026-10-19).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: contract tiers = rs/gInfra
+%   (sharp rectangle = formal interface artifact, not a model); the ledger-defended tier = amber
+%   (T2, schema compliance is table stakes); assurance rungs = dashed thin outlines (places the
+%   contract can reach but cannot fill); yellow accent = the item the evidence ledger defends.
+% Change from v3: the floating amber slogan box and its dashed arrow are gone — T2 is amber and
+%   carries the sentence. Each tier now states its own named defeat in the same three-line box
+%   (L4-C folded in at zero height cost). The right of the divider is the L5 ladder the contract
+%   hands its objects to, numbered 1-5 exactly as Fig. 14 prints them (rung 3, model-based checks,
+%   is drawn and marked "not handed by contracts": it consumes no contract object), with two dashed
+%   handoffs (T4 -> 1 grounding, T3 -> 4 calibrated abstention);
+%   the three-item "outside the contract" list is replaced by that ladder plus the bracket
+%   "the contract cannot walk this ladder", which is what the list was saying.
+% label: fig:layer4-contract   (figure env + \label to be wired in main.tex, sec:contracts)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. tier order (free-form -> schema-constrained -> typed decisions -> + structured metadata) is
+%      OUR analytic cut [J] from the L4 synthesis, not a measured ladder; the defeats are the
+%      section's own wording (free-form guarantees nothing checkable; schema: parseability, not
+%      truth; typed: confidence auditable, not accurate; metadata: attachable, not attached or
+%      faithful);
+%   2. yellow = T2: schema compliance is table stakes — [S]-by-synthesis on the [E] anchors
+%      grammar-constrained decoding 2305.13971 + JSONSchemaBench 2501.10868 + XGrammar
+%      2411.15100; the residual validity-vs-truth gap remains;
+%   3. the two handoffs are the figure's thesis: T4 hands grounding EVIDENCE TO CHECK (citations
+%      can be present and stale, so grounding receives material, not truth); T3 hands calibrated
+%      abstention A SCALAR TO THRESHOLD (a probability exists to be thresholded, which is why
+%      threshold policies live at L5 and not in the contract); no tier hands anything to
+%      "value truth" — nothing in the contract walks that far. Rung 3 (model-based checks) is
+%      drawn with no contract object: it consumes none, which is why its box says so;
+%   4. typed decisions relocate the truth problem to "are the probabilities honest?"; option set
+%      and option order are contract-design variables [V] with measured framing sensitivity
+%      [E 2610.02267]; thresholds are meaningful only at the measured configuration;
+%   5. the right-hand ladder is Fig. 14's ladder in miniature, drawn here only to name the
+%      destinations; it is not a second assurance figure.
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figneq}{{\fontsize{8.2}{10}\selectfont $\ne$}}
+\begin{tikzpicture}[x=1mm,y=1mm]
+\tikzset{
+  rs/l4tier/.style={rs/gInfra, minimum width=29mm, inner ysep=3.5pt},
+  rs/l4rung/.style={draw=black!55, line width=0.5pt, dashed, fill=none, align=center,
+                    inner sep=2.5pt, font=\fontsize{7.5}{9}\selectfont, minimum height=5.5mm},
+  rs/l4note/.style={rs/gLegend, anchor=center, align=center},
+}
+% ===== four ascending contract tiers, each with its named defeat =====
+\node[rs/l4note, anchor=west] at (4,22) {ascending contract tiers: what each tier guarantees};
+\node[rs/l4tier] (s1) at (15,-26) {T1 \textperiodcentered\ free-form text\\nothing checkable};
+\node[rs/gAccent, minimum width=29mm] (s2) at (47,-13) {T2 \textperiodcentered\ schema-constrained\\parseable [S]};
+\node[rs/l4tier] (s3) at (79,0) {T3 \textperiodcentered\ typed decisions\\auditable, not accurate};
+\node[rs/l4tier] (s4) at (111,13) {T4 \textperiodcentered\ structured metadata\\attachable};
+% ===== vertical divider: validity != truth (line gaps behind the note: the note is unfilled
+%       text, so a full-height line threads through the word gaps and splits the phrase) =====
+\draw[black!60, line width=0.6pt] (128,26) -- (128,24);
+\draw[black!60, line width=0.6pt] (128,20) -- (128,-38);
+\node[rs/l4note] at (128,22) {validity \figneq\ truth};
+% ===== right: the rungs the contract hands its objects to (numbered as in Fig. 14) =====
+\node[rs/l4note, anchor=west] at (130,14) {what the contract\\hands L5};
+\node[rs/l4rung, minimum width=30mm] (g1) at (145,4)   {1 grounding:\\evidence to check};
+\node[rs/l4rung, minimum width=30mm] (g2) at (145,-5.5) {2 rule checks:\\quote in source};
+\node[rs/l4rung, minimum width=30mm] (g3) at (145,-15) {3 model-based checks:\\not handed by contracts};
+\node[rs/l4rung, minimum width=30mm] (g4) at (145,-24.5) {4 calibrated abstention:\\a scalar to threshold};
+\node[rs/l4rung, minimum width=30mm] (g5) at (145,-34) {5 escalation:\\human review};
+\node[rs/l4note] at (145,-42) {the contract cannot\\walk this ladder};
+% ===== edges: the staircase, then the two handoffs =====
+\draw[rs/gFlow] (s1.east) -| ([xshift=-6mm]s2.south);
+\draw[rs/gFlow] (s2.east) -| ([xshift=-6mm]s3.south);
+\draw[rs/gFlow] (s3.east) -| ([xshift=-6mm]s4.south);
+\draw[rs/gFlowD] (s4.east) -- (g1.west);
+\draw[rs/gFlowD] (s3.east) -- (g4.west);
+\end{tikzpicture}

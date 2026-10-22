@@ -1,0 +1,45 @@
+% figures/f_fam_masked.tex — Family-card sketch: masked / denoising objectives (Table 1 row 2).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: payload = rs/gData;
+%   mechanism + learned object = rs/gModel; inherited-failure box = rs/gAccent (the ONE yellow).
+% Chain: text -> corruption (mask spans) as the training signal -> recovery trainer -> learned
+%   bidirectional encoder -> contextual embeddings at inference.
+% Accent (yellow): the inherited failure the claim ledger documents [E] — generation is not the
+%   training signal; sampling is not defined by the trainer (D3PM contrast in the foot line).
+% label: fig:fam-masked   (figure env + \label live in the family-cards slot of main.tex; parent wires)
+%
+% CAPTION NOTE — items the paper must defend:
+%   1. [E] recovery training targets representations, not a generator (austin2021d3pm,
+%      mdm2025orderar in the card); "encoder-only scope" is the card's phrase;
+%   2. D3PM contrast: the same corruption family splits into representation-trainers and
+%      sequence-generators only when sampling is defined — the vicinity arrow is dashed for
+%      exactly this claim;
+%   3. no mask-rate number appears in the figure by design (reference-free labels only).
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\begin{tikzpicture}
+% ===== chain =====
+\node[rs/gData] (txt) {text};
+\node[rs/gModel, right=19mm of txt] (mrec) {corrupt, then\\recover};
+\node[rs/gModel, right=19mm of mrec] (enc) {learned: bidirectional enc.};
+\node[rs/gData, right=19mm of enc] (emb) {contextual embeddings};
+% ===== corruption annotation on the signal edge (4mm lift: matches the other family cards) =====
+\coordinate (emid) at ($(txt.east)!0.5!(mrec.west)$);
+\node[rs/gEdgeLbl, align=center] at ([yshift=4mm]emid) {mask\\spans};
+% ===== inherited failure (yellow = ledger-defended item) =====
+\node[rs/gAccent, below=10mm of enc] (fail) {inherited: no generation signal [E]\\sampling not defined by the trainer [T]};
+% ===== edges =====
+\draw[rs/gFlow] (txt.east) -- (mrec.west);
+\draw[rs/gFlow] (mrec.east) -- (enc.west);
+\draw[rs/gFlow] (enc.east) -- (emb.west);
+\draw[rs/gFlowD] (fail.north) -- (enc.south);
+% ===== foot =====
+\coordinate (mid) at ($(txt.center)!0.5!(emb.center)$);
+\node[rs/gFoot] at ([yshift=-7mm]mid |- fail.south) {D3PM contrast: the same corruption family becomes a generator only when sampling is defined [E]};
+% --- loss tape (P3): a bag of per-position terms; only visible targets carry one
+\rsLossTape{masked}{mrec.south}{-2.4mm}{term per visible slot}
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} no generation signal}
+\rsRibSeg{rsVerified}{\textbf{[E]} D3PM: generator only once sampling is defined}
+\end{tikzpicture}

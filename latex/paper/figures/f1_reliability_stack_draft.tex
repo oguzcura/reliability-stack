@@ -1,0 +1,73 @@
+% figures/f1_reliability_stack_draft.tex — F1 v4 (2026-10-19): V4 redesign A1 "peer stack".
+% ONE continuous six-band stack (L0 top -> L5 bottom) under a single rounded frame; two instance
+% columns A/B separated by one title rule (x=46) and a per-row divider (x=95) drawn ONLY on rows
+% where the two instances choose a different KIND of thing (L0 openness, L3 architecture,
+% L4 contract, L5 assurance instrument). Rows of the same kind carry one shared gray phrase and
+% NO divider: sameness is half the claim.
+% Diamond (1.6mm, title gutter) = the divergent rows only.
+% No amber in this figure: the ledger item (calibrated thresholds + escalation) is a claim, not a
+% layer; it is carried claim-sized in F3 and in case 2. Region-level amber was the audit finding.
+% Side rail: evaluation + monitoring, one full-height bracket = "acts at every layer" (the six
+% arrows it replaces read as a column rule). Foot replaced by one quotable thesis sentence.
+% Dropped: the two dashed per-instance wires (they read as a second column rule). The wiring
+% claim is prose-only here, so the caption must drop its "dashed wires" sentence.
+% label: fig:stack   (figure env + \label live in main.tex; F1 slot)
+% Fonts 7.5pt at natural width (direct \input, no resizebox).
+\begin{tikzpicture}[x=1mm,y=1mm]
+\tikzset{
+  rs/f1chip/.style={rounded corners=2pt, draw=black, line width=0.7pt, fill=white,
+    align=center, inner sep=2.2pt, minimum width=40mm, minimum height=7.6mm,
+    font=\fontsize{7.5}{8.8}\selectfont},
+  rs/f1title/.style={anchor=west, font=\fontsize{7.5}{9.2}\selectfont, text=black!90},
+  rs/f1same/.style={anchor=center, font=\fontsize{7.5}{9.0}\selectfont\itshape, text=black!60},
+  rs/f1hdr/.style={anchor=center, font=\fontsize{7.5}{9.0}\selectfont\bfseries, text=black},
+}
+% ===== one continuous stack: tinted frame + row separators + title rule =====
+\fill[rsPanelTint, rounded corners=3pt] (0,0) rectangle (141,-66);
+\draw[black, line width=0.9pt, rounded corners=3pt] (0,0) rectangle (141,-66);
+\foreach \ry in {-11,-22,-33,-44,-55} { \draw[black!25, line width=0.35pt] (0,\ry) -- (141,\ry); }
+\draw[black!30, line width=0.35pt] (46,0) -- (46,-66);
+% ===== instance headers =====
+\node[rs/f1hdr] at (70.5,5.2) {A \textperiodcentered{} RAG-LLM assistant};
+\node[rs/f1hdr] at (118,5.2)  {B \textperiodcentered{} decision-model serving};
+% ===== layer titles =====
+\node[rs/f1title] at (2.5,-5.5)  {L0 \textperiodcentered{} task \& risk specification};
+\node[rs/f1title] at (2.5,-16.5) {L1 \textperiodcentered{} learning objectives};
+\node[rs/f1title] at (2.5,-27.5) {L2 \textperiodcentered{} representations};
+\node[rs/f1title] at (2.5,-38.5) {L3 \textperiodcentered{} inference architectures};
+\node[rs/f1title] at (2.5,-49.5) {L4 \textperiodcentered{} output contracts};
+\node[rs/f1title] at (2.5,-60.5) {L5 \textperiodcentered{} assurance \& control};
+% ===== L0: different kind of specification =====
+\node[rs/f1chip] at (72,-5.5)  {open, cited answers};
+\node[rs/f1chip] at (118,-5.5) {risk-budgeted actions};
+\draw[black!30, line width=0.35pt] (95,-11) -- (95,0);
+% ===== L1 / L2: same kind in both instances (no divider, one shared phrase) =====
+\node[rs/f1same] at (93.5,-16.5) {both supervised};
+\node[rs/f1same] at (93.5,-27.5) {both task-specific};
+% ===== L3: different kind of architecture =====
+\node[rs/f1chip] at (72,-38.5)  {generalist + RAG chain};
+\node[rs/f1chip] at (118,-38.5) {single model + calibrator};
+\draw[black!30, line width=0.35pt] (95,-44) -- (95,-33);
+% ===== L4: different kind of contract =====
+\node[rs/f1chip] at (72,-49.5)  {free text + citations};
+\node[rs/f1chip] at (118,-49.5) {typed action + abstain};
+\draw[black!30, line width=0.35pt] (95,-55) -- (95,-44);
+% ===== L5: same assurance job, different instrument =====
+\node[rs/f1chip] at (72,-60.5)  {grounding + human review};
+\node[rs/f1chip] at (118,-60.5) {calibrated thresholds\\+ escalation};
+\draw[black!30, line width=0.35pt] (95,-66) -- (95,-55);
+% ===== divergence marks: 1.6mm filled diamonds in the title gutter =====
+\foreach \dy in {-5.5,-38.5,-49.5,-60.5} {
+  \fill (48.5,\dy+0.8) -- (49.3,\dy) -- (48.5,\dy-0.8) -- (47.7,\dy) -- cycle;
+}
+% ===== cross-cutting rail: ONE full-height bracket = acts at every layer =====
+\draw[black, line width=0.7pt] (141.3,-2.5) -- (143.2,-2.5) -- (143.2,-63.5) -- (141.3,-63.5);
+\draw[black, line width=0.7pt] (143.2,-33) -- (144.6,-33);
+\node[anchor=center, inner sep=0pt, font=\fontsize{7.5}{9.0}\selectfont\bfseries, text=black] at (153.6,-24.6)
+  {cross-cutting};
+\node[rs/gInfra, minimum width=18mm, minimum height=8mm, align=center,
+  font=\fontsize{7.5}{9.0}\selectfont] at (153.6,-33) {evaluation\\monitoring};
+% ===== the thesis, in one sentence =====
+\node[anchor=center, font=\fontsize{8}{9.6}\selectfont\itshape, text=black] at (70.5,-74)
+  {No layer repairs another's gap: an assembly, not a ranking.};
+\end{tikzpicture}

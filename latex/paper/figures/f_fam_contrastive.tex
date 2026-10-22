@@ -1,0 +1,57 @@
+% figures/f_fam_contrastive.tex — Family-card sketch: contrastive (CLIP-class) objectives (Table 1 row 6).
+% SCOPE: this card draws Table 1 row 6 ONLY. Row 5 (supervised discrimination) shares this card's
+%   reliability question but not its mechanism (no P(y|x) head, no label box is drawn); its envelope
+%   — label-space drift under shift — is carried by the L4 contract discussion. The caption must
+%   therefore read "contrastive", not "discriminative / contrastive" (see changelog handoff).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: payload = rs/gData;
+%   encoders / learned space = rs/gModel; inherited-failure box = rs/gAccent (the ONE yellow).
+% Chain: paired inputs (inputs, matched pair) -> paired encoders -> agreement trainer
+%   (pull matching pairs together) -> learned embedding space -> similarity / retrieval at inference.
+% Accent (yellow): the inherited failure the claim ledger documents [E] — embedding similarity
+%   is not semantic correctness; embeddings are not calibrated probabilities.
+% label: fig:fam-contrastive   (figure env + \label live in the family-cards slot of main.tex; parent wires)
+%
+% CAPTION NOTE — items the paper must defend:
+%   1. [E] agreement of matching pairs is the objective's currency; similarity != semantic
+%      correctness (retrieval errors, OOD embeddings, fine-grained mismatch — card text);
+%   2. [E] embeddings are not calibrated probabilities: threshold policies built directly on
+%      embeddings break (this feeds the L4 contract discussion in section 5);
+%   3. two-input geometry mirrors F3 panel D; both inputs are wired to the paired encoders.
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+% Notation note: the old $a^+$ superscript is spelled "matched pair" (a superscript glyph would
+% publish below the 7pt floor); semantics unchanged.
+\providecommand{\figneq}{{\fontsize{8.2}{10}\selectfont $\ne$}}
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\begin{tikzpicture}
+% ===== paired inputs (relative placement: bare coordinates are cm, never mm) =====
+\node[rs/gData] (anc) {input $a$};
+\node[rs/gData, below=6mm of anc] (pos) {matched pair};
+\coordinate (inmid) at ($(anc.center)!0.5!(pos.center)$);
+% ===== chain =====
+\node[rs/gModel, right=12mm of inmid] (enc) {paired enc.};
+\node[rs/gModel, right=13mm of enc] (agr) {agree on\\matched pairs};
+\node[rs/gModel, right=13mm of agr] (emb) {learned: embedding space};
+\node[rs/gData, right=13mm of emb] (sim) {similarity / retrieval};
+% ===== inherited failure (yellow = ledger-defended item) =====
+\node[rs/gAccent, below=10mm of emb] (fail) {inherited: similarity \figneq\ semantic\\correctness [E]; embeddings are\\not calibrated probabilities [E]};
+% ===== edges (author sweep: the old corner->anchor routing ran the shafts tangent to the
+% encoder's top/bottom borders; now both inputs fan into the encoder's LEFT edge) =====
+\draw[rs/gFlow] (anc.east) -- ([yshift=2.5mm]enc.west);
+\draw[rs/gFlow] (pos.east) -- ([yshift=-2.5mm]enc.west);
+\draw[rs/gFlow] (enc.east) -- (agr.west);
+\draw[rs/gFlow] (agr.east) -- (emb.west);
+\draw[rs/gFlow] (emb.east) -- (sim.west);
+\draw[rs/gFlowD] (fail.north) -- (emb.south);
+% ===== foot =====
+\coordinate (mid) at ($(inmid)!0.5!(sim.center)$);
+\node[rs/gFoot] at ([yshift=-7mm]mid |- fail.south) {signal: matched pairs pulled together, mismatched pairs apart [E] \figsep\ retrieval\\+ OOD errors are the residual};
+% --- loss tape (P3): terms arrive as pairs, one per matched pair
+\rsLossTape{contrastive}{agr.south}{-2.4mm}{term per matched pair}
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} similarity is not correctness}
+\rsRibSeg{rsVerified}{\textbf{[E]} embeddings not calibrated probabilities}
+\rsRibbonRow{-5.8mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} matched-pair agreement signal}
+\end{tikzpicture}

@@ -1,0 +1,245 @@
+% ===== P4: Section 9 case-study cards (my prose from cards/case-evidence-packs.md) =====
+
+Seven recurring reliable-AI engineering settings are our case studies. Each is an \emph{instance}
+of the stack of \cref{sec:stack}, and each is documentation-anchored
+rather than drawn from a measured population of deployments. What they demonstrate, then, is
+the framework fitting together, and the seven-row comparison, with Case~6 as the null, tests
+that.
+Per our protocol (\cref{sec:protocol}), every claim a card rests on is carried in the ledger
+with its class. Cards mark the class where it changes the reading, and \cref{tab:crosscase}
+gives the per-case summary.
+\cref{fig:case-rag,fig:case-decision,fig:case-hybrid,fig:case-jepa,fig:case-classifier,fig:case-forms,fig:case-diffusion}
+give the seven architecture sketches; each case's sketch follows its prose.
+
+\subsection{Case 1: Retrieval-augmented LLM assistant}
+\label{sec:case-rag}
+The dominant deployment class is an open-ended knowledge task on an autoregressive objective,
+with provenance deliberately externalized to a retrieval index whose shape --- flat, graph, or
+episodic log --- is itself a selection with measured consequences (\cref{sec:l5-grounding}).
+Case~1's closed corpus is the instance where flat is the
+right choice; we keep it and decline the alternative. The reliability literature is
+dense but disorganized: the trustworthy-RAG surveys collect reliability as per-dimension
+technique checklists ~\cite{id250206872,id240910102}, and the hallucination surveys map a
+single failure mode across a lifecycle rather than a design-objective
+stack~\cite{id230901219,id251006265}. On the positive side, a live empirical line teaches the
+model to abstain when retrieved evidence cannot support a response~\cite{id260935794} [E], and
+conformal abstention supplies an assumption-bound procedure for deciding when to
+refuse~\cite{id240501563} [T]. Self-consistency remains the incumbent model-level
+mitigation~\cite{id220311171}, with no dedicated survey (a named gap in our ledger).
+\emph{Inherited failure mode:} hallucination is intrinsic to the objective; compositional
+effects of chaining retrieval with conformal and self-consistency layers are unmeasured in our
+evidence, as is human reviewers' catch rate. \cref{fig:case-rag} marks both gaps as dashed
+wiring. Remove the L4 contract --- citations as structured metadata --- and the grounding gate
+has nothing to check; remove L5 and the contract certifies form only. The gate catches citation
+mismatch; post-rationalization sits outside it, and \cref{sec:l5-grounding} prices that gap at a
+measured miss rate. The instance is reliable only as that pair.
+
+
+\begin{figure}[h!]
+  \centering
+  \resizebox{\linewidth}{!}{\input{figures/f_case_rag.tex}}
+  \caption{Case 1: retrieval-augmented assistant. Accent = ledger-admissible grounding gate ($[E]$ recovery-abstention line + assumption-bound conformal procedure $[T]$); dashed = mitigation composition and system-level-acceptance coverage, both named gaps; human review remains un-quantifiable [GAP]. Glyph: the two thin rules in the store box = stored records; the external index is a data store that is retrieved from, outside the processing path.}
+  \label{fig:case-rag}
+\end{figure}
+
+\subsection{Case 2: Decision-model serving}
+\label{sec:case-decision}
+This case exercises every layer. At L0, bounded decisions over closed option sets; at L4 the
+contract is the typed primitives \texttt{choice}/\texttt{score}/\texttt{noul} (target
+vocabulary of the Laya-class systems), returned from a single forward pass of a non-generative
+model \cite{rauk2026jevbenchmark,id260934024,id261018529}. The boundary-setting evaluation
+literature describes the contract class independently of the vendor
+~\cite{id261002076,id261013675,id261019811}: multimodal decision models, per-dataset diagnostic
+QA gating, calibration metrics. Training aligns with proper scoring rules (log + spherical +
+ranked-probability score) of the Laya-class recipe; we anchor the recipe to the vendor's
+shipped documentation \evvendor{}.\footnote{The vendor-named training scheme shares an
+acronym with an unrelated older method (``RLCD''); we cite the vendor's usage only, so the
+label does not ride on the older literature.} The vendor reports threshold-as-policy (``a
+threshold is a policy you choose from measured accuracy \ldots on your data, not a property of
+the model''), our L5 epigraph; but the family's reliability claims require the
+contested-direction caveat: \evindep{the shipped Typed-Decisions checkpoint was independently
+measured \emph{under}-confident (signed gap $-0.214$)}, the opposite of the card's framing, and the
+direction decides which way a confidence-gated cascade fails~\cite{id260933843}. The deployed
+gate --- thresholds frozen before evaluation --- beats random escalation on both reported
+tracks, but \evindep{misses its 10\% accepted-error target on each track} \cite{id260933843}. The headline \evindep{30\% of answers flip when option order
+reverses, and accuracy drops sharply at 50 similar candidates~\cite{id261002267}}. Third-party entrants
+now contest benchmark-leader margins with KL/Brier metrics, and those margins carry
+labelling-teacher saturation caveats~\cite{id261020778}. Because a typed decision acts without
+a human reader in the loop, the verdict is the attack surface: black-box attacks flip the
+verdicts of verified-reward models without touching their weights~\cite{id260931142}, and
+decision models already serve inside autonomous penetration-testing
+harnesses~\cite{id260928940}. A 2026 red team of a due-diligence deployment \evindep{broke 25 of 27 Jev
+configurations at roughly \$0.50 per break, its strongest attacker succeeding on 9 of
+9}~\cite{checkpoint2026jevredteam}; on that record the typed output did not harden the contract \evjudge{}.
+
+\emph{What this instance leaves unmeasured:} no anchor evaluates a fully deployed decision-model system end-to-end (harness + gate + escalation); the joint effect of the documented fixes (temperature refit, option shuffling, shortlist workaround) is unmeasured in our evidence.
+
+\begin{figure}[h!]
+  \centering
+  \resizebox{\linewidth}{!}{\input{figures/f_case_decision.tex}}
+  \caption{ Case 2: decision-model serving. Accent = calibrated acceptance as threshold-as-policy (locked to $[V]$ vendor docs and $[E]$ independent benchmarking). Inset: the shipped TD checkpoint's reliability diagram (\cite{id260933843}) --- the bars are the confidence bins, bar height is accuracy in that bin, and the diagonal is perfect calibration, so bars above it are under-confidence; the dashed rule is the policy cut and the shaded band is the accepted set (bin spacing schematic); measured mean confidence 0.553 vs accuracy 0.767 (signed gap $-0.214$), and the accepted set misses its 10\% error target $[E]$. The vermillion dashed leader marks the $[C]$ claim: the card frames the cascade as failing toward over-confidence, while the independent measurement finds the shipped checkpoint under-confident --- the direction is contradicted (anchor named); the measurement stands. End-to-end-system evidence remains a named gap.}
+  \label{fig:case-decision}
+\end{figure}
+
+\subsection{Case 3: Hybrid specialist (Interfaze-class)}
+\label{sec:case-hybrid}
+This case instantiates an architecture class: task-specific DNNs/CNNs fused into a transformer
+decoder through a shared embedding space~\cite{interfaze2026} (\cref{fig:case-hybrid}). Its
+value is representational: the specialist channel returns structured fields (boxes,
+coordinates, confidence values) that the stack can check, and the fusion layer absorbs
+interaction errors when a specialist meets inputs outside its training distribution.
+Multi-expert adapters have precedents in the literature~\cite{id230317580,id240509818}, and the
+distinction between intra- and system-level routing matters here too~\cite{id240706204}. The
+metadata stream is only verifiable because the specialists return typed fields; a generalist
+producing the same fields as text would leave the fusion layer nothing to check. Our verdict
+stays restrained: the case's value is that check. \emph{Inherited failure:} cross-component
+error propagation is known to be a leading reliability cost in per-component
+pipelines~\cite{mdpi2026arlm}; all evaluation evidence is vendor-class, and no independent
+propagation or end-to-end comparison anchor exists in our evidence set.
+
+\begin{figure}[h!]
+  \centering
+  \resizebox{\linewidth}{!}{\input{figures/f_case_hybrid_v8.tex}}
+  \caption{Case 3: hybrid specialist architecture, Interfaze-class $[V]$ (vendor reconstruction; dashed = vendor-undocumented; box with record rules = data store, octagon = control/validation, red = fallback risk). The validation layer is the reliability-critical path.}
+  \label{fig:case-hybrid}
+\end{figure}
+
+\subsection{Case 4: JEPA world-model planner}
+\label{sec:case-jepa}
+This case aims at a conception of reliability that generative objectives cannot reach:
+latent-predictive training \cite{id230108243}, whose planning value is conditional on
+identifiability theory~\cite{klindt2026lejepa,identifiability2026,id260612471}. The
+identifiability trio supplies only assumption-bound performance
+guarantees~\cite{klindt2026lejepa,identifiability2026}; the transfer-to-language paradox
+supplies our honest counterpoint (\cref{sec:l2-jepa}). \emph{Inherited failure:} a systematic
+evaluation awaiting our full-text read is carried as $[W]$: the source is cited for a
+planning-horizon cap and a success-rate fall at 20-step horizons, but its full-text check is
+incomplete, so those quantities are \emph{not verified} (n/v) here and we do not use them.
+Text-modality stability remains contested elsewhere in our ledger~\cite{id260723531}
+\evindep{}~\textsf{[C]}.
+\cref{fig:case-jepa} marks the
+identifiability block as the condition the system must pay for.
+
+\begin{figure}[h!]
+  \centering
+  \resizebox{\linewidth}{!}{\input{figures/f_case_jepa.tex}}
+  \caption{Case 4: latent-predictive world-model planner. Accent = identifiability conditions $[T]$; the text layer renders prediction-is-not-planning as a caveat; the planning-horizon evidence is marked n/v in the section text pending a completed verification pass.}
+  \label{fig:case-jepa}
+\end{figure}
+
+\subsection{Case 5: Discriminative classifier baseline}
+\label{sec:case-classifier}
+The deliberate non-generative control is a mapping head $P(y|x)$ whose L1 foregoes generation
+entirely. Its reliability machinery carries calibration and
+selective prediction inventories~\cite{id231108298,id250315850}, abstention
+surveys~\cite{id240718418}, assumption-bound selective-prediction
+guarantees~\cite{id260704430}, and a standing measure of the limit of instrumentation: runtime
+monitors are a separate component, OOD detection alone does not close the
+envelope~\cite{id221116158}, and monitoring itself can be evaded under ordinary task
+pressure~\cite{id260930217}. \emph{Inherited failure:} no anchor in our evidence set benchmarks
+a plain classifier baseline end-to-end against LLM and decision-model stacks on a shared task;
+the quadrant limits drawn in \cref{fig:map} are therefore policy-relevant engineering judgment,
+not measured comparisons. The same class-probability interface bridges back to the
+decision-model case (\cref{sec:case-decision})~\cite{id261002267}.
+
+\begin{figure}[h!]
+  \centering
+  \resizebox{\linewidth}{!}{\input{figures/f_case_classifier.tex}}
+  \caption{ Case 5: discriminative classifier baseline. Accent = risk-budget selective gate $[T]$; the gate consumes the OOD + runtime monitor, so the monitor's failure is the gate's: ordinary task pressure evades the monitor $[E]$ (\cite{id260930217}), making the assurance layer part of the attack surface rather than above it. OOD detection alone is insufficient $[E]$; cross-class comparability to LLM and decision-model stacks remains a named gap in the ledger.}
+  \label{fig:case-classifier}
+\end{figure}
+
+\subsection{Case 6: Rules / formal-verification pipeline}
+\label{sec:case-forms}
+This is the null-instance discipline case: our evidence base contains no case-study-grade
+anchor for a production rules-only or formally-verified AI pipeline, and \cref{sec:protocol}
+records that as an honest null. What we hold instead are three verified enforcement classes:
+deterministic schema/grammar enforcement at L4
+\cite{id230513971,jsonschemabench2025,xgrammar2024}, verifier-failure evidence at
+L5~\cite{id260601066} (validity $\neq$ truth applies to the verification layer itself), and
+Redline-style risk-budgeted serving-configuration selection~\cite{id260933887} (a
+configuration-selection class adjacent to Case 2's serving lanes, outside the formal
+loop). \emph{Inherited failure:} statistical guarantee machinery (conformal abstention,
+provable-alignment, Learn-Then-Test) is uniformly theory-class in our evidence; no independent
+empirical evaluation of the formal loop over a learned model is in our evidence set.
+
+\begin{figure}[h!]
+  \centering
+  \resizebox{\linewidth}{!}{\input{figures/f_case_forms.tex}}
+  \caption{ Case 6: rules / formal-verification pipeline. Accent = formal validator $[E]$ (validity relative to encoded constraints). Above it, a paired-verdict trace: the same completion (\texttt{partial\_answer}) is ACCEPTed under a buggy encoding and REJECTed under a narrower one, so the guard relocates error rather than removing it (\cite{id260601066}) --- the narrower verdict is not ``correct'', only narrower; filled/open markers carry the verdicts, no second colour. This card is a template instance: an honest null, since no production formal-verification anchor exists in our evidence base.}
+  \label{fig:case-forms}
+\end{figure}
+
+\subsection{Case 7: Production diffusion-LLM serving}
+\label{sec:case-diffusion}
+Diffusion LLMs have production instances, and the reliability research has not caught up.
+Mercury~2.5 has been served since 2026-09-08~\cite{inception2026mercury25}, and the open-weight
+branch is as concrete: LLaDA2.x ships under Apache-2.0 at 16B and 100B-MoE with its own inference
+engine and block-parallel decode~\cite{llada2026two}. Declared and deployed rates diverge: 1,107
+tok/s declared for 2.5 \cite{inception2026mercury25} \evvendor{} against 770 tok/s on a
+fixed-workload independent instrument and 141 tok/s at router
+P50~\cite{artificialanalysis2026mercury25,openrouter2026mercury} \evindep{}. Two independent
+instruments differ fivefold on one model, so the vendor figure reads as a ceiling on an undisclosed
+workload.
+
+The levers split along that hosted/open-weight line. The operating-point procedure of \cref{sec:l5-bridge} is
+executable only where the engine is yours: on LLaDA2 you choose sampler and step count, on the
+hosted endpoint neither is a request parameter. The current hosted generation
+(Mercury~3\footnote{Mercury~3 was announced 2026-10-19, two days after our 2026-10-17 cutoff. It
+enters this card as a \textsf{[V]} vendor claim only and is not corpus evidence.}) returns text,
+usage, and a stream of \emph{revisions} rather than appended tokens, and its request schema
+carries no seed, no \texttt{logprobs} or \texttt{top\_logprobs}, no $n$ and no step count, with
+temperature floored at 0.5~\cite{inception2026mercury3}. With no per-token score to threshold, the
+only acceptance surface left is agreement over $k$ whole outputs. The same vendor's typed endpoint is the
+counter-example: \texttt{choice}/\texttt{score}/\texttt{noul} with probabilities, and
+\evindep{ranked 3/135 on an independent decision board}~\cite{jevbench2026board}. Reliability here
+is bought at L4, by choosing the endpoint.
+
+\emph{What this instance leaves unmeasured:} Mercury~3 postdates our cutoff, so no independent
+quality evaluation of it exists, and for 2.5 the only independent quality signal is a single index
+score (12, against 21/22/17 on the peers it names), so the hosted generation's quality evidence is
+thin and mostly vendor-reported. The case concerns the contract and the evidence record. No sampler-variance
+or NFE study is published either; the inherited failure is sampler sensitivity \emph{made
+unobservable}, not merely present. Nor does the instance show that parallel refinement buys
+reliability: latency shape is not an assurance property, and the open-weight branch is the only
+place where the sampler can be held fixed.
+
+\begin{figure}[h!]
+  \centering
+  \resizebox{\linewidth}{!}{\input{figures/f_case_diffusion.tex}}
+  \caption{ Case 7: production diffusion-LLM serving. Left: $L$ positions refined in parallel over $T$ vendor-set passes --- filled = settled, ? = still unresolved, step counts symbolic and no wall-clock drawn. Right: the hosted text endpoint's acceptance surface: temperature floored at 0.5, no seed, no logprobs, a stream of revisions rather than appended tokens. The vermillion dashed leader marks the contested inference $[C]$: with no token score, acceptance reduces to agreement over $k$ whole outputs --- the schema silence is $[V]$, the consequence for the L5 gate is ours. Throughput is vendor/independent paired ($1{,}107$ tok/s declared vs 770 tok/s on a fixed-workload instrument and 141 tok/s at router P50); Mercury~3 postdates the cutoff, so no independent evaluation of it exists; 2.5 carries one independent index score.}
+  \label{fig:case-diffusion}
+\end{figure}
+
+\subsection{Cross-case synthesis}
+\label{sec:crosscase}
+Three regularities emerge, and each survives a row-by-row read of \cref{tab:crosscase}. First,
+the case cards' \emph{strongest} reliability moves sit above the objective, at L4--L5 for five
+of seven instances (1, 2, 5, 6, 7) and L2 for the two representational ones (3, 4), rather than at
+the objective's home layer. That pattern is an argument for cross-layer engineering, and against
+committing to a single objective family. Second, the
+last engineering move in each case sits above the mechanism it secures: the decision case needs
+the L5 gate, and the formal case needs its L5 wrapper re-evaluated. Row~7 is the new information
+in this table: its reliability move is procurement at L4 --- choose the endpoint that reports
+scores. Third, two of the three families \cref{fig:evidence} surfaces as
+most-contested appear here --- calibration direction and latent-prediction stability --- so the
+ledger makes the paper's uncertainty legible rather than uniform.
+
+\begin{table}[!t]
+\centering\small
+\begin{tabular}{@{}p{4.0cm}p{5.6cm}p{5.6cm}@{}}
+\toprule
+Case & Strongest reliability move & Worst failure the home layer cannot close \\
+\midrule
+1 RAG-LLM assistant & grounding gate + abstention machinery ([E]~\cite{id260935794}; [T]~\cite{id240501563}) & hallucination intrinsic to the AR objective; mitigation composition unmeasured \\
+2 Decision-model serving & typed closed contract + proper-scoring rules ([V] Laya; [E]~\cite{rauk2026jevbenchmark,id261019811}) & interface instability: \evindep{30\% of answers flip under option reversal~\cite{id261002267}}; calibration direction contested~\cite{id260933843}; \evindep{gate misses its 10\% accepted-error target} \\
+3 Hybrid specialist & structured, checkable fields returned by the specialist components ([V]~\cite{interfaze2026}) & cross-component error propagation unmeasured (named gap); all evaluation evidence vendor-reported \\
+4 JEPA planner & identifiability-under-assumptions guarantees ([T]~\cite{klindt2026lejepa,identifiability2026}) & an unverified report of a planning-horizon cap; all quantities n/v ([W]~\cite{id260939235}); an independent evaluation reports latent-prediction instability on ambiguous text ([E]~\textsf{[C]}~\cite{id260723531}) \\
+5 Classifier baseline & calibration/abstention/monitoring inventory ([S, T]) & monitor evasion under task pressure ([E]~\cite{id260930217}); instrumentation needs its own threat model \\
+6 Rules / formal & deterministic validity enforcement ([E]) + distribution-free wrappers ([T]) & validity $\neq$ truth: verifiers themselves fail ([E]~\cite{id260601066}); honest null on formal loops \\
+7 Diffusion-LLM serving & endpoint choice as the reliability move: the typed endpoint reports scores ([V] docs; [E] rank 3/135~\cite{jevbench2026board}) where the text endpoint reports none & sampler schedule is vendor-side --- no step count, seed or token score, so sampler variance cannot be held fixed (named gap) \\
+\bottomrule
+\end{tabular}
+\caption{Cross-case comparison. Evidence classes: \cref{sec:protocol}. The third column names the mechanism that the instance's own layer cannot close.}
+\label{tab:crosscase}
+\end{table}

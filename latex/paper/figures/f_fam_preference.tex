@@ -1,0 +1,50 @@
+% figures/f_fam_preference.tex — Family-card sketch: preference / reward post-training (Table 1 row 8).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: payload = rs/gData;
+%   post-training layer / verifier = rs/gModel; inherited-failure box = rs/gAccent (ONE yellow).
+% Chain: base objective -> preference / reward post-training layer -> reward model / verifier
+%   (proper scoring rules) -> post-trained policy at inference; the preference signal
+%   (rankings / verifiable rules) enters the verifier from above.
+% Accent (yellow): the inherited failure the claim ledger documents [E,V] — reward hacking
+%   (the signal measures the reward model's beliefs, not ground truth) and a contested
+%   calibration direction across independent reproductions, reported as unresolved.
+% label: fig:fam-preference   (figure env + \label live in the family-cards slot of main.tex; parent wires)
+%
+% CAPTION NOTE — items the paper must defend:
+%   1. [E] reward hacking: the signal reflects the reward model's beliefs, not ground truth
+%      (id260937647 in the card);
+%   2. [E,V] calibration direction contested, not resolved — cite per checkpoint, never per
+%      family (section 5 carries the measured-direction caveat);
+%   3. [V] proper scoring rules are the RLCD / Laya-lineage recipe (vendor-reported), not an
+%      independent measurement;
+%   4. the layer sits on ANY base objective (row 1 chains it over the base block).
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\providecommand{\figneq}{{\fontsize{8.2}{10}\selectfont $\ne$}}
+\begin{tikzpicture}
+% ===== chain =====
+\node[rs/gData] (base) {base objective};
+\node[rs/gModel, right=19mm of base] (post) {preference\\post-training};
+\node[rs/gModel, right=19mm of post] (ver) {reward model / verifier\\proper scoring rules};
+\node[rs/gData, right=19mm of ver] (pol) {post-trained policy};
+% ===== preference signal (enters the verifier) =====
+\node[rs/gData, above=10mm of ver] (sig) {preferences \figsep\ verifiable rules};
+% ===== inherited failure (yellow = ledger-defended item) =====
+\node[rs/gAccent, below=10mm of ver] (fail) {inherited: reward hacking [E]\\reward \figneq\ ground truth [E]; calibration\\direction contested [E,V]};
+% ===== edges =====
+\draw[rs/gFlow] (base.east) -- (post.west);
+\draw[rs/gFlow] (post.east) -- (ver.west);
+\draw[rs/gFlow] (ver.east) -- (pol.west);
+\draw[rs/gFlow] (sig.south) -- (ver.north);
+\draw[rs/gFlowD] (fail.north) -- (ver.south);
+% ===== foot =====
+\coordinate (mid) at ($(base.center)!0.5!(pol.center)$);
+\node[rs/gFoot] at ([yshift=-7mm]mid |- fail.south) {signal: ranked / verified outputs shape the prior [V] \figsep\ assurance changes the posterior of use (L5)};
+% --- loss tape (P3): one chosen/rejected term pair per preference pair
+\rsLossTape{preference}{post.south}{-2.4mm}{term per pair}
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} reward is not ground truth}
+\rsRibSeg[dashed]{rsContested}{\textbf{[C]} calibration direction contested}
+\rsRibSeg{rsVendor}{\textbf{[V]} proper-scoring-rule recipe}
+\end{tikzpicture}

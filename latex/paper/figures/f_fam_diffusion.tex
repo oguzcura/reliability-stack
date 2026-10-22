@@ -1,0 +1,49 @@
+% figures/f_fam_diffusion.tex — Family-card sketch: diffusion / flow matching (Table 1 row 3).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: payload = rs/gData;
+%   mechanism / learned field / sampler = rs/gModel; inherited-failure box = rs/gAccent (ONE yellow).
+% Chain: noise -> iterative denoising (t = T -> 0) -> learned score / velocity field ->
+%   sampler choice -> sample at inference.
+% Accent (yellow): the inherited failure the claim ledger documents [T,E] — sampler sensitivity:
+%   the same trainer yields different samples across samplers.
+% label: fig:fam-diffusion   (figure env + \label live in the family-cards slot of main.tex; parent wires)
+%
+% CAPTION NOTE — items the paper must defend:
+%   1. [T,E] sampler sensitivity: same trainer, different samplers, different samples
+%      (song2021ddim in the card); the comprehensive survey documents
+%      likelihood-vs-sample-quality separations (acm2023diffusionsurvey);
+%   2. the flow-matching contrast (lipman2023flow) is a family VARIANT — regression along
+%      probability paths — not a separate row of the table;
+%   3. no sampler name is endorsed in the figure; sampler choice is an assurance question
+%      (risk-budgeted serving, section 5) not a benchmark answer.
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figtT}{{\fontsize{8.2}{10}\selectfont $t = T$}}
+\providecommand{\figtoz}{{\fontsize{8.2}{10}\selectfont $\to 0$}}
+\begin{tikzpicture}
+% ===== chain =====
+\node[rs/gData] (noi) {noise};
+\node[rs/gModel, right=19mm of noi] (den) {iterative\\denoising};
+\node[rs/gModel, right=19mm of den] (fld) {learned: score / velocity};
+\node[rs/gModel, right=19mm of fld] (smp) {sampler};
+\node[rs/gData, right=19mm of smp] (smpo) {sample};
+% ===== step-direction annotation on the signal edge (4mm lift: matches the other family cards) =====
+\coordinate (emid) at ($(noi.east)!0.5!(den.west)$);
+\node[rs/gEdgeLbl, align=center] at ([yshift=4mm]emid) {\figtT\\\figtoz};
+% ===== inherited failure (yellow = ledger-defended item) =====
+\node[rs/gAccent, below=10mm of smp] (fail) {inherited: sampler sensitivity [T,E]\\sample quality is sampler-relative [E]};
+% ===== edges =====
+\draw[rs/gFlow] (noi.east) -- (den.west);
+\draw[rs/gFlow] (den.east) -- (fld.west);
+\draw[rs/gFlow] (fld.east) -- (smp.west);
+\draw[rs/gFlow] (smp.east) -- (smpo.west);
+\draw[rs/gFlowD] (fail.north) -- (smp.south);
+% ===== foot =====
+\coordinate (mid) at ($(noi.center)!0.5!(smpo.center)$);
+\node[rs/gFoot] at ([yshift=-7mm]mid |- fail.south) {contrast: flow matching regresses along probability paths --- same family,\\transport without stochastic steps [T]};
+% --- loss tape (P3): one summed term per denoise step, over the whole sequence
+\rsLossTape{diffusion}{den.south}{-2.4mm}{sum per denoise step}
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} sampler sensitivity}
+\rsRibSeg{rsTheory}{\textbf{[T]} flow matching: no stochastic steps}
+\end{tikzpicture}

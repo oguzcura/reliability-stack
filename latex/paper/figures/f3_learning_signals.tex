@@ -1,0 +1,83 @@
+% figures/f3_learning_signals.tex — F3 v6 (2026-10-19): V4 redesign B2 "stage grid".
+% Four objective/signal families as ROWS on one shared four-column stage grid:
+%   family [label block] | input -> what is optimized -> prediction target | cannot deliver
+% Fixed x columns (50 / 86 / 122), one header row, one heavy header rule: the alignment carries
+% the comparison. train: stays a one-line sub-label under the family name; each family's failure
+% moves into column 4 (bold = the argument, the only bold text besides family titles).
+% D's extra node is folded into a two-cell inset inside column 2 ("shared enc." -> "predictor"),
+% so every row has the same three-stage chain.
+% Accent: panel (C)'s mechanism chip is the ONE amber = the typed-decision contract, the item the
+% ledger defends (threshold-as-policy [V] + independent benchmarking [E]). It is NOT the failure;
+% the old caption said so and is wrong (fix logged in docs/caption-pending.md).
+% Scope note in the header band: this grid is four training signals, not the ten-family
+% objective map (Table 1) -- the old panel grid read as if it were the objective space.
+% label: fig:signals   (figure env + \label live in main.tex; F3 slot)
+% All in-figure fonts >= 7.5pt; math glyphs set at 8.2pt nominal (CMSY/CMR ~0.92x quirk).
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\providecommand{\figneq}{{\fontsize{8.2}{10}\selectfont $\ne$}}
+\begin{tikzpicture}[x=1mm,y=1mm]
+\tikzset{
+  rs/f3cell/.style={rounded corners=2pt, draw=black, line width=0.7pt, fill=white,
+    align=center, inner sep=2.2pt, minimum height=7.6mm,
+    font=\fontsize{7.5}{8.8}\selectfont},
+  rs/f3hdr/.style={anchor=center, font=\fontsize{7.5}{9.0}\selectfont\bfseries, text=black!70},
+  rs/f3name/.style={anchor=west, font=\fontsize{7.5}{9.0}\selectfont\bfseries, text=black},
+  rs/f3train/.style={anchor=west, font=\fontsize{7.5}{9.0}\selectfont, text=black!55},
+  rs/f3fail/.style={anchor=west, align=left, font=\fontsize{7.5}{9.0}\selectfont\bfseries,
+    text=black, text width=24mm},
+}
+% ===== header band: scope note + column names + heavy rule =====
+\node[anchor=center, font=\fontsize{7.5}{9.0}\selectfont, text=black!70] at (81,14.4)
+  {four training signals compared; the ten-family objective map is Table~1};
+\node[rs/f3hdr] at (48,8.4)  {input};
+\node[rs/f3hdr] at (84,8.4)  {what is optimized};
+\node[rs/f3hdr] at (121,8.4) {prediction target};
+\node[rs/f3hdr] at (147,8.4) {cannot deliver};
+\draw[black!45, line width=0.6pt] (36,5.2) -- (160,5.2);
+% ===== (A) autoregressive =====
+\begin{scope}[yshift=0mm]
+  \node[rs/f3name] at (0,3.6)  {Autoregressive};
+  \node[rs/f3train] at (0,-1.4) {train: CE on next token};
+  \node[rs/f3cell, text width=21mm] (a1) at (48,0) {context tokens};
+  \node[rs/f3cell, text width=34mm] (a2) at (84,0) {predict next token};
+  \node[rs/f3cell, text width=21mm] (a3) at (120,0) {token};
+  \draw[rs/gFlow] (a1.east) -- (a2.west); \draw[rs/gFlow] (a2.east) -- (a3.west);
+  \node[rs/f3fail] at (134,0) {fluency \figneq\ grounding};
+\end{scope}
+% ===== (B) discriminative =====
+\begin{scope}[yshift=-19mm]
+  \node[rs/f3name] at (0,3.6)  {Discriminative};
+  \node[rs/f3train] at (0,-1.4) {train: CE on label};
+  \node[rs/f3cell, text width=21mm] (b1) at (48,0) {input {\fontsize{8.2}{10}\selectfont $x$}};
+  \node[rs/f3cell, text width=34mm] (b2) at (84,0) {{\fontsize{8.2}{10}\selectfont $P(y$\,\figsep\,$x)$} mapping};
+  \node[rs/f3cell, text width=21mm] (b3) at (120,0) {label};
+  \draw[rs/gFlow] (b1.east) -- (b2.west); \draw[rs/gFlow] (b2.east) -- (b3.west);
+  \node[rs/f3fail] at (134,0) {shift; no ``why''};
+\end{scope}
+% ===== (C) typed decision (the ONE accent = the decision contract) =====
+\begin{scope}[yshift=-38mm]
+  \node[rs/f3name] at (0,3.6)  {Typed decision};
+  \node[rs/f3train] at (0,-1.4) {train: proper scoring};
+  \node[rs/f3cell, text width=21mm] (c1) at (48,0) {state};
+  \node[rs/gAccent, text width=34mm, minimum height=7.6mm, align=center,
+    font=\fontsize{7.5}{8.8}\selectfont] (c2) at (84,0) {one pass: option probs};
+  \node[rs/f3cell, text width=21mm] (c3) at (120,0) {act\,\figsep\,defer};
+  \draw[rs/gFlow] (c1.east) -- (c2.west); \draw[rs/gFlow] (c2.east) -- (c3.west);
+  \node[rs/f3fail] at (134,0) {option-set\\instability};
+\end{scope}
+% ===== (D) latent prediction: extra encoder folded into a two-cell inset (column 2) =====
+\begin{scope}[yshift=-57mm]
+  \node[rs/f3name] at (0,3.6)  {Latent prediction};
+  \node[rs/f3train] at (0,-1.4) {train: latent-space loss};
+  \node[rs/f3cell, text width=21mm] (d1) at (48,0) {context obs.};
+  \node[rs/gModel, minimum width=34mm, minimum height=10.4mm, inner sep=0pt] (dc) at (84,0) {};
+  \node[draw, rounded corners=1pt, line width=0.5pt, fill=white, inner sep=1.2pt,
+    minimum width=14mm, font=\fontsize{7.5}{8.8}\selectfont] (d3) at (76.4,0) {shared enc.};
+  \node[draw, rounded corners=1pt, line width=0.5pt, fill=white, inner sep=1.2pt,
+    minimum width=13mm, font=\fontsize{7.5}{8.8}\selectfont] (d5) at (92.6,0) {predictor};
+  \draw[rs/gFlow] (d3.east) -- (d5.west);
+  \node[rs/f3cell, text width=21mm] (d6) at (120,0) {next latent};
+  \draw[rs/gFlow] (d1.east) -- (dc.west); \draw[rs/gFlow] (dc.east) -- (d6.west);
+  \node[rs/f3fail] at (134,0) {prediction \figneq\ planning};
+\end{scope}
+\end{tikzpicture}

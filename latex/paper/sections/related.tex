@@ -1,0 +1,96 @@
+% Section 12: related work (P4, positioned from _scan/competitor_matrix_2026-10-17.json + mdpi_raie comparison + Almuammar deep-read)
+We position against the three verified classes of prior work: model catalogues,
+failure-mode/deployment taxonomies, and per-axis surveys that overlap one or two of our layers.
+Where we code a competitor, each of the five positioning axes is \emph{treated} (the work
+devotes a section or a sustained passage to it), \emph{partial} (it gets a paragraph or a single
+design choice), or \emph{absent} (neither); the coding is categorical, and no axis takes a
+numeric score.
+
+\subsection{Catalogue genre: model-family surveys}
+The closest catalogue is Almuammar et al.'s \emph{Generative Artificial Intelligence
+Models: A Survey}~\cite{almuammar2026genai}, which classifies generative model families,
+their training signals and benchmark behaviors across 36 pages. We verified its full text. On our
+five positioning axes it is partial on three --- learning-objective contrast, reliability, and
+selection --- and absent on the other two, decision interfaces and the integrated stack. The
+objective contrast is weak, every ``reliability'' mention is an adjective, and the work is a
+catalogue rather than a selection framework; contract, validity, routing, and decision-model
+mechanics do not appear. A second survey covers the same genre on
+arXiv~\cite{yazdani2025genaidepth} and spans diffusion and real-world development; the most
+complete diffusion survey consolidates an adjacent
+space~\cite{acm2023diffusionsurvey,zhan2025dlmsurvey}. We cite these as background figures, and
+the distinction is explicit: their genre is \emph{what generative models exist}; ours
+is \emph{which stack instance to select for a reliability-constrained workload}, a question
+they define but do not answer.
+
+\subsection{Failure-mode and deployment taxonomies}
+The closest overall competitor is the MDPI survey of Ricciardi Celsi and
+McCann~\cite{mdpi2026arlm}: standardized deployment patterns, an AR-large-language-model failure
+taxonomy, a claims-to-evidence map, and a JEPA/H-JEPA section. Our verified comparison finds it
+strong on assurance and assessment structure --- a mean of 3.4/5 on its own nine-row coverage
+table, which is that survey's rubric rather than our five-axis coding --- but with \emph{zero}
+coverage of the decision-model
+family (grep-verified: no decision-model vocabulary appears), no learning-objective taxonomy,
+and only partial coverage of the routing axis: its selection apparatus is
+one binary architectural decision (token-centric vs.\ adding a world-model component), scoped to
+AR pipeline deployment. It tells a deployment engineer what to check after their single
+architecture choice; our framework selects across stack instances, L0 first.
+The RAIE survey of test-time scaling for agentic LLMs (An et al., IJCAI-26 survey track,
+\cite{raie2026}) is the closest survey-level competitor to our task-selection map
+(\cref{fig:map}). It covers only the inference-time part of our Layers 3/5 (its four scaling
+dimensions are reasoning, acting, interaction, evolution), and it offers a decision-tree
+selection guide scoped to agentic test-time strategies; learning objectives, representations,
+output contracts, decision models and cost-side routing are out of its scope, and its roadmap
+draws no evidence-quality distinction. A January 2026 five-axis survey of 147 agentic systems
+\cite{ssrn2026fiveaxis} goes the other way, auditing the evidence behind architecture, memory,
+planning, coordination and safety --- an assurance map of the field.
+
+The objective space itself is still expanding while this survey is drafted: Next-Concept
+Modeling (Kumbong et al./Hazy Research) adds a coarse-to-fine next-scale code-hierarchy generation
+family between the generative rows of \cref{tab:objspace} \cite{kumbong2026ncm}, a fresh
+instance of our Table-1 pattern in which new objectives move inherited failure modes rather than
+removing them. The lineage is explicit: NCM carries next-scale prediction from visual
+autoregressive modeling \cite{var2024} into text and inherits the concept-level ambition of Large
+Concept Models \cite{lcm2024} and Mimir, a 1.6B concept model whose pretraining corpus spans 46
+languages with instruction tuning in 35 \cite{mimir2026}. Where the hierarchy comes from is the
+question NCM leaves open: its $K$ levels are fixed by a frozen tokenizer, against the learned
+chunking of H-Net \cite{hnet2025}. The nearest same-objective competitor, NCP-ArchPreview, has
+targeted coarse-to-fine latent text generation since September 2026 and does not appear in NCM's
+own related work \cite{ncparch2026}; no survey in our verified matrix places the two together.
+
+\subsection{Per-axis surveys on our layers}
+Trustworthy-RAG surveys treat reliability as dimension checklists inside retrieval pipelines
+\cite{id250206872,id240910102}, and hallucination surveys track a single failure mode across
+the model lifecycle \cite{id230901219,id251006265}. UQ and abstention work makes calibration
+the reliability question \cite{id250315850,id240718418,id231108298}; world-model surveys cover
+prediction and its deployment in robotics \cite{id251016732}. Routing and cascade work began
+as cost allocation \cite{frugalgpt2023,id240215991,id250208773} and now carries reliability:
+Gatekeeper tunes a small model's confidence so that deferral is a calibrated decision rather
+than a cost threshold \cite{gatekeeper2025}, a cascade that ends in a human expert rather
+than a larger model turns its last rung into an accuracy decision \cite{humandeferral2025},
+and the routing characterization these extend \cite{id250606579,id251005164} is a decision
+interface as well as a price. MoE reliability is benchmarked within one instrument
+\cite{id240706204,id240611353}, and looped-depth on unit tasks \cite{id260713491}. Four bodies
+of work come closest. The full-stack-safety survey \cite{ida25192} maps
+data/training/deployment threats but is a roadmap of threats; the
+HuggingGPT- and Chameleon-class agent surveys \cite{id230317580,id240509818} describe
+orchestration patterns without selecting among them. The IEEE CAI 2026 system-level failure-mode
+taxonomy \cite{ieeecai2026failure} catalogues fifteen hidden failure modes of LLM applications
+with no routing decision attached, and Select-then-Route \cite{selectroute2025} is the closest
+published analogue to C2 --- taxonomy, route, cascade, escalate --- except that its taxonomy
+partitions query classes.
+
+Each covers a \emph{slice} of our frame; no survey among the works we examine here
+(\cref{sec:protocol}) integrates the five positioning axes (learning-objective taxonomy, decision
+interfaces, verification/assurance, actionable selection framework, integrated L0--L5 stack) into
+one engineer-facing selection procedure --- the gap \cref{sec:selection} addresses. The thesis has
+independent support: Rabanser et al.\ \cite{rabanser2026agent} measure twelve reliability metrics
+along four dimensions across fifteen models and find that capability gains buy only small
+reliability gains.
+
+\subsection{What we claim}
+We claim no single fixed best method, no new objective, and no novel mechanism. The
+contribution is the cross-layer link: which stack instance to select, tagged with the class of
+evidence behind each claim, so that each layer's reliability consequences are auditable. The
+claim-ledger discipline (\cref{sec:protocol}) is itself part of the contribution: contested rows
+are surfaced (including in \cref{fig:evidence}), and excluded claims are listed with their
+reasons.

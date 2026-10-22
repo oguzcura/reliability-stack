@@ -1,0 +1,47 @@
+% figures/f_fam_ar.tex — Family-card sketch: autoregressive next-token prediction (Table 1 row 1).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: payload = rs/gData (rounded
+%   green); training mechanism + learned object = rs/gModel (rounded blue); the inherited-failure
+%   box = rs/gAccent (the ONE yellow = ledger-defended item); dashed edge = claim-to-defend.
+% Chain: token stream under a causal mask -> next-token NLL trainer -> learned conditional LM ->
+%   token-by-token text at inference.
+% Accent (yellow): the inherited failure the claim ledger documents [E] — fluency is not
+%   grounding; calibration does not ride on the likelihood signal.
+% label: fig:fam-ar   (figure env + \label live in the family-cards slot of main.tex; parent wires)
+%
+% CAPTION NOTE — items the paper must defend:
+%   1. [E] fluency != grounding: hallucination surveys report persistent inconsistency across
+%      elicitation formats (id251006265 in the card); no figure carries a rate;
+%   2. calibration is not guaranteed out of the box — the case-study packs cite this per system,
+%      not per family; box line 2 carries [A] (per-system report), not a family-level [E];
+%   3. complements are named, not measured: retrieval, contracts, acceptance (L4--L5) carry the
+%      residual; composition effects stay [GAP].
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\providecommand{\figneq}{{\fontsize{8.2}{10}\selectfont $\ne$}}
+\begin{tikzpicture}
+% ===== chain (training signal -> learned object -> inference output) =====
+\node[rs/gData] (tok) {token stream};
+\node[rs/gModel, right=19mm of tok] (nll) {next-token\\NLL trainer};
+\node[rs/gModel, right=19mm of nll] (lm) {learned: conditional LM};
+\node[rs/gData, right=19mm of lm] (gen) {token-by-token text};
+% ===== causal-mask annotation on the signal edge (4mm lift: matches the other family cards) =====
+\coordinate (emid) at ($(tok.east)!0.5!(nll.west)$);
+\node[rs/gEdgeLbl, align=center] at ([yshift=4mm]emid) {causal\\mask};
+% ===== inherited failure (yellow = ledger-defended item) =====
+\node[rs/gAccent, below=10mm of lm] (fail) {inherited: fluency \figneq\ grounding [E]\\calibration not guaranteed out of the box [A]};
+% ===== edges =====
+\draw[rs/gFlow] (tok.east) -- (nll.west);
+\draw[rs/gFlow] (nll.east) -- (lm.west);
+\draw[rs/gFlow] (lm.east) -- (gen.west);
+\draw[rs/gFlowD] (fail.north) -- (lm.south);
+% ===== foot =====
+\coordinate (mid) at ($(tok.center)!0.5!(gen.center)$);
+\node[rs/gFoot] at ([yshift=-7mm]mid |- fail.south) {signal: cross-entropy on the next token [E] \figsep\ complements: retrieval, contracts, acceptance (L4--L5)};
+% --- loss tape (P3): the signal structure this card's trainer consumes: one term per position, in order
+\rsLossTape{ar}{nll.south}{-2.4mm}{per-position CE term}
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} next-token CE signal}
+\rsRibSeg{rsVerified}{\textbf{[E]} fluency is not grounding}
+\end{tikzpicture}

@@ -1,0 +1,46 @@
+% figures/f_fam_energy.tex — Family-card sketch: energy-based objectives (Table 1 row 4).
+% Grammar: figures/style_v2_tokens.tex (GRAY claim box = cards-pack [GAP] style, not the yellow accent).
+% Chain: context -> inference as search over an energy landscape -> learned energy E -> searched
+%   minima as outputs (search, not one-pass decoding).
+% Accent (GRAY, deliberately not yellow): the inherited failure is an honest-null row — no
+%   quantitative anchor; scale evidence remains small; no superiority over production AR.
+% label: fig:fam-energy   (figure env + \label live in the family-cards slot of main.tex; parent wires)
+%
+% CAPTION NOTE — items the paper must defend:
+%   1. [GAP] no quantitative anchor: demonstrations remain small and no superiority over
+%      production AR systems is established in our evidence base — state this as the null, not
+%      as a performance claim;
+%   2. the mechanism itself is [T]: an energy landscape whose minima are plausible outputs
+%      (NRGPT class, card text); inference is search, not one-pass decoding;
+%   3. value today is conceptual (tunable search effort), not deployed reliability — the usual
+%      assurance stack applies unchanged.
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\providecommand{\figeq}{{\fontsize{8.2}{10}\selectfont $=$}}
+\begin{tikzpicture}
+\tikzset{rs/famGap/.style={rounded corners=2.5pt, draw=black!40, line width=0.9pt, dashed,
+  fill=white, align=center, inner sep=3pt, font=\fontsize{7.5}{9.0}\selectfont, text=black!55}}
+% ===== chain =====
+\node[rs/gData] (ctx) {context $x$};
+\node[rs/gModel, right=19mm of ctx] (srch) {inference \figeq\ search\\over energy};
+\node[rs/gModel, right=19mm of srch] (nrg) {learned: energy $E(y$\,\figsep\,$x)$};
+\node[rs/gData, right=19mm of nrg] (min) {searched minima};
+% ===== inherited failure (GRAY = [GAP]: no quantitative anchor) =====
+\node[rs/famGap, below=10mm of nrg] (gap) {[GAP] no quantitative anchor\\scale evidence absent so far;\\no superiority vs.\ production AR [T]};
+% ===== edges =====
+\draw[rs/gFlow] (ctx.east) -- (srch.west);
+\draw[rs/gFlow] (srch.east) -- (nrg.west);
+\draw[rs/gFlow] (nrg.east) -- (min.west);
+\draw[rs/gFlowD] (gap.north) -- (nrg.south);
+% ===== foot =====
+\coordinate (mid) at ($(ctx.center)!0.5!(min.center)$);
+\node[rs/gFoot] at ([yshift=-7mm]mid |- gap.south) {signal: low energy at plausible outputs [T] \figsep\ value today is conceptual (search-driven\\inference), not deployed reliability};
+% --- loss tape (P3): one score term per candidate configuration; the minimum is the output
+\rsLossTape{energy}{srch.south}{-2.4mm}{score per config}
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsNoClaim}{\textbf{[N]} no quantitative anchor}
+\rsRibSeg{rsTheory}{\textbf{[T]} low energy at plausible outputs}
+\rsRibSeg{rsTheory}{\textbf{[T]} no superiority vs.\ production AR}
+\end{tikzpicture}

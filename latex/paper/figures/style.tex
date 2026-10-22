@@ -1,0 +1,46 @@
+% figures/style.tex — Reliability Stack figure grammar (single source for all paper figures)
+% Grammar rules:
+%   solid arrow = verified/measured edge    dashed edge = optional/claim-to-defend (must have citation in caption)
+%   hexagon     = mechanism node            rounded box = system component
+%   \rsAccent   = amber accent #E69F00 (replaced Tiger Yellow #F5A623), ONLY for the item the evidence ledger defends
+%   tag colors  = rsVerified [V] / rsAuthorRep [E] / rsContested [C] / rsNoClaim [N]; colour = meaning only, never decoration
+% LESSONS (S3, 2026-10-17):
+%   node titles must carry anchor=west (an unanchored node centers ON its coordinate and straddles borders)
+%   prefer relative chains (right/below of drawn edges) over absolute x,y guesses when boxes have wide text
+%   connector QA: check line-vs-text span crossings mechanically (pdf drawings vs text spans), not by eye
+\NeedsTeXFormat{LaTeX2e}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, calc, fit}
+\tikzset{
+  rs/hex/.style={regular polygon, regular polygon sides=6, draw=black!70, line width=0.7pt,
+                 align=center, inner sep=1.2pt, minimum width=13mm, font=\fontsize{6.2}{7.2}\selectfont},
+  rs/comp/.style={rounded corners=2pt, draw=black!70, line width=0.7pt, fill=black!4,
+                 align=center, inner sep=3pt, minimum height=6.5mm, font=\fontsize{6.4}{7.4}\selectfont},
+  rs/infra/.style={rs/comp, fill=black!8, minimum height=4.8mm, font=\fontsize{5.8}{6.8}\selectfont},
+  rs/claim/.style={rs/comp, dashed, line width=0.6pt},
+  rs/input/.style={rs/comp, fill=black!12},
+  rs/out/.style={rs/comp, fill=rsyellow!22},
+  rs/flow/.style={-{Stealth[length=1.6mm]}, line width=0.6pt, draw=black!65},
+  rs/flow2/.style={rs/flow, dashed},
+  rs/label/.style={font=\fontsize{5.4}{6.2}\selectfont, text=black!60},
+  rs/edge/.style={font=\fontsize{5.2}{6}\selectfont, text=black!55, inner sep=0.8pt},
+  rs/foot/.style={font=\fontsize{5.2}{6}\selectfont, text=black!50, align=center},
+  rs/fail/.style={font=\fontsize{5.4}{6.2}\selectfont, text=black!55, align=left},
+  % boxes-inside-boxes: vendor-style container holding component tiles
+  rs/container/.style={rounded corners=3pt, draw=black!75, line width=0.9pt, fill=black!1,
+                       inner sep=4pt, label={[rs/contitle, xshift=2pt, yshift=-5.5pt]north west:\labelText}},
+  rs/contitle/.style={font=\fontsize{5.8}{6.6}\selectfont\bfseries, text=black!60},
+  rs/tile/.style={rs/infra, minimum height=4.2mm},
+  rsNote/.style={font=\fontsize{5.4}{6.4}\selectfont, text=black!60, align=center},
+  % mirrored from style_v2_tokens.tex: outline-only evidence chips (theory/vendor are asserted,
+  % not measured, so they must not carry a filled chip's weight)
+  rs/ribsegTheory/.style={draw=rsVerified, fill=white, line width=0.6pt},
+  rs/ribsegVendor/.style={draw=rsAuthorRep, fill=white, line width=0.6pt},
+}
+\definecolor{rsyellow}{HTML}{E69F00}   % accent (Okabe-Ito amber; Tiger Yellow retired from paper PDFs)
+% reserved evidence-tag colours (colour = meaning only; always paired with a letter badge or dash pattern)
+\definecolor{rsVerified}{HTML}{009E73}  % [V] verified claim — reserved, never decorative
+\definecolor{rsAuthorRep}{HTML}{CC79A7} % [A] author-reported / system report
+\definecolor{rsContested}{HTML}{D55E00} % [C] contested — also error semantic
+\definecolor{rsNoClaim}{HTML}{8B95A5}   % [N] not-claimable / absent
+\newcommand{\labelText}{}

@@ -1,0 +1,74 @@
+% (v3 layout notes retired 2026-10-19 — see the v4 header below.)
+% figures/f_layer3_route.tex — L3 mechanism sketch: one controller, three granularities (v4 2026-10-19).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar). Roles: the decision signal = rs/gData
+%   (a value in transit); the controller = rs/gControl octagon (a gate/selector, all three bands
+%   the SAME shape — the repetition is the claim); compute = rs/gModel; output = rs/gData;
+%   yellow accent = the item the evidence ledger defends for L3, now the ONE calibrated signal.
+% Change from v3: the three mechanisms (MoE per token, looped depth per step, cascade per request)
+%   are drawn as three bands of ONE four-node motif at identical x — signal -> selector ->
+%   compute -> merge — with a right-hand column carrying what each costs when its signal is wrong.
+%   The looped/recurrent family (DeepLoop 2607.13491, tied depth) enters the figure for the first
+%   time as the middle band: the section's second conditional-computation axis was missing here.
+%   The foot is gone: its three clauses sit on the marks (band labels carry the two loci; the
+%   signal column carries "learned / constant / calibrated"; the cost column carries composition).
+% label: fig:layer3-route   (figure env + \label to be wired in main.tex, sec:architectures)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. yellow: the calibrated gate score (C3 2402.15991 [E]; SATER 2510.05164 [E] couples
+%      pre-generation routing with escalation). The layer-level claim — cost--quality allocation
+%      is a first-class reliability lever, not an efficiency-only trade-off — is [S] by synthesis
+%      (routing survey 2506.06579 is [S] in the SLR matrix, efficiency-scoped: do NOT tag it [E]);
+%      risk-keyed selection across methods stays open [GAP]; FrugalGPT 2305.05176 is [A].
+%      AMBER MOVED: v3 put the accent on the "allocation is a lever" slogan; v4 puts it on the one
+%      signal with a measured calibration anchor. The slogan claim is prose + this caption.
+%   2. the asymmetry across bands is the argument, and it is evidence-shaped, not symmetric:
+%      per-token router = a learned score, partially inspectable (MoE-RBench 2406.11353 [E];
+%      expert pruning moves factual reliability 2607.01444 [E]) — the section claims learnability
+%      and configuration dependence, NOT that this score is calibrated; per-step depth = not a
+%      per-input signal at all, a constant chosen offline (DeepLoop tied-depth bound 2607.13491
+%      [T]; single-seed ablations [A]); per-request = the calibrated score [E]. Two of the three
+%      signals are calibratable in the literature; the third is a schedule. Wording "two signals
+%      can be calibrated" would overclaim: the router's calibration is not in our evidence set.
+%   3. two loci kept apart (OUR analytic cut [J]): per-token and per-step are inside the model
+%      (architecture properties); per-request is above it (orchestration policy). Neither
+%      composes into a system guarantee — component benchmarks do not add up to one [S].
+%   4. "cost when the signal is wrong" entries are OUR analytic cut [J], not measured rates:
+%      wrong expert (capability routed away), wasted or short depth, wrong tier (over- or
+%      under-spend). No benchmarks, rates, or prices are encoded.
+% Fonts >= 7.5pt; no math glyphs in this figure, so the CMSY size quirk does not apply.
+\begin{tikzpicture}[x=1mm,y=1mm]
+\tikzset{
+  rs/l3band/.style={rs/gLegend, anchor=west, text=black!85},
+  rs/l3cost/.style={rs/gEdgeLbl, anchor=west, align=left, text=black!75},
+}
+% ===== header: the claim =====
+\node[rs/l3band] at (4,15) {one controller, three granularities: the signal is what differs};
+\node[rs/l3cost] at (140,14.5) {cost when the\\signal is wrong [J]};
+% ===== band 1: per token (inside the model) =====
+\node[rs/l3band] at (4,9) {per token --- inside the model};
+\node[rs/gData, minimum width=26mm] (s1) at (17,0) {router logit\\(learned [S])};
+\node[rs/gControl] (d1) at (53,0) {select\\experts};
+\node[rs/gModel, minimum width=35mm] (c1) at (89,0) {active experts\\(sparse FFN)};
+\node[rs/gData, minimum width=22mm] (m1) at (125,0) {combine};
+\node[rs/l3cost] (k1) at (139,0) {wrong\\expert};
+% ===== band 2: per step (inside the model) — the looped/recurrent family =====
+\node[rs/l3band] at (4,-15) {per step --- inside the model};
+\node[rs/gData, minimum width=26mm] (s2) at (17,-24) {loop count $n$\\(chosen offline)};
+\node[rs/gControl] (d2) at (53,-24) {repeat\\block};
+\node[rs/gModel, minimum width=35mm] (c2) at (89,-24) {tied block,\\n passes};
+\node[rs/gData, minimum width=22mm] (m2) at (125,-24) {exit after\\n rounds};
+\node[rs/l3cost] (k2) at (139,-24) {wasted or\\ short depth};
+% ===== band 3: per request (above the model, policy) =====
+\node[rs/l3band] at (4,-35.5) {per request --- above the model (policy)};
+\node[rs/gAccent, minimum width=27mm] (s3) at (17,-50) {gate score\\calibrated\\per member [E]};
+\node[rs/gControl] (d3) at (53,-50) {select tier /\\ escalate};
+\node[rs/gModel, minimum width=35mm] (c3) at (89,-50) {cheap tier, then\\strong if gated};
+\node[rs/gData, minimum width=22mm] (m3) at (125,-50) {response};
+\node[rs/l3cost] (k3) at (139,-50) {wrong tier:\\ over- or\\ under-spend};
+% ===== cost column footer: composition =====
+\node[rs/l3cost] at (139,-64) {the three costs\\ do not compose\\ into a system\\ guarantee [S]};
+% ===== edges (identical in every band) =====
+\foreach \a/\b in {s1/d1, d1/c1, c1/m1, s2/d2, d2/c2, c2/m2, s3/d3, d3/c3, c3/m3} {
+  \draw[rs/gFlow] (\a.east) -- (\b.west);
+}
+\end{tikzpicture}

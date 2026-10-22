@@ -1,0 +1,75 @@
+% figures/f2_task_map_draft.tex — F2 v4 (2026-10-19): V4 redesign C1 "two probes".
+% Task-selection map, 2x2 over answer-space openness (x) and cost of error (y).
+% Structural grammar: one solid frame, solid hairline dividers, ONE black!6 band + 0.9pt top rule
+% for the escalation row (no amber anywhere: the band a region cannot carry a ledger row).
+% The map is shown USED: two probes from our own case set are placed on the axes
+%   case 1 RAG assistant   = high cost x open-ended
+%   case 2 decision serving = high cost x well-defined
+% (case 2 is placed high-cost, not low-cost as the ideas memo had it: a typed decision acts with
+% no human reader in the loop -- cases.tex -- so a low-cost placement would contradict the case.)
+% One dashed elbow from probe 1 to the reversibility modifier callout = the reversibility modifier,
+% not a measured trajectory (it shows which lever would move the placement, so it ends on that lever).
+% The four modifiers sit in one right-hand column behind a single bracket to the frame (they modify
+% placement anywhere; per-tile arrows implied a false specificity).
+% Four corner labels and the two-line foot are deleted (axes labels + caption carry them).
+% label: fig:map   (figure env + \label live in main.tex)
+% CAPTION (main.tex) needs: "[S] quadrant modes are candidates, not guarantees"; "probe placements
+% are ours (illustrative), the dashed elbow is a claim-to-defend, not a measured boundary";
+% "modifier callouts are claims-to-defend"; "escalation band = high-error-cost row: defer, verify,
+% escalate"; "both axes qualitative".
+% Fonts >= 7.5pt; natural width ~153mm.
+\begin{tikzpicture}[x=1mm,y=1mm]
+\tikzset{
+  rs/f2callout/.style={rounded corners=2.5pt, draw=black, dashed, line width=0.9pt, fill=white,
+    align=center, inner sep=3pt, font=\fontsize{7.5}{9.0}\selectfont},
+  rs/f2lbl/.style={font=\fontsize{7.5}{9.0}\selectfont, text=black!80},
+  rs/f2tile/.style={rs/gModel, minimum width=38mm, minimum height=13mm,
+    font=\fontsize{7.5}{9.0}\selectfont},
+  rs/f2probe/.style={circle, fill=black, inner sep=0pt, minimum size=3.6mm},
+}
+% ===== escalation zone: high-error-cost row, neutral fill + heavier top rule (the ONE emphasis) =====
+\fill[black!6] (0,40) rectangle (96,80);
+\draw[line width=0.9pt, draw=black] (0,80) -- (96,80);
+% ===== frame + quadrant dividers (structure = solid hairlines) =====
+\draw[line width=0.7pt, draw=black!70] (0,0) rectangle (96,80);
+\draw[line width=0.4pt, draw=black!45] (48,0) -- (48,80);
+\draw[line width=0.4pt, draw=black!45] (0,40) -- (96,40);
+% ===== axes =====
+\draw[rs/gFlow] (0,-6) -- (99,-6);
+\draw[rs/gFlow] (-6,0) -- (-6,84);
+\node[rs/f2lbl] at (11,-11) {well-defined};
+\node[rs/f2lbl] at (48,-11) {answer-space openness};
+\node[rs/f2lbl] at (86,-11) {open-ended};
+\node[rs/f2lbl, rotate=90] at (-10.5,7)  {low};
+\node[rs/f2lbl, rotate=90] at (-10.5,73) {high};
+\node[rs/f2lbl, rotate=90] at (-17,40)   {cost of error};
+% ===== escalation-zone label (band, high-error row) — above the frame by necessity: the label is
+% 55mm wide and the quadrant divider at x=48 runs the full height, so any in-frame position puts a
+% rule through the text (measured: 1 line/text crossing). It labels the band from outside =====
+\node[rs/f2lbl, anchor=south] at (48,81) {escalation zone: defer \textperiodcentered\ verify \textperiodcentered\ escalate};
+% ===== candidate-mode tiles (candidate operating modes, not guarantees) =====
+\node[rs/f2tile] at (24,53) {specialist + validators\\+ calibrated acceptance\\+ escalation};
+\node[rs/f2tile] at (72,53) {grounded generative assistance\\+ retrieval + verification\\+ human review};
+\node[rs/f2tile] at (24,21) {rules / classifiers /\\decision models vs.\ baselines};
+\node[rs/f2tile] at (72,21) {general-purpose generative\\+ sampling + iteration};
+% ===== two probes: our own cases placed on the axes =====
+\node[rs/f2probe] (p1) at (72,68.5) {};
+\node[rs/f2lbl, anchor=south] at (72,71.2) {case 1 \textperiodcentered{} RAG assistant};
+\node[rs/f2probe] (p2) at (24,68.5) {};
+\node[rs/f2lbl, anchor=south] at (24,71.2) {case 2 \textperiodcentered{} decision serving};
+% one dashed elbow = the reversibility modifier (a shift, not a measured trajectory). It leaves the
+% probe, drops through the open corridor at x=50.5 (clears the centre divider at 48 and the narrowed
+% right-column tile at 53 by 2.5mm each), runs along y=35 (the empty band between the low-cost tiles
+% at 26.5 and the quadrant divider at 40) and TERMINATES on the reversibility callout's north edge.
+% It used to stop at (50.5,36) with its own "reversibility" label there, i.e. it dangled inside the
+% low-cost row and named itself twice; the label now exists once, on the callout it points at.
+\draw[rs/gFlowD] (72,67) -- (72,65) -- (50.5,65) -- (50.5,35) -- (117,35) -- (117,32.5);
+% ===== modifier column: one bracket to the frame, no per-tile arrows =====
+\draw[line width=0.7pt, draw=black] (96.6,2.5) -- (99.6,2.5) -- (99.6,77.5) -- (96.6,77.5);
+\node[rs/f2lbl, anchor=south, font=\fontsize{7.5}{9.0}\selectfont\bfseries, text=black] at (117,67.4)
+  {modifiers};
+\node[rs/f2callout, minimum width=32mm] at (117,63) {distribution shift};
+\node[rs/f2callout, minimum width=32mm] at (117,52) {operational budget};
+\node[rs/f2callout, minimum width=32mm] at (117,41) {observability};
+\node[rs/f2callout, minimum width=32mm] at (117,30) {reversibility};
+\end{tikzpicture}

@@ -1,0 +1,17 @@
+# LaTeX build products
+latex/paper/main.aux
+latex/paper/main.log
+latex/paper/main.out
+latex/paper/main.pdf
+latex/paper/main.fls
+latex/paper/main.fdb_latexmk
+latex/paper/main.synctex.gz
+latex/paper/main.toc
+latex/paper/main.lof
+latex/paper/main.lot
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+latex/paper/main.blg

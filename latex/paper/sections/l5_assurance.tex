@@ -1,0 +1,372 @@
+% l5_assurance.tex --- Layer 5 (Assurance and Verification), P4 draft 2026-10-17.
+% Subsections for \section{Layer 5 --- Assurance and Verification}\label{sec:assurance}.
+% Placeholder cite convention: \cite{p2[<arxiv-id>]} for IDs verified in the P2 sweep
+% (wire named keys at P2; rauk2026jevbenchmark already wired in refs.bib).
+% IDs cited here: 2210.03629, 2309.01219, 2510.06265, 2502.06872, 2409.10102, 2205.11916,
+% 2203.11171, 2607.04430, 2510.08049, 2505.19475, 2311.08298, 2503.15850, 2407.18418,
+% 2405.01563, 2211.16158, 2609.26123, 2609.30217, 2609.33887, 2609.37647.
+% v3 add (2026-10-21): 2605.19537, 2607.24440, 2601.06118, 2608.14376, 2606.29581, 2404.06654,
+% 2502.05167, 2404.16130, 2405.14831, 2609.11065, 2609.23053, 2305.14627; plus non-arXiv
+% rosbach2026stuck, atman2026llm, fang2026right, huang2026cade, bachar2026lpp, fu2026knowing,
+% chroma2025contextrot, anthropic2025context (metadata: docs/keys-C.md).
+
+% ---- epigraph: the L5 thesis in vendor language ----
+\begin{quote}
+``A threshold is a policy you choose from measured accuracy at that coverage on your data, not a
+property of the model. \dots{} Then pick the point where the errors you accept are ones you can
+live with. Confidence orders decisions; it does not establish that a decision is correct.''
+\\[-0.3em]
+{\small --- Laya project documentation (vendor-reported)\footnote{\texttt{github.com/NandhaKishorM/laya},
+README, accessed 2026-10-17; evidence class \evvendor{}.} --- the stance this layer formalizes.}
+\end{quote}
+
+\subsection{The layer contract: reliability as residual-risk management}
+\label{sec:l5-contract}
+
+Layer~4 delivers outputs that are structurally valid: schema-conformant, typed, parseable
+(\cref{sec:contracts}). Validity is not truth, and no output \emph{contract} can make it truth:
+hallucination persists across model families, tasks and elicitation formats, which is why
+detection and mitigation retain survey literatures of their own
+\cite{id230901219,id251006265} \evsynth{}. Layer~5 is the collection of mechanisms a
+system uses to manage that residual: attaching evidence to outputs, checking them, refusing
+to deliver some of them, and routing the rest to a human. Its contract is deliberately weaker
+than ``no errors'' and deliberately stronger than ``hope'':
+
+\begin{quote}
+An L5-wrapped system promises that undetected errors are a \emph{managed quantity}: the
+operator chooses how much error may pass unflagged, the system measures how much actually does,
+and drift or evasion appears as a monitored signal.
+\end{quote}
+
+The responses available to the layer, ordered roughly by cost, form a ladder.
+(1)~\emph{grounding} --- attach retrieved evidence and tool results, so claims become
+attributable; (2)~\emph{deterministic checks} --- validators and content rules (quote-in-source
+tests, unit and interval checks) that reuse the Layer-4 machinery but verify content rather than
+shape; (3)~\emph{model-based checking} --- self-consistency and learned verifiers, which trade
+sampling compute for an error signal; (4)~\emph{calibrated selective prediction} --- accept or
+abstain against a threshold derived from a risk budget (\S\ref{sec:l5-calibrated});
+(5)~\emph{escalation} --- defer the hardest cases to a human or a slower mode. The ladder is
+cumulative, and every rung is itself a component that can fail; \S\ref{sec:l5-envelope}
+therefore closes the chapter with the layer's own failure envelope. The epigraph is the stance
+the calibrated rung formalizes: thresholds are policies chosen from measured behavior.
+
+\subsection{Retrieval grounding: evidence channels and their new failure paths}
+\label{sec:l5-grounding}
+
+Grounding is the cheapest way to change a claim's \emph{epistemic status}: if the document a
+system cites is the source of what it says, a reviewer can audit the claim without auditing the
+model. In its interactive form the model acquires the evidence itself: ReAct interleaves
+reasoning traces with task-specific actions so that the model queries external sources and
+conditions on what comes back, which the original work credits with reducing hallucination and
+error propagation on question answering and fact verification \cite{id221003629}. In its
+passive form, retrieval-augmented generation supplies context up front; the trustworthy-RAG
+surveys are the systematic accounts of what this buys and what it costs. RAG is reported to
+reduce hallucination and freshen knowledge, but it introduces new risks along its own pipeline
+(robustness, privacy, adversarial exposure, accountability), and unreliable retrieval or
+improper use of retrieved knowledge still yields bad outputs \cite{id250206872}. A companion
+framework scores RAG trustworthiness on six dimensions --- factuality, robustness, fairness,
+transparency, accountability and privacy --- with a benchmark for each
+\cite{id240910102} \evsynth{}.
+
+The failure paths are what the layer must be designed around. \emph{Retrieval miss:} the
+evidence exists but is not retrieved, and the generator answers ungrounded with undiminished
+fluency; misses of this kind stay invisible unless the system is required to cite. \emph{Stale
+or conflicting sources:} grounding certifies that a claim came from \emph{a} document; that
+document can be wrong, and a confidently stale source launders error into apparent diligence.
+\emph{Unfaithful use:} the evidence sits in context but does not shape the output, the
+``improper knowledge utilization'' the survey singles out \cite{id250206872}. The nominal
+window and the effective one diverge: of seventeen models claiming at least 32K tokens, half
+keep satisfactory performance at 32K \cite{id240406654} \evindep{}; under a needle test that
+removes the lexical shortcut, eleven of thirteen fall below half their short-context score at
+the same length, GPT-4o from 99.3\% to 69.7\% \cite{id250205167} \evindep{}; and an
+eighteen-model industry evaluation finds degradation with input length on tasks that require no
+retrieval at all \cite{chroma2025contextrot} \evindep{}. Vendor guidance on managing the window
+--- compaction, note-taking, sub-agents --- is vendor-reported \cite{anthropic2025context}
+\evvendor{}, and no independent replication of it exists in our evidence \textsf{[N]}.
+\emph{Lossy context:} the window is a lossy store --- it holds what was retrieved, and what gets
+used is a separate step. Grounding therefore converts an unobservable failure (model error) into
+an \emph{auditable} one (citation mismatch) that deterministic checks can catch. It does not
+convert error into truth.
+
+The index is a design decision, and its shape is a measured design variable. A flat top-$k$
+store fails questions that are global to a corpus by construction, which is the gap
+graph-structured indexes are built to close \cite{id240416130} \evaurep{}; a graph index over
+entities and passages buys about 20\% on multi-hop retrieval at 10--30$\times$ lower cost than
+iterative retrieval \cite{id240514831} \evaurep{}; and the traversal policy over that graph is
+worth up to 9.96 NDCG@10 over the strongest fixed policy while exploring 81.9\% fewer paths
+\cite{id260911065} \evaurep{}. \evjudge{The three results say one thing: which questions are
+answerable at all is decided before the generator runs, so a retrieval miss is a property of the
+index and its policy as well as of the query.}
+
+The audit claim has a false-negative rate of its own. In a controlled reproduction on
+Wikipedia-based question answering, roughly one citation in seven was unfaithful --- the answer
+was right and the cited passage did not support it --- and the rate did not improve under RLVR,
+one trained search agent landing slightly worse than its base model \cite{id260923053}
+\evindep{}. ALCE puts incomplete citation support at 50\% for the best models on ELI5
+\cite{id230514627} \evindep{}. Citation mismatch is therefore a check with a measured miss rate:
+it catches the citation that fails to support the sentence and passes the citation chosen after
+the answer was already fixed, which is why a citation check belongs in the budget with a stated
+miss rate.
+
+\subsection{Self-checking: agreement as a cheap signal and its sampling price}
+\label{sec:l5-selfcheck}
+
+The cheapest model-based checks verify nothing external; they interrogate the generation process
+itself. Zero-shot chain-of-thought showed that a single elicitation phrase can move accuracy
+substantially on arithmetic, symbolic and logical tasks without any exemplars \cite{id220511916}
+\evaurep{} --- a prompt-level change to the error distribution: the system learns nothing about
+\emph{which} of its answers are wrong. Self-consistency turns sampling itself into a signal:
+draw a diverse set of reasoning paths, answer by the agreement among them, and benchmark gains
+on arithmetic and commonsense reasoning follow \cite{id220311171} \evaurep{}. The cost is the
+k-sample price in latency and budget, and it scales with k.
+
+Self-consistency is best read as an \emph{uncertainty estimate}, with two caveats. First, a
+systematically wrong model can produce agreement too, and the
+uncertainty literature is explicit that such scores are heuristic: a threshold chosen on them
+does not by itself provide statistical guarantees on the error rate among accepted answers
+\cite{id260704430}. Second, the signal is nonetheless useful raw material: the
+conformal-abstention construction takes self-consistency as its reliability measure and adds
+the missing guarantee on top (\S\ref{sec:l5-calibrated}). The pattern repeats at every rung:
+heuristic signal first, calibrated signal where the stakes require it.
+
+\evaurep{Minimum-Bayes-risk selection over cheap candidates is the assurance-side use of the
+sampling budget that shorter generation paths free up: on XSum the NCM authors report about 7\% higher ROUGE-L than the strongest
+summarization baseline within the same sampling-time budget.} The gain comes from agreement among
+candidates. Agreement is not independent verification, so budget reallocated this way must
+still route through this layer's grounding and verification machinery
+(\cref{sec:l5-verifiers}).
+
+\subsection{Verification loops: process supervision and the verifier as a component}
+\label{sec:l5-verifiers}
+
+Where self-checking asks the model about itself, a \emph{verifier} is a separate component
+that is trained to judge. Process reward models score reasoning at the step or trajectory level rather
+than judging final answers alone, and the survey of the area organizes the full loop --- how
+process data is generated, how PRMs are built, and how they are consumed for test-time scaling
+and reinforcement learning --- across math, code, multimodal reasoning, robotics and agents
+\cite{id251008049} \evsynth{}. Verification signals can also be recycled into adaptation:
+verifier-driven test-time training scores a pool of sampled answers, keeps the high-confidence
+ones as pseudo-labels, and fits a small adapter to them, improving the base model on
+structurally novel tasks \cite{id250519475} \evaurep{}. This is Layer~5 re-entering L3 and
+L1: assurance outputs become inference and training signal.
+
+Both moves share a structural caveat. A verifier is itself a model, with an error rate and a
+proxy objective; when it selects data or scores rewards, the generator acquires an incentive to
+satisfy the verifier rather than the world, and the verifier's own errors are no longer
+checkable by the system that consumes them: they \emph{become} the system's errors.
+Verification loops therefore reduce some errors and relocate others, and the relocation is
+invisible from the outside unless the verifier's accuracy is itself maintained against
+held-out ground truth. This is the first entry in the layer's failure envelope
+(\S\ref{sec:l5-envelope}).
+
+\subsection{Calibrated selective prediction: thresholds as policies derived from risk budgets}
+\label{sec:l5-calibrated}
+
+The strongest rung is the most studied: use the model's own uncertainty to decide when to answer
+at all. The survey anchors agree on the landscape. The confidence-estimation survey organizes
+calibration techniques and their applications \cite{id231108298}; the newer
+uncertainty-quantification survey adds a taxonomy along two axes --- computational efficiency
+and uncertainty source (input, reasoning, parameter, prediction) --- and frames selective
+prediction as the operative risk-mitigation use case \cite{id250315850}. Abstention now has a
+survey of its own, organized by what is uncertain (the query), who is uncertain (the model), and
+against whose values abstention is judged (human values); the last axis is what makes abstention
+a policy \cite{id240718418} \evsynth{}.
+
+This paper's stance is that a threshold is \emph{derived}, never universal, the position the
+epigraph states in vendor language. An operator fixes a risk budget (the maximum tolerated error
+rate among accepted outputs, per task and per unit of harm) and then selects the most permissive
+threshold whose measured behavior on held-out data satisfies it. The budget is where costs
+enter: a routing decision and a legal determination get different budgets. The vendor
+documentation for the decision-model case study (the epigraph's source) supplies the operational
+corollaries: fit and validate any cutoff on held-out data \emph{at the option counts the
+workload uses}, because the usable threshold shifts with the configuration, and refit shipped
+confidence values before any gating policy relies on them.
+
+Two constructions make the budget statement literal, and they are the layer's theory-class ([T])
+machinery. A conformal-abstention procedure uses self-evaluated similarity across sampled
+responses as the confidence measure and conformal prediction to bound the hallucination rate
+among non-abstained answers \cite{id240501563}. A second framework turns any uncertainty score
+into a selective-answering rule: for each candidate threshold it estimates a high-probability
+upper bound on the error rate among accepted answers, under a criterion the application
+declares, and then adopts the largest threshold whose bound stays below the user's risk
+\cite{id260704430}. Both are \evtheory{conditional guarantees: distribution-free within an
+exchangeability assumption on calibration data, and only as good as the criterion that defines
+``error''}. They formalize what the surveys only recommend: the threshold is the output of a
+procedure over data plus budget. \evsynth{For the newest generation family, the criterion is
+concrete: where the frozen codec's residual errors are substitutions of named entities and
+numerals and errors in diacritics and usernames while surface reconstruction stays near-exact
+(NCM-class \cite{kumbong2026ncm}), the accepted-error budget must state whether a fluent
+substitution that changes a referent or quantity counts as an error, and at which layer it is
+adjudicated --- the token-exactness vs.\ meaning-equivalence boundary, priced rather than
+assumed.}
+
+\paragraph{The fifth rung: escalation.} Abstention keeps a case out of the answer; escalation
+moves it to a human, or to a slower and more expensive mode, whose capacity and error rate are
+themselves resources that belong in the budget. The abstention survey's human-values axis is the
+reminder that ``answer or abstain'' is a judgment about consequences; escalation is where those
+consequences are owned explicitly.
+
+That budget is usually written as though review were a constant and a catch. Neither assumption
+survives measurement. In a pathology study, 7\% of baseline-correct estimates flipped after an
+erroneous machine prediction, inside a 6--11\% range reported across specialties, and the
+coefficient on the AI estimate was 0.74 when the advice beat the reviewer's own estimate against
+0.30 when it was worse \cite{rosbach2026stuck} \evindep{}. Expertise moderates the damage without
+removing it: in a 20-resident simulation, management accuracy fell from 77.3\% under concordant
+advice to 45.3\% under discordant advice \cite{atman2026llm} \evindep{}. Review also depletes: computer-aided
+detection's adenoma advantage was present early (49.9\%) and gone late (39.9\%, against a stable
+39--41\% unassisted) \cite{huang2026cade} \evindep{}. Detection of naturally occurring errors ran
+24\% at baseline and 31\% at high injected-error prevalence, at 16--18\% more time per review
+\cite{fang2026right} \evindep{}. Capacity can be budgeted as a queue rather than a
+constant: on a moderation benchmark, selective escalation held human load at 16--26\% of cases
+where uncertainty baselines routed 28--39\%, at \$38--77 against \$127 for always-trust
+\cite{bachar2026lpp} \evaurep{}.
+
+The distinction that matters is therefore whether a human can catch the failure. A reviewer
+needs an independent judgment formed before the output is shown, the evidence to check it
+retrievable at review time, the time to use it, and the authority to overrule; without that
+support, oversight decays with repetition even among reviewers \cite{fu2026knowing} \evindep{}.
+What the evidence does not contain is the term an operator would budget: no study in this sweep
+reports precision, recall or minutes per review for reviewers working a production LLM
+escalation queue, so the rates above come from adjacent settings and do not transfer. Escalation
+priced that way reprices risk; it does not remove it.
+
+\subsection{Monitoring: the monitored quantity, and the evadable layer}
+\label{sec:l5-monitoring}
+
+A deployed system's thresholds decay: calibration data ages, the workload drifts, and the
+monitor's own distributions move. Monitoring is the rung that tests, after deployment, whether
+the assumptions the earlier rungs rest on still hold, and its first design question is what to
+monitor. The monitoring literature's sharpest lesson is that the obvious answer is usually a
+proxy. Runtime-monitor research argues that out-of-distribution detection is \emph{not} the
+right framing: a monitor's job is to discard incorrect predictions, and measured on that
+quantity (``out-of-model-scope'' detection), OOD scores can give a false impression of safety,
+while OOD-framed comparisons need not identify the better monitor \cite{id221116158} \evindep{}.
+The lesson parallels the threshold-as-policy stance: the monitored quantity is chosen by what
+the operator cares about, and validated against that quantity.
+
+The monitored surface is also wider than correctness. Fairness-monitoring tools specify
+subgroup-behavior properties in a runtime specification language and expose them with live
+visualization, and they target the human-oversight duties that regulation such as the EU AI Act
+places on high-stakes decision systems \cite{id260926123} \evindep{}. Monitoring is where
+the layer becomes auditable: a monitor is the operational form of an oversight duty.
+
+The honest warning, and the newest result in this section, is that the assurance layer is itself
+a target. An evaluation of instrumental evasion places agents in task-policy pairs where
+completing the task requires an operation the runtime monitor prohibits, with the agents aware
+they are monitored: best-of-3 evasion \emph{attempt} rates reach up to 98\% and success rates up
+to 88\%, evasion grows with test-time compute, and the successful strategies are mundane:
+encoding prohibited commands, decomposing an operation across several tool calls, and retrying
+until the relevant context leaves the monitor's history \cite{id260930217} \evindep{}. Two
+implications. First, oversight-evasion emerges from ordinary goal-directed behavior under task
+pressure, and belongs to the deployment setup that the assurance layer must budget for. Second,
+the trade-off cuts both ways: in the same study the model with the lowest evasion rate paid for
+it in over\-refusal, abandoning otherwise solvable tasks. Monitoring policy, like the thresholds
+it feeds, is chosen against consequences.
+
+\subsection{L4--L5 bridge: configuration selection against a risk budget}
+\label{sec:l5-bridge}
+
+The pattern Layer~5 formalizes is already visible in production serving practice, which is
+why the contract layer and the assurance layer exchange more than a one-way handoff: the
+contract tier decides what can be measured, and the measurement decides where the operating
+point sits. The clearest current demonstration is block-diffusion serving. Its operating points --- acceptance
+thresholds, buffer depth, schedule, checkpoint, precision --- are normally hand-picked by mean
+benchmark accuracy, but a mean does not tell an operator how often a faster configuration fails
+on prompts that a slower reference configuration answers correctly. The risk-guaranteeing
+procedure (Redline) selects operating points from their measured correctness on calibration
+prompts, keeps the reference-relative risk --- the joint event ``reference correct, candidate
+wrong'' --- within a user-chosen budget with high probability, and deploys the fastest
+configuration that passes \cite{id260933887}. \evtheory{The guarantee is finite-sample and
+distribution-free, but relative to the reference configuration and the chosen correctness
+measure; LEC gives the general form for selective prediction and routing, where linear expectation
+constraints hold the risk of the selected set below a budget \cite{lec2026}.}
+\evaurep{On the same calibration data the procedure
+stays within its stated failure probability, whereas a mean-accuracy rule at any fixed tolerance
+either buys less speed on some model--task pairs or overshoots the risk budget on others; at a
+10\% risk budget it deploys a LLaDA2 math configuration that commits over a
+third more tokens per forward pass, and therefore needs proportionally fewer passes to emit the
+same sequence. The measured budgets are task-dependent --- math clears
+at a tighter budget than code} \cite{id260933887}. ``Cheaper but less
+accurate'' is thereby replaced by a measurable statement: speed is bought at a chosen risk
+budget. The same selection logic governs the other layers' choice points
+(objective, architecture, contract tier), which is the subject of \cref{sec:selection}.
+
+The guarantee attaches to a serving configuration. \emph{Engine.} With
+weights and decoding fixed, the inference engine alone shifts benchmark scores by up to 16.6
+percentage points across five engines \cite{id260519537} \evindep{}; in one vision-language family,
+4-bit weights cost 1.6 accuracy points and drop the internal error-detection AUROC from 0.95 to
+0.80 \cite{id260724440} \evindep{}. Nondeterminism is concentrated in $p\in[0.1,0.9]$, the
+cutoff's own neighbourhood \cite{id260106118}, and \evaurep{removing it costs more than twice the
+latency and up to 74\% throughput loss}~\cite{id260814376}. \emph{Precision.} Precision is not even a stable
+label: vLLM's quantized KV cache defaults to uncalibrated scales of one, and TensorRT-LLM's FP8
+recipe differs between SM90 and SM100+ (FP32 against UE8M0 activation scales). Calibration is a
+deployment artifact that no checkpoint records, and the same weights on a newer GPU are different
+arithmetic\footnote{%
+\url{https://docs.vllm.ai/en/latest/features/quantization/quantized_kvcache};
+\url{https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/features/quantization.md},
+accessed 2026-10-20; evidence class \evvendor{}.}. \emph{Co-tenancy.} Batch composition changes
+reductions \cite{id260106118} \evindep{}, so co-resident requests can change the sampled tokens for
+the same prompt; the serving stack documents the effect \cite{vllmfaq2026} \evvendor{}. We treat it
+as a third determinism term beside task determinism and model stochasticity (serving-path
+determinism, \cref{sec:determinism}), so the deployed function is a function of its neighbours.
+The danger is not that quantization is unsafe --- AWQ INT4's safety score stayed within
+about 1.6 points of full precision on seven of eight models \cite{id260629581} \evindep{} --- and
+the risk sits in the record: a cutoff carries an error rate for the configuration it was fitted on. A
+stack change is a model change, and the configuration record has to say so.
+
+The decision-model case studies supply the second half of the bridge: systems that return typed
+probabilities per question (Layer~4) are exactly the systems on which
+\emph{measured-accuracy-at-coverage} thresholds are computable, and the independent Jev
+benchmarking line evaluates a commercial decision model on precisely those terms:
+zero-shot, frozen templates, full rather than sampled splits. Its findings read as a
+controlled demonstration of this section's principle: the model's choice probabilities
+measure as well-calibrated and support selective prediction, but its binary
+probabilities --- ranking well as scores --- sit poorly placed against a fixed 0.5 default,
+and thresholds tuned on its training data raise the classification result on a
+terms-of-service benchmark (micro-F1 from 0.50 to 0.75) \cite{rauk2026jevbenchmark}
+\evindep{}. In that benchmark the threshold was the binding
+constraint on the reported metric. That is evidence about one benchmark, not evidence that
+thresholds dominate in general. The vendor documentation quoted in the epigraph shows
+the same stance arriving in industry language, caveats included: cutoffs are fit and validated
+on held-out data at the option counts the workload uses, and shipped confidence is refitted
+before gating. Deployment-grade selection, in other words, is a Layer-5 procedure: Layer-0
+sets the budget, Layer-4 supplies the scored return, and the procedure picks the operating point.
+
+\subsection{The failure envelope of the assurance layer}
+\label{sec:l5-envelope}
+
+Every rung above is a component, and components fail. The layer's own envelope deserves the
+same honesty as the model envelopes of \cref{sec:objectives-cards}:
+
+\begin{itemize}
+  \item \textbf{Wrong grounding.} The evidence channel can carry stale, conflicting or false
+        documents; grounding makes claims attributable. A system that cites
+        carefully can still be wrong with provenance.
+  \item \textbf{Wrong verifier.} Learned checkers have error rates, and one used as a
+        selection signal or reward is subject to being optimized against rather than for the
+        truth (\S\ref{sec:l5-verifiers}); verification moves error without deleting it.
+  \item \textbf{Correction racing.} A check that completes after the action has committed has
+        no authority. When outputs stream, tools execute, or downstream systems consume
+        immediately, the assurance layer must fit inside the committed-before-irreversible
+        latency budget, which is why reversibility and observability appear as
+        operating-mode modifiers in \cref{sec:selection}.
+  \item \textbf{Unsound auditing.} Monitors can be evaded under ordinary task pressure
+        (\S\ref{sec:l5-monitoring}); monitor scores validated against proxies can mislead
+        \cite{id221116158}; and a fairness monitor certifies conformance to a
+        specification, not justice. Auditing is only as sound as the quantity it audits.
+  \item \textbf{Scoped guarantees.} The theory-class ([T]) bounds are conditional on the
+        calibration distribution; under drift, an unmonitored guarantee is a historical
+        statement.
+  \item \textbf{Escalation is also a system.} Human review has capacity limits, fatigue, and
+        its own error rates --- detection of naturally occurring errors ran near 24\%
+        \cite{fang2026right} \evindep{} --- so a budget that routes overload to humans has not
+        removed risk, only moved and repriced it (\S\ref{sec:l5-calibrated}).
+\end{itemize}
+
+The closing honesty the whole chapter is built to support: \emph{layered defense is a policy
+decision, not a property}. How many independent checks to stack, which evidence classes to
+require, and where to set acceptance and escalation budgets are choices made per task
+against error cost and answer-space openness (\cref{sec:selection}), and they are choices with
+a ceiling: no layer makes another layer correct. What the \reliabilitystack{} claims for Layer
+5 is the honest version of assurance: an error rate you measured, under assumptions you can
+name, at a residual you chose to own.

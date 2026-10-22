@@ -1,0 +1,88 @@
+% figures/f_case_decision.tex — Case-study sketch (pack 2): decision-model system (Laya/Jev-class).
+% Grammar: figures/style_v2_tokens.tex (v8 token grammar).
+% Roles: state+question / typed decision / act / risk budget = rs/gData; single-pass engine =
+%   rs/gModel; calibrated acceptance = rs/gAccent (the ONE ledger-defended item); escalate / defer =
+%   rs/gInfra (service). The reliability inset is ink/gray only (no role fill): its means and the
+%   gate miss are [E] measurements; the vermillion dashed leader marks the [C] direction claim
+%   (which way a confidence-gated cascade fails), not the measurement.
+% Chain: state + typed question -> single-pass decision engine -> typed decision -> calibrated
+%   acceptance (threshold-as-policy) -> act / escalate. Risk budget (L0) sets the acceptance
+%   threshold (vertical edge from above). The inset hangs over act on the [C] leader.
+% label: fig:case-decision   (figure env + \label live in main.tex; case-studies slot, owner wires)
+%
+% CAPTION NOTE — items the paper must defend (state these in the caption):
+%   1. [E] typed contract 2609.37647: no generation; choice/score/noul over a closed option set
+%      (spelling 'noul' is per vendor docs — do not correct to 'null'; Jev only — that benchmark
+%      evaluated no Laya checkpoint);
+%   2. [V] threshold-as-policy + RLCD proper-scoring-rule recipe (Laya repo); "RLCD" is never
+%      expanded in-repo — do not conflate with the unrelated 2307.12950;
+%   3. [E] contested calibration direction: shipped TD checkpoint is uniformly UNDER-confident,
+%      signed gap -0.214 (2609.33843), contradicting the card's over-confidence framing; the
+%      direction decides which way a confidence-gated cascade fails; the frozen gate misses its
+%      10% accepted-set error target on both tracks [E] — cite per checkpoint, not per family;
+%   4. [E] option-set instability 2610.02267: 30% option-order flip + 31% at 50 candidates
+%      (vs Jev 98% on unique-tool items); interface generality: fine-tuned AR LLMs + multimodal
+%      (2610.02076 / 2610.13675);
+%   5. [GAP] no end-to-end deployed decision-system eval (harness + gate + escalation); joint
+%      effect of the documented fixes unmeasured.
+% Fonts >= 7.5pt; math glyphs measure ~0.92x nominal (CMSY/CMR quirk) so symbols use 8.2pt.
+\providecommand{\figplus}{{\fontsize{8.2}{10}\selectfont $+$}}
+\providecommand{\figsep}{{\fontsize{8.2}{10}\selectfont $|$}}
+\providecommand{\figeq}{{\fontsize{8.2}{10}\selectfont $=$}}
+\providecommand{\figminus}{{\fontsize{8.2}{10}\selectfont $-$}}
+\begin{tikzpicture}
+% ===== inference chain =====
+\node[rs/gData, inner ysep=4pt] (in1) {state \figplus\\typed question};
+\node[rs/gModel, right=9mm of in1, inner ysep=4pt] (eng) {single pass\\never generates};
+\node[rs/gData, right=9mm of eng, inner ysep=4pt] (tif) {typed decision\\choice \figsep\ score \figsep\ noul};
+\node[rs/gAccent, right=9mm of tif, inner ysep=4pt] (acc) {calibrated acceptance\\threshold \figeq\ policy};
+\node[rs/gData, right=9mm of acc, minimum width=10mm, minimum height=7.5mm] (act) {act};
+\node[rs/gInfra, below=7mm of acc] (esc) {escalate / defer};
+% ===== L0 risk budget (left of the acceptance gate, sets the threshold) =====
+\node[rs/gData, above=10mm of tif] (rb) {risk budget (L0)};
+% ===== reliability inset (replaces the old contested tile): the anchor's own reliability
+% diagram, redrawn. x = confidence bin, y = accuracy; the diagonal is perfect calibration and
+% every bar sits a near-constant offset ABOVE it (uniform under-confidence). The dashed rule is
+% the policy cut, the pale band right of it the accepted region. No axis ticks/numbers (they
+% would publish sub-floor at 18mm); bin spacing is schematic, the two means + the gate miss are
+% the measured anchors. The [C] direction claim survives as the vermillion dashed leader + tag.
+\coordinate (rib) at ($(act.north)+(-9mm,21.5mm)$);
+\begin{scope}[shift={(rib)}, x=1mm, y=1mm]
+\fill[white] (0,0) rectangle (18,18);                                % opaque backing for the inset
+\fill[black!6] (9.8,1) rectangle (17,17);                            % accepted region (x >= cut)
+\foreach \i/\c/\a in {0/0.20/0.40, 1/0.30/0.50, 2/0.40/0.60,
+                     3/0.50/0.70, 4/0.60/0.80, 5/0.70/0.90} {
+  \pgfmathsetmacro{\bx}{1+16*\c-0.8}
+  \pgfmathsetmacro{\bh}{16*\a}
+  \fill[black!14] (\bx,1) rectangle ++(1.6,\bh);                     % one occupied confidence bin
+  \draw[black!55, line width=0.4pt] (\bx,1) rectangle ++(1.6,\bh);
+}
+\draw[black!45, line width=0.4pt] (1,1) -- (17,17);                  % perfect calibration (over the bars)
+\draw[black!55, line width=0.5pt, dashed] (9.8,1) -- ++(0,16);       % threshold = policy, in a bin gap
+\draw[draw=black!35, line width=0.4pt] (0,0) rectangle (18,18);
+\node[anchor=north east, align=right, font=\fontsize{7.5}{9.0}\selectfont, text=black!85]
+  at (-1.6,18)
+  {shipped TD ckpt \textbf{[E]}\\mean conf 0.553 vs acc 0.767\\
+   signed gap \figminus 0.214; accepted error above 10\% target};
+\end{scope}
+% ===== edges =====
+\draw[rs/gFlow] (in1.east) -- (eng.west);
+\draw[rs/gFlow] (eng.east) -- (tif.west);
+\draw[rs/gFlow] (tif.east) -- (acc.west);
+\draw[rs/gFlow] (acc.east) -- (act.west);
+\draw[rs/gFlow] (acc.south) -- (esc.north);
+\draw[rs/gFlow] (rb.south) -| (acc.north);   % elbow: fills the upper-left band instead of a lone tall riser
+% [C] direction: the offset is measured [E]; which way a confidence-gated cascade fails is contested [C]
+\draw[rsContested, dashed, line width=0.9pt, -{Stealth[length=1.7mm]}]
+  ($(act.north)+(0,21.2mm)$) -- (act.north);
+\node[rs/gTiny, anchor=east, text=rsContested] at ($(act.north)+(-2mm,7mm)$) {\textbf{[C]}};
+% --- evidence ribbon (P2): segments are claims already carried above; tag = the claim's class.
+\rsRibbonBase{-3.4mm}
+\rsRibbonRow{0mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} typed contract: choice/score/noul}
+\rsRibSeg{rsNoClaim}{\textbf{[V]} threshold is policy}
+\rsRibSeg[dashed]{rsContested}{\textbf{[C]} calibration direction contested}
+\rsRibbonRow{-5.8mm}
+\rsRibSeg{rsVerified}{\textbf{[E]} option-set instability 30\% / 31\%}
+\rsRibSeg{rsNoClaim}{\textbf{[N]} no deployed-system eval}
+\end{tikzpicture}

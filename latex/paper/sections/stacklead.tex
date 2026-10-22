@@ -1,0 +1,19 @@
+% Section 3 stack lead (P4)
+The Reliability Stack (L0--L5) arranges reliability-bearing engineering decisions in one frame
+--- task and risk specification, learning objective, representation, inference architecture,
+output contract, assurance and control. It is a stack of \emph{decision problems}: a fix at one
+layer can move a failure to another rather than remove it --- we call that
+reliability debt. An objective that buys generative quality does not buy an assurance story, and
+a large label set does not make a typed decision calibrated.
+
+Six archetypes recur in practice: generative LLM, discriminative classifier, decision-oriented
+model, hybrid specialist, JEPA world model, and a rules/verification pipeline (the last carried
+as an \emph{honest null}: we include it because no verified production instance exists, and that
+absence is itself the finding [N]). Each is a \emph{stack instance} --- a particular filling of
+L0--L5 --- and they differ at identifiable layers (\cref{fig:stack}). Case~1 carries the
+generative and grounded halves; Case~6 the
+verification half, and composing the two is a stack instance rather than a seventh archetype.
+Case~7 adds a second instance of the generative archetype, under the factorization that
+\cref{tab:objspace} row~3 names, so six archetypes stay six.
+Reading them as orthogonal rival model classes is the misreading the case studies of
+\cref{sec:cases} are built to prevent.

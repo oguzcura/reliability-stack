@@ -1,0 +1,141 @@
+% ===== L2 draft: Layer 2 -- Representations and What They Guarantee (first written pass, 2026-10-17)
+% \input directly under \section{Layer 2 ...}\label{sec:representations}; starts at subsection level.
+% p2 placeholders beyond the pre-cleared list: id260723531 (JEPA Paradox in Language; openpins
+% CONFIRMED 2026-10-17, evidence _scan/openpins_evidence/html_2607.23531.html) and id230108243
+% (I-JEPA, SLR pin). Both verified in-repo; add to the conversion table when merging.
+
+\subsection{Representation as the interface between objective and system}
+\label{sec:l2-interface}
+
+The first layer decides what a model is trained to be (\cref{sec:objectives}), and the second
+decides what the input becomes; a \emph{representation} is the interface between the two. It
+fixes the objects the system computes over, and with them the assumptions that every later layer
+(inference architecture, output contract, assurance) inherits. Three families recur across the
+stack instances of \cref{sec:stack}. (i)~\emph{Token embeddings}: a discrete sequence of subword
+units, represented as learned vectors. This is the dominant interface of language systems, and
+it embeds a modelling decision that is easy to overlook. \evindep{Tokenization is more than
+compression: comparative studies find that tokenization choices impose inductive biases of their
+own, with downstream consequences that compression ratio does not predict \cite{id240218376}.}
+Byte-level and multiscale byte-sequence designs (the ByT5/MEGABYTE class) relax or remove the
+tokenizer at the cost of longer effective sequences, though multiscale byte transformers were
+designed to amortize that cost \cite{id230507185}.
+(ii)~\emph{Encoder and joint-embedding latents}: a continuous vector space trained by prediction
+or agreement, spanning the JEPA family and the embedding models that retrieval consumes.
+(iii)~\emph{Symbolic or structured state}: retrieved spans, typed records, explicit task state,
+representations on which deterministic checks are possible by construction. The rest of this
+section asks what each family guarantees, and what it hands to the layers that follow.
+
+\subsection{Joint-embedding latent prediction and the language-{JEPA} paradox}
+\label{sec:l2-jepa}
+
+Joint-embedding predictive training predicts target \emph{representations} rather than raw
+inputs: a context encoder observes a masked view, an exponential-moving-average (EMA) target
+encoder embeds the unmasked signal, and a predictor is trained to match the target latent. What
+the objective encourages is a representation in which masked targets are predictable from the
+visible context, one biased toward structure from the outset rather than toward surface
+reconstruction. The family produced strong visual representations (I-JEPA \cite{id230108243})
+and motivates the hope that such learning yields a world model rather than a surface generator.
+Its language case tests our honesty most directly, so we state it as a conditional candidate
+rather than a verdict.
+
+\evtheory{Squared-error latent prediction is well posed only when the target representation is
+conditionally concentrated---when, given the context and the target location, the target
+representation lies near a single meaningful point. Otherwise the optimal predictor degenerates
+to a conditional mean: a centroid over incompatible alternatives.} Masked text need not satisfy
+this condition: the same context can admit several valid continuations whose embeddings occupy
+distinct directions. \evindep{In matched I-JEPA/T-JEPA experiments, mutual-information
+saturation and elevated conditional target variance precede train--validation divergence,
+effective-rank degeneration, cosine collapse, and poor downstream transfer; the pattern
+replicates across five independent data seeds, and downstream probes (IMDB and SNLI
+classification; MTEB retrieval, FEVER and MSMARCO) fail to transfer \cite{id260723531}.} The
+study is explicit that this does not refute predictive learning for language; it identifies a
+missing inductive bias, namely the preservation of multiple plausible completions instead of
+compressing them into one latent point. The same analysis notes that marginal variance
+regularizers constrain only the marginal distribution, so they do not by themselves guarantee
+predictable conditionals \cite{id260723531}.
+
+Identifiability theory for latent world models (the conditions under which a learned latent
+provably corresponds to the structure that generated the data) is recent and explicitly
+conditional. \evtheory{Results on when JEPA-style training learns an identifiable world model,
+and on the identifiability of controlled world models, hold under stated assumptions about data
+and training; extensions relax the Gaussianity restriction without making identifiability
+unconditional \cite{klindt2026lejepa,identifiability2026,id260612471}.} We take a standing
+discipline from this cluster: prediction quality and world-model quality are separate
+properties. Low squared error on held-out targets can coexist with degenerate representation
+geometry, and whatever structure a representation recovers is recovered only because the stated
+assumptions hold; the objective does not deliver it by default.
+
+\subsection{World models: prediction quality is not decision quality}
+\label{sec:l2-worldmodels}
+
+When Layer~2 hands a world model to a planner, the reliability question changes register. The
+world-models survey we cite as our anchor treats objectives and representations together
+\cite{id251016732}; its scope is robotics-oriented, and we borrow from it only the interface
+claim we need here: serving a model to a decision procedure differs from evaluating it as a
+predictor. \evsynth{Prediction metrics and decision utility are different currencies: a model can
+minimize average rollout error and still be a poor or exploitable basis for planning, because
+decisions consume predictions through an optimizer whose failure modes---compounding error,
+exploitation of model error, objective mismatch---need not appear in any prediction loss.}
+Planning needs more than prediction: it needs predictions that are reliable exactly where the
+decision is sensitive, which is a statement about the task and the policy (L0, L3--L4), as
+\cref{sec:selection} sets out. The identifiability results above also govern
+expectations here: where their assumptions hold, ``the representation is a world model'' has
+content; where they fail, the same phrase is an aspiration. Unqualified world-model
+claims are unsupported without those assumptions; since they cannot be evidenced, they have to
+be gated, which makes them a matter for the assurance layer (\cref{sec:assurance}).
+
+\subsection{What each representation choice hands to the output and assurance layers}
+\label{sec:l2-handoff}
+
+Representation choices propagate downstream: each family of \cref{sec:l2-interface} hands Layer~4
+(\cref{sec:contracts}) and Layer~5 (\cref{sec:assurance}) different raw material.
+
+\emph{Token embeddings.} The system can emit a distribution over a discrete alphabet, so output
+contracts built on checking discrete structure---schemas, grammars
+\cite{jsonschemabench2025,xgrammar2024}---have something to verify; what they verify is structure;
+the boundary to truth is Layer~4's central statement (\cref{sec:contracts}). One
+deployment-level asymmetry matters for reliability: in API-served models the tokenizer is fixed
+by the serving stack, so tokenization-induced biases are inherited rather than chosen and cannot
+be repaired by output constraints alone. One recent variant replaces the subword tokenizer
+itself with a learned multiscale code hierarchy (NCM-class \cite{kumbong2026ncm}):
+\evaurep{surface reconstruction is 98.79--100\% across the released datasets (99.79\% on XSum),
+yet the authors observe substitutions of named entities and numerals and errors in diacritics and
+usernames at the tokenizer stage}. \evsynth{What such a representation hands Layer~4 is
+a boundary to define --- token exactness vs.\ meaning equivalence --- rather than a fidelity
+guarantee to inherit (\cref{sec:contracts}).}
+
+\emph{Joint-embedding latents.} Similarity geometry and probability semantics answer different
+questions: a cosine score has no declared meaning, so no threshold policy can consume it.
+\evtheory{Threshold policies---abstention, escalation, cascades---need a scalar risk
+estimate with a declared meaning, which a raw embedding does not provide; obtaining one requires
+adding a calibration or conformal layer together with its own assumptions (exchangeability for
+conformal procedures; alignment conditions for provable abstention)
+\cite{id240501563,id260704430}.} The calibration and uncertainty surveys map what
+confidence estimates do and do not carry for LLM systems \cite{id231108298,id250315850},
+and abstention designs (surveyed in \cite{id240718418}) are the constructive response. Output
+contracts that emit typed decision probabilities as first-class outputs
+\cite{rauk2026jevbenchmark} occupy exactly this design point: they make the decision probability,
+not a similarity score, the object that a threshold policy consumes.
+
+\emph{Byte-level input.} Removing the tokenizer trades a class of tokenizer-induced failure modes
+for sequence length; attention cost grows super-linearly in length \cite{vaswani2017attention},
+so the context budget that finer granularity spends is unavailable to retrieval and verification
+machinery unless multiscale designs buy it back \cite{id230507185}. The pattern generalizes:
+representations do not determine reliability, but they determine which reliability mechanisms are
+available downstream, and \cref{sec:selection} follows that thread.
+
+\subsection{What Layer 2 does not guarantee}
+\label{sec:l2-limits}
+
+\evtheory{Identifiability is never unconditional: the results cited in this section hold under
+stated assumptions about data and training, and outside them nothing follows.} Representation and
+semantics are distinct: a latent can be stable and low-loss yet underdetermined with
+respect to the meaning a decision needs. The language case remains open in both directions:
+\evindep{%
+deterministic squared-error latent prediction fails under matched protocols on text
+\cite{id260723531}, while the same authors leave predictive representation learning for
+language explicitly unrefuted.} We therefore record \emph{stable language-JEPA as contested}: a
+candidate the field has neither established nor settled, and an honest-null entry in the ledger
+of \cref{sec:protocol}; at matched evidence standards, no language representation recipe in our
+ledger carries the evidence its image- and video-modality ancestors do~\textsf{[N]} (scoped to the
+searched literature, cutoff 2026-10-17).
